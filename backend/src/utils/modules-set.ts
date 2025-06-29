@@ -6,8 +6,8 @@ import { AllConfigType } from "@/config/config.type";
 import { Environment } from "@/constants/app.constant";
 import databaseConfig from "@/database/config/database.config";
 import mailConfig from "@/mail/config/mail.config";
-// import redisConfig from "@/redis/config/redis.config";
 import { MailModule } from "@/mail/mail.module";
+import redisConfig from "@/redis/config/redis.config";
 import { ModuleMetadata } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -20,13 +20,7 @@ function generateModulesSet() {
   const imports: ModuleMetadata["imports"] = [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        appConfig,
-        databaseConfig,
-        // redisConfig,
-        authConfig,
-        mailConfig,
-      ],
+      load: [appConfig, databaseConfig, redisConfig, authConfig, mailConfig],
       envFilePath: [".env"],
     }),
   ];

@@ -12,4 +12,7 @@ export class BaseEntity {
 
   @Prop({ default: null })
   deletedAt?: Date;
+
+  createdAt: Date;
+  updatedAt: Date;
 }

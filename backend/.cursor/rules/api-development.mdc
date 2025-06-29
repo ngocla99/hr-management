@@ -1,0 +1,199 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# API Development Patterns
+
+## Controller Structure
+Controllers should follow this pattern based on [UserController example](mdc:src/api/user/user.controller.ts):
+
+```typescript
+@Controller({
+  path: 'users',
+  version: '1',
+})
+@UseGuards(AuthGuard)
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Get()
+  @Public()
+  async findAll(): Promise<UserResDto[]> {
+    return await this.userService.findAll();
+  }
+}
+```
+
+## DTO Patterns
+
+### Request DTOs
+Use validation decorators from [field.decorators.ts](mdc:src/decorators/field.decorators.ts):
+
+```typescript
+export class CreateUserReqDto {
+  @StringField()
+  @Transform(({ value }) => (value as string)?.toLowerCase().trim())
+  username: string;
+
+  @EmailField()
+  email: string;
+
+  @PasswordField()
+  password: string;
+
+  @StringFieldOptional()
+  bio?: string;
+}
+```
+
+### Response DTOs
+Use class-transformer with [BaseEntity](mdc:src/common/entities/base.entity.ts):
+
+```typescript
+export class UserResDto extends BaseEntity {
+  @Expose()
+  username: string;
+
+  @Expose()
+  email: string;
+
+  // Never expose password
+}
+```
+
+## Authentication Decorators
+
+### Public Routes
+```typescript
+@Public()
+@Post('register')
+async register(@Body() dto: RegisterReqDto) {
+  return await this.authService.register(dto);
+}
+```
+
+### Optional Authentication
+```typescript
+@AuthOptional()
+@Get('profile')
+async getProfile(@CurrentUser() user?: JwtPayloadType) {
+  // User is optional, handle accordingly
+}
+```
+
+### Protected Routes (Default)
+```typescript
+@Get('dashboard')
+async getDashboard(@CurrentUser() user: JwtPayloadType) {
+  // User is required, AuthGuard ensures this
+}
+```
+
+## Error Handling in Controllers
+
+Controllers should let services throw exceptions and rely on [GlobalExceptionFilter](mdc:src/filters/global-exception.filter.ts):
+
+```typescript
+@Post()
+async create(@Body() dto: CreateDto) {
+  // Service throws ValidationException, UnauthorizedException, etc.
+  // GlobalExceptionFilter handles the conversion to proper HTTP responses
+  return await this.service.create(dto);
+}
+```
+
+## Validation Patterns
+
+### Custom Validation Decorators
+Create reusable validators in [validators directory](mdc:src/decorators/validators/):
+
+```typescript
+@ValidateIf((object) => object.password)
+@IsPasswordValid()
+confirmPassword: string;
+```
+
+### Transform Input Data
+Always transform and sanitize input:
+
+```typescript
+@StringField()
+@Transform(({ value }) => (value as string)?.toLowerCase().trim())
+email: string;
+```
+
+## Pagination Patterns
+
+Use cursor-based pagination from [cursor-pagination.ts](mdc:src/utils/cursor-pagination.ts):
+
+```typescript
+@Get()
+async findAll(@Query() query: PaginationQueryDto) {
+  const paginator = buildPaginator(this.userModel, {
+    paginationKeys: ['_id'],
+  });
+
+  if (query.afterCursor) paginator.setAfterCursor(query.afterCursor);
+  if (query.limit) paginator.setLimit(query.limit);
+
+  return await paginator.paginate();
+}
+```
+
+## Response Standards
+
+### Success Responses
+```typescript
+// Simple data return
+return userData;
+
+// With pagination
+return {
+  data: users,
+  cursor: {
+    afterCursor: 'xxx',
+    beforeCursor: 'yyy'
+  }
+};
+```
+
+### Error Responses
+Let [GlobalExceptionFilter](mdc:src/filters/global-exception.filter.ts) handle error formatting:
+
+```typescript
+// Service layer throws:
+throw new ValidationException(ErrorCode.E003);
+throw new UnauthorizedException();
+
+// Filter automatically converts to:
+{
+  timestamp: "2024-01-01T00:00:00.000Z",
+  statusCode: 400,
+  error: "Bad Request",
+  message: "Validation failed"
+}
+```
+
+## Documentation
+
+### Swagger Integration
+```typescript
+@ApiOperation({ summary: 'Create new user' })
+@ApiResponse({ status: 201, type: UserResDto })
+@ApiResponse({ status: 400, description: 'Validation failed' })
+@Post()
+async create(@Body() dto: CreateUserReqDto): Promise<UserResDto> {
+  return await this.userService.create(dto);
+}
+```
+
+## Common Patterns
+
+1. **Always use DTOs** for request/response data
+2. **Transform input data** to ensure consistency
+3. **Use custom decorators** for common validations
+4. **Let services handle business logic** and throw exceptions
+5. **Use dependency injection** for all dependencies
+6. **Version your APIs** with `@Version()`
+7. **Apply guards at controller level** unless route-specific needed

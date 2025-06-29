@@ -1,0 +1,162 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# NestJS Backend Architecture Rules
+
+## Project Overview
+This is a NestJS backend application using MongoDB with Mongoose, featuring authentication, internationalization, job queues, and email functionality.
+
+## Core Technologies
+- **Framework**: NestJS with TypeScript
+- **Database**: MongoDB with Mongoose (NOT TypeORM)
+- **Authentication**: JWT with refresh tokens
+- **Validation**: class-validator and class-transformer
+- **Logging**: Pino with nestjs-pino
+- **Job Queue**: BullMQ
+- **Email**: Nodemailer
+- **Internationalization**: nestjs-i18n
+
+## Project Structure
+
+### Main Entry Points
+- [main.ts](mdc:src/main.ts) - Application bootstrap and configuration
+- [app.module.ts](mdc:src/app.module.ts) - Root application module
+- [utils/modules-set.ts](mdc:src/utils/modules-set.ts) - Dynamic module configuration
+
+### Core Directories
+```
+src/
+├── api/              # Feature modules (auth, users, etc.)
+├── common/           # Shared utilities, DTOs, interfaces
+├── config/           # Configuration files and types
+├── constants/        # Application constants and enums
+├── database/         # Database configuration
+├── decorators/       # Custom decorators
+├── exceptions/       # Custom exception classes
+├── filters/          # Global exception filters
+├── guards/           # Authentication and authorization guards
+├── interceptors/     # Request/response interceptors
+├── pipes/            # Validation pipes
+├── utils/            # Utility functions and helpers
+└── modules/          # Feature-specific modules
+```
+
+## Database Patterns
+
+### Entity Definition
+- Use Mongoose schemas with `@Schema()` decorator
+- Extend [BaseEntity](mdc:src/common/entities/base.entity.ts) for common fields
+- Example: [User Entity](mdc:src/api/user/entities/user.entity.ts)
+- Always use SchemaFactory with hooks: `UserSchemaFactory()`
+
+### Repository Pattern
+- Create repository classes for database operations
+- Example: [UserRepository](mdc:src/api/user/user.repository.ts)
+- Use `@Injectable()` and inject model with `@InjectModel()`
+
+### Module Registration
+```typescript
+@Module({
+  imports: [MongooseModule.forFeature([{ name: "User", schema: UserSchemaFactory() }])],
+  providers: [UserService, UserRepository],
+  exports: [UserService, UserRepository],
+})
+```
+
+## Authentication & Authorization
+
+### Configuration
+- JWT configuration in [auth.config.ts](mdc:src/api/auth/config/auth.config.ts)
+- Database configuration in [database.config.ts](mdc:src/database/config/database.config.ts)
+
+### Guards
+- [AuthGuard](mdc:src/guards/auth.guard.ts) for JWT authentication
+- Use decorators: `@Public()`, `@AuthOptional()` from [decorators](mdc:src/decorators/)
+
+### Session Management
+- Session-based JWT with refresh tokens
+- Session blacklisting for logout functionality
+
+## API Design Patterns
+
+### DTOs and Validation
+- Request DTOs with validation decorators from [field.decorators.ts](mdc:src/decorators/field.decorators.ts)
+- Response DTOs with class-transformer
+- Use `@EmailField()`, `@StringField()`, `@PasswordField()` etc.
+
+### Controllers
+- Version APIs with `@Version('1')`
+- Use proper HTTP status codes
+- Apply decorators for documentation and validation
+
+### Error Handling
+- Global exception filter: [GlobalExceptionFilter](mdc:src/filters/global-exception.filter.ts)
+- Custom validation exceptions: [ValidationException](mdc:src/exceptions/validation.exception.ts)
+- MongoDB error handling for CastError, ValidationError, and duplicate keys
+
+## Configuration Management
+
+### Environment Variables
+- Use `@nestjs/config` with validation
+- Type-safe configuration with [AllConfigType](mdc:src/config/config.type.ts)
+- Example configurations in [app.config.ts](mdc:src/config/app.config.ts)
+
+### Database Connection
+- Smart URI construction supporting local and cloud MongoDB
+- Authentication-aware connection strings
+- Fallback patterns for development
+
+## Logging and Monitoring
+
+### Logger Configuration
+- Pino logger with custom formatters in [logger-factory.ts](mdc:src/utils/logger-factory.ts)
+- Request ID generation and tracking
+- Custom success/error messages
+- Supports Google Cloud Logging and AWS CloudWatch
+
+## Job Queue System
+
+### Email Jobs
+- BullMQ for background job processing
+- Email verification and notification jobs
+- Retry logic with exponential backoff
+
+## Development Patterns
+
+### Module Organization
+- Each feature has its own module directory
+- Include: controller, service, repository, entities, DTOs
+- Export services and repositories for inter-module usage
+
+### Validation Patterns
+- Use custom decorators for common validations
+- Transform data with class-transformer
+- Validate environment variables with class-validator
+
+### Error Codes
+- Centralized error codes in [error-code.constant.ts](mdc:src/constants/error-code.constant.ts)
+- Internationalized error messages
+
+## Security Practices
+- Helmet for security headers
+- CORS configuration
+- JWT secret management
+- Password hashing with bcrypt
+- Input validation and sanitization
+
+## Testing Considerations
+- Unit tests for services and repositories
+- Integration tests for API endpoints
+- Mock external dependencies (database, email, etc.)
+
+## Common Patterns to Follow
+1. Always use TypeScript strict mode
+2. Implement proper error handling
+3. Use dependency injection consistently
+4. Follow NestJS module structure
+5. Use environment-based configuration
+6. Implement proper logging
+7. Use DTOs for data validation and transformation
+8. Follow repository pattern for database operations

@@ -1,0 +1,305 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# MongoDB & Mongoose Patterns
+
+## Entity/Schema Definition
+
+### Base Entity
+All entities should extend [BaseEntity](mdc:src/common/entities/base.entity.ts):
+
+```typescript
+@Schema({ timestamps: true })
+export class User extends BaseEntity {
+  @Prop({ required: true, unique: true })
+  username: string;
+
+  @Prop({ required: true, unique: true, index: true })
+  email: string;
+
+  @Prop({ required: true, select: false }) // Hide by default
+  password: string;
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
+
+// Always create a factory for hooks and middleware
+export const UserSchemaFactory = () => {
+  const schema = UserSchema;
+
+  // Pre-save hook for password hashing
+  schema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    this.password = await hashPassword(this.password);
+    next();
+  });
+
+  return schema;
+};
+```
+
+### Schema Registration
+Always use the factory when registering schemas:
+
+```typescript
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchemaFactory() }, // Use factory, not UserSchema
+    ]),
+  ],
+  // ...
+})
+```
+
+## Repository Pattern
+
+### Repository Structure
+Follow the pattern from [UserRepository](mdc:src/api/user/user.repository.ts):
+
+```typescript
+@Injectable()
+export class UserRepository {
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+  ) {}
+
+  async create(userData: Partial<User>): Promise<User> {
+    const user = new this.userModel(userData);
+    return await user.save();
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userModel.findOne({ email }).exec();
+  }
+
+  async findById(id: string): Promise<User | null> {
+    return await this.userModel.findById(id).exec();
+  }
+
+  // Always use proper typing and null checks
+  async updateById(id: string, updateData: Partial<User>): Promise<User | null> {
+    return await this.userModel
+      .findByIdAndUpdate(id, updateData, { new: true })
+      .exec();
+  }
+}
+```
+
+### Module Dependencies
+Ensure repositories are available in modules:
+
+```typescript
+@Module({
+  imports: [MongooseModule.forFeature([...])],
+  providers: [UserService, UserRepository],
+  exports: [UserService, UserRepository], // Export for other modules
+})
+```
+
+## Database Configuration
+
+### Connection Setup
+Use smart URI construction from [database.config.ts](mdc:src/database/config/database.config.ts):
+
+```typescript
+export default registerAs<DatabaseConfig>('database', () => {
+  // Handle both local and cloud MongoDB
+  if (process.env.DATABASE_URL) {
+    return { url: process.env.DATABASE_URL };
+  }
+
+  const {
+    DB_HOST = 'localhost',
+    DB_PORT = '27017',
+    DB_USERNAME,
+    DB_PASSWORD,
+    DB_NAME = 'hrmanage',
+  } = process.env;
+
+  // Smart protocol selection
+  const protocol = DB_HOST.includes('.mongodb.net') ? 'mongodb+srv' : 'mongodb';
+
+  // Handle authentication
+  const auth = DB_USERNAME && DB_PASSWORD ? `${DB_USERNAME}:${DB_PASSWORD}@` : '';
+  const port = protocol === 'mongodb+srv' ? '' : `:${DB_PORT}`;
+
+  return {
+    url: `${protocol}://${auth}${DB_HOST}${port}/${DB_NAME}`,
+  };
+});
+```
+
+## Query Patterns
+
+### Cursor Pagination
+Use [cursor-pagination.ts](mdc:src/utils/cursor-pagination.ts) for MongoDB pagination:
+
+```typescript
+export async function buildPaginator<T>(
+  model: Model<T>,
+  options: PaginationOptions,
+): Promise<Paginator<T>> {
+  return {
+    async paginate(): Promise<PaginationResult<T>> {
+      const query = model.find(this.query || {});
+
+      // MongoDB cursor-based pagination
+      if (this.afterCursor) {
+        query.where({ _id: { $gt: this.afterCursor } });
+      }
+
+      if (this.beforeCursor) {
+        query.where({ _id: { $lt: this.beforeCursor } });
+      }
+
+      // MongoDB sorting (1 for ASC, -1 for DESC)
+      const sortObj = { [this.paginationKeys[0]]: 1 };
+      query.sort(sortObj);
+
+      query.limit(this.limit + 1); // +1 to check if there's next page
+
+      const results = await query.exec();
+      // ... pagination logic
+    }
+  };
+}
+```
+
+### Complex Queries
+```typescript
+// Aggregation pipeline example
+async getUserStats(userId: string) {
+  return await this.userModel.aggregate([
+    { $match: { _id: new Types.ObjectId(userId) } },
+    {
+      $lookup: {
+        from: 'posts',
+        localField: '_id',
+        foreignField: 'authorId',
+        as: 'posts'
+      }
+    },
+    {
+      $project: {
+        username: 1,
+        email: 1,
+        postCount: { $size: '$posts' }
+      }
+    }
+  ]);
+}
+
+// Text search
+async searchUsers(searchTerm: string) {
+  return await this.userModel
+    .find({ $text: { $search: searchTerm } })
+    .select('username email')
+    .exec();
+}
+```
+
+## Error Handling
+
+### MongoDB Error Types
+Handle specific MongoDB errors in [GlobalExceptionFilter](mdc:src/filters/global-exception.filter.ts):
+
+```typescript
+// CastError - Invalid ObjectId
+if (exception.name === 'CastError') {
+  return {
+    statusCode: HttpStatus.BAD_REQUEST,
+    message: 'Invalid ID format'
+  };
+}
+
+// ValidationError - Schema validation failed
+if (exception.name === 'ValidationError') {
+  return {
+    statusCode: HttpStatus.BAD_REQUEST,
+    message: 'Validation failed',
+    details: exception.errors
+  };
+}
+
+// Duplicate key error (E11000)
+if (exception.code === 11000) {
+  return {
+    statusCode: HttpStatus.CONFLICT,
+    message: 'Resource already exists'
+  };
+}
+```
+
+## Performance Patterns
+
+### Indexing
+```typescript
+@Schema({ timestamps: true })
+export class User extends BaseEntity {
+  @Prop({ required: true, unique: true, index: true })
+  email: string;
+
+  @Prop({ index: true }) // Add indexes for frequently queried fields
+  status: string;
+}
+
+// Compound indexes
+UserSchema.index({ email: 1, status: 1 });
+```
+
+### Population and Selection
+```typescript
+// Selective field loading
+async findUserProfile(id: string) {
+  return await this.userModel
+    .findById(id)
+    .select('username email bio avatar')
+    .exec();
+}
+
+// Population (similar to JOIN)
+async findUserWithPosts(id: string) {
+  return await this.userModel
+    .findById(id)
+    .populate('posts', 'title content createdAt')
+    .exec();
+}
+```
+
+## Transaction Patterns
+
+```typescript
+async createUserWithProfile(userData: CreateUserDto) {
+  const session = await this.userModel.db.startSession();
+
+  try {
+    const result = await session.withTransaction(async () => {
+      const user = await this.userModel.create([userData], { session });
+      const profile = await this.profileModel.create([{
+        userId: user[0]._id,
+        ...profileData
+      }], { session });
+
+      return { user: user[0], profile: profile[0] };
+    });
+
+    return result;
+  } finally {
+    await session.endSession();
+  }
+}
+```
+
+## Common Patterns
+
+1. **Always use SchemaFactory()** for schemas with hooks
+2. **Extend BaseEntity** for timestamp and common fields
+3. **Use proper TypeScript typing** with Model<T>
+4. **Handle MongoDB-specific errors** in global filter
+5. **Use cursor-based pagination** for better performance
+6. **Add indexes** for frequently queried fields
+7. **Use transactions** for multi-collection operations
+8. **Always call .exec()** on queries for proper typing
