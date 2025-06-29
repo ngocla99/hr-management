@@ -1,0 +1,80 @@
+# Overview
+This document outlines the requirements for an HR Management System designed to streamline the recruitment and employee management process. The system will provide a centralized platform for creating job postings, managing candidates through a hiring pipeline, and maintaining an employee directory. The initial version (MVP) will focus on core functionalities to deliver value quickly.
+
+# Core Features
+The MVP will include the following core features:
+
+- **User Authentication:**
+  - Secure login for HR personnel.
+  - Basic role management (Admin/HR).
+
+- **Job Management:**
+  - Create, view, edit, and publish job postings.
+  - Each job will have a title, description, and status (e.g., Draft, Published, Closed).
+
+- **Candidate Management:**
+  - A simple pipeline to track candidates (e.g., Applied, Interview, Hired).
+  - Ability to view candidate details (name, contact info, resume).
+  - A public link for each job to allow external applications.
+
+- **Employee Management:**
+  - A basic directory to list all employees.
+  - View employee details (name, department, contact info).
+
+# User Experience
+The primary user persona for the MVP is the HR Manager.
+
+- **Key User Flow:**
+  1. The HR Manager logs into the system.
+  2. Creates a new job posting for an open position.
+  3. Shares the public job link.
+  4. Candidates apply through the link.
+  5. The HR Manager views applicants and moves them through the hiring pipeline.
+  6. Once a candidate is hired, they are added to the Employee directory.
+
+- **UI/UX Considerations:**
+  - The interface will be clean, intuitive, and align with the provided UI/UX mockups.
+  - Focus on ease of use for managing jobs and candidates efficiently.
+
+# Technical Architecture
+- **System Components:**
+  - **Backend:** Node.js with NestJS framework.
+  - **Database:** MongoDB for flexible data storage.
+  - **API:** RESTful API for communication between the frontend and backend.
+
+- **Data Models (MVP):**
+  - **User:** `email`, `password`, `role`.
+  - **Job:** `title`, `description`, `status`, `candidates`.
+  - **Candidate:** `name`, `email`, `resumeUrl`, `status`.
+  - **Employee:** `name`, `email`, `department`.
+
+- **APIs and Integrations:**
+  - No external integrations for the MVP.
+
+# Development Roadmap
+- **MVP Requirements:**
+  - Implement all features listed under "Core Features".
+  - The goal is a functional backend that can support the primary user flow.
+
+- **Future Enhancements:**
+  - Advanced reporting and analytics.
+  - Calendar and To-do integration.
+  - Customizable application forms and hiring pipelines.
+  - Employee referral system.
+  - Organizational structure editor.
+
+# Logical Dependency Chain
+1.  **Authentication:** Foundational for securing the system.
+2.  **Job Management:** Core module that drives the recruitment process.
+3.  **Candidate Management:** Directly depends on Jobs and is essential for the hiring workflow.
+4.  **Employee Management:** The final step in the recruitment cycle.
+
+# Risks and Mitigations
+- **Risk:** Scope creep for the MVP.
+- **Mitigation:** Strictly adhere to the defined MVP features. Defer all other features to future releases.
+
+- **Risk:** Technical challenges with integrating the frontend and backend.
+- **Mitigation:** Ensure clear API documentation and communication between frontend and backend teams.
+
+# Appendix
+[This section can be used for future research findings or detailed technical specifications.]
