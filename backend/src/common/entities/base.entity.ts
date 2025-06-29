@@ -11,5 +11,5 @@ export class BaseEntity {
   id?: string;
 
   @Prop({ default: null })
-  deleted_at?: Date;
+  deletedAt?: Date;
 }

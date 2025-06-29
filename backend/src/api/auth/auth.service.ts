@@ -58,7 +58,7 @@ export class AuthService {
    */
   async signIn(dto: LoginReqDto): Promise<LoginResDto> {
     const { email, password } = dto;
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findByEmail(email, { select: ["+password"] });
 
     const isPasswordValid = user && (await verifyPassword(password, user.password));
 

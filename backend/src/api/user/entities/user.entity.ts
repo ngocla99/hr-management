@@ -1,4 +1,5 @@
 import { BaseEntity } from "@/common/entities/base.entity";
+import { hashPassword } from "@/utils/password.util";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
 
@@ -19,10 +20,10 @@ export enum ROLE {
   timestamps: true,
 })
 export class User extends BaseEntity {
-  @Prop({ required: true, minlength: 2, maxlength: 60 })
+  @Prop({ minlength: 2, maxlength: 60 })
   firstName: string;
 
-  @Prop({ required: true })
+  @Prop({ minlength: 2, maxlength: 60 })
   lastName: string;
 
   @Prop({
@@ -46,6 +47,8 @@ export class User extends BaseEntity {
   @Prop({
     required: true,
     select: false,
+    match:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()[\]{}|\\/'"<>,.;:`~+=_-])[A-Za-z\d@$!%*?&#^()[\]{}|\\/'"<>,.;:`~+=_-]{8,}$/,
   })
   password: string;
 
@@ -69,3 +72,18 @@ export class User extends BaseEntity {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+export const UserSchemaFactory = () => {
+  const userSchema = UserSchema;
+  userSchema.index({ email: 1 }, { unique: true });
+  userSchema.index({ username: 1 }, { unique: true });
+
+  userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+
+    this.password = await hashPassword(this.password);
+    next();
+  });
+
+  return userSchema;
+};

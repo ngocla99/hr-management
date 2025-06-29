@@ -1,3 +1,4 @@
+import { applyMongoQueryOptions } from "@/utils/build-query-options";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { plainToInstance } from "class-transformer";
@@ -15,8 +16,9 @@ export class UserRepository {
     return this.userModel.findById(id).exec();
   }
 
-  async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email, deletedAt: null }).exec();
+  async findByEmail(email: string, options?: { select?: string[] }): Promise<UserDocument | null> {
+    const query = this.userModel.findOne({ email, deletedAt: null });
+    return applyMongoQueryOptions(query, options).exec();
   }
 
   async findByUsername(username: string): Promise<UserDocument | null> {
