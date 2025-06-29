@@ -1,29 +1,26 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsArray, IsOptional, IsString } from "class-validator";
+import { DateFieldOptional, StringFieldOptional } from "@/decorators/field.decorators";
+import { Expose } from "class-transformer";
 
 export class UploadFileReqDto {
-  @ApiPropertyOptional({
+  @StringFieldOptional({
     description: "File tags for categorization",
-    type: [String],
     example: ["resume", "document"],
+    each: true,
   })
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
+  @Expose()
   tags?: string[];
 
-  @ApiPropertyOptional({
-    description: "Additional metadata for the file",
-    example: { department: "hr", category: "resume" },
+  @StringFieldOptional({
+    description: "Additional metadata for the file (JSON string)",
+    example: '{"department": "hr", "category": "resume"}',
   })
-  @IsOptional()
-  metadata?: Record<string, any>;
+  @Expose()
+  metadata?: string;
 
-  @ApiPropertyOptional({
-    description: "Expiration date for the file (ISO string)",
+  @DateFieldOptional({
+    description: "Expiration date for the file",
     example: "2024-12-31T23:59:59.000Z",
   })
-  @IsOptional()
-  @IsString()
-  expiresAt?: string;
+  @Expose()
+  expiresAt?: Date;
 }

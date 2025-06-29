@@ -1,71 +1,90 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import {
+  DateField,
+  DateFieldOptional,
+  NumberField,
+  StringField,
+  StringFieldOptional,
+  UUIDField,
+} from "@/decorators/field.decorators";
+import { Expose } from "class-transformer";
 
 export class FileResDto {
-  @ApiProperty({
+  @UUIDField({
     description: "File ID",
     example: "507f1f77bcf86cd799439011",
   })
+  @Expose()
   id: string;
 
-  @ApiProperty({
+  @StringField({
     description: "Original filename",
     example: "resume.pdf",
   })
+  @Expose()
   originalName: string;
 
-  @ApiProperty({
+  @StringField({
     description: "System filename",
     example: "1640995200000_resume.pdf",
   })
+  @Expose()
   filename: string;
 
-  @ApiProperty({
+  @StringField({
     description: "File MIME type",
     example: "application/pdf",
   })
+  @Expose()
   mimeType: string;
 
-  @ApiProperty({
+  @NumberField({
     description: "File size in bytes",
     example: 1024000,
+    min: 0,
   })
+  @Expose()
   size: number;
 
-  @ApiProperty({
+  @StringField({
     description: "File download URL",
     example: "/api/files/507f1f77bcf86cd799439011/download",
   })
+  @Expose()
   url: string;
 
-  @ApiProperty({
+  @StringField({
     description: "Storage type",
     example: "local",
-    enum: ["local", "s3", "gridfs"],
   })
+  @Expose()
   storage: string;
 
-  @ApiPropertyOptional({
+  @StringFieldOptional({
     description: "File tags",
-    type: [String],
     example: ["resume", "document"],
+    each: true,
   })
+  @Expose()
   tags?: string[];
 
-  @ApiPropertyOptional({
-    description: "File metadata",
-    example: { department: "hr", category: "resume" },
+  @StringFieldOptional({
+    description: "File metadata (JSON string)",
+    example: '{"department": "hr", "category": "resume"}',
   })
-  metadata?: Record<string, any>;
+  @Expose()
+  metadata?: string;
 
-  @ApiProperty({
+  @DateField({
     description: "Upload timestamp",
     example: "2024-01-01T00:00:00.000Z",
   })
+  @Expose()
   createdAt: Date;
 
-  @ApiPropertyOptional({
+  @DateFieldOptional({
     description: "File expiration date",
     example: "2024-12-31T23:59:59.000Z",
   })
+  @Expose()
   expiresAt?: Date;
 }

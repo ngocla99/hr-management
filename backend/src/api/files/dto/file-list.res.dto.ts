@@ -1,34 +1,44 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ClassField, NumberField } from "@/decorators/field.decorators";
+import { Expose } from "class-transformer";
 import { FileResDto } from "./file.res.dto";
 
 export class FileListResDto {
-  @ApiProperty({
+  @ClassField(() => FileResDto, {
     description: "List of files",
-    type: [FileResDto],
+    each: true,
   })
+  @Expose()
   files: FileResDto[];
 
-  @ApiProperty({
+  @NumberField({
     description: "Total count of files",
     example: 25,
+    min: 0,
   })
+  @Expose()
   total: number;
 
-  @ApiProperty({
+  @NumberField({
     description: "Current page",
     example: 1,
+    min: 1,
   })
+  @Expose()
   page: number;
 
-  @ApiProperty({
+  @NumberField({
     description: "Items per page",
     example: 10,
+    min: 1,
   })
+  @Expose()
   limit: number;
 
-  @ApiProperty({
+  @NumberField({
     description: "Total storage used in bytes",
     example: 10485760,
+    min: 0,
   })
+  @Expose()
   totalSize: number;
 }

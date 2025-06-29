@@ -1,4 +1,5 @@
 import { BaseEntity } from "@/common/entities/base.entity";
+import { UserRole } from "@/constants/roles.constant";
 import { hashPassword } from "@/utils/password.util";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
@@ -9,11 +10,6 @@ export enum GENDER {
   Male = "MALE",
   Female = "FEMALE",
   Other = "OTHER",
-}
-
-export enum ROLE {
-  Admin = "ADMIN",
-  User = "USER",
 }
 
 @Schema({
@@ -66,9 +62,11 @@ export class User extends BaseEntity {
   gender: string;
 
   @Prop({
-    enum: ROLE,
+    type: String,
+    enum: UserRole,
+    default: UserRole.EMPLOYEE,
   })
-  role: ROLE;
+  role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

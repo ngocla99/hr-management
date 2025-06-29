@@ -1,0 +1,535 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# NestJS Module Patterns
+
+## Module Structure Patterns
+
+### Basic Module Structure
+All feature modules follow this consistent structure:
+
+```typescript
+@Module({
+  imports: [/* External and feature modules */],
+  controllers: [/* Module controllers */],
+  providers: [/* Services, repositories, etc. */],
+  exports: [/* Services/providers used by other modules */],
+})
+export class FeatureModule {}
+```
+
+### Directory Organization
+```
+src/api/{feature}/
+├── dto/                    # Request/Response DTOs
+├── entities/              # Database entities/schemas
+├── types/                 # TypeScript types/interfaces
+├── config/                # Feature-specific config (optional)
+├── {feature}.controller.ts
+├── {feature}.service.ts
+├── {feature}.repository.ts (for data modules)
+├── {feature}.module.ts
+```
+
+## DTO (Data Transfer Object) Patterns
+
+### File Naming Convention
+- **Request DTOs**: `{action}.req.dto.ts` (e.g., `login.req.dto.ts`, `assign-role.req.dto.ts`)
+- **Response DTOs**: `{resource}.res.dto.ts` (e.g., `user.res.dto.ts`, `file.res.dto.ts`)
+- **List Response DTOs**: `{resource}-list.res.dto.ts` (e.g., `file-list.res.dto.ts`)
+
+### File Structure
+- Each DTO must be in its own separate file
+- Never combine multiple DTOs in a single file
+- Place DTOs in `src/api/{module}/dto/` directory
+- **Use Field Decorators**: Always use custom field decorators from `@/decorators/field.decorators`
+- **No Manual @ApiProperty**: Field decorators handle Swagger documentation automatically
+
+### DTO Examples
+```typescript
+// ✅ CORRECT: login.req.dto.ts - Using Field Decorators
+import { EmailField, PasswordField } from "@/decorators/field.decorators";
+
+export class LoginReqDto {
+  @EmailField({
+    description: "User email",
+    example: "user@example.com",
+  })
+  email: string;
+
+  @PasswordField({
+    description: "User password",
+    example: "SecurePass123!",
+  })
+  password: string;
+}
+
+// ✅ CORRECT: user.res.dto.ts - Using Field Decorators
+import { UserRole } from "@/constants/roles.constant";
+import { EmailField, EnumField, StringField, UUIDField } from "@/decorators/field.decorators";
+
+export class UserResDto {
+  @UUIDField({
+    description: "User ID",
+    example: "60b5f8c2e4b0a12b8c2e4b0a",
+  })
+  id: string;
+
+  @StringField({
+    description: "Username",
+    example: "john_doe",
+  })
+  username: string;
+
+  @EmailField({
+    description: "User email",
+    example: "john@example.com",
+  })
+  email: string;
+
+  @EnumField(() => UserRole, {
+    description: "User role",
+    example: UserRole.EMPLOYEE,
+  })
+  role: UserRole;
+}
+```
+
+### Field Decorator Types
+Reference: [field.decorators.ts](mdc:src/decorators/field.decorators.ts)
+
+- **`StringField`** - String validation + Swagger docs
+- **`EmailField`** - Email validation + lowercase transform
+- **`PasswordField`** - Password validation (min 6 chars + complexity)
+- **`UUIDField`** - UUID v4 validation
+- **`NumberField`** - Number validation with min/max options
+- **`BooleanField`** - Boolean validation
+- **`DateField`** - Date validation
+- **`EnumField(() => Enum)`** - Enum validation with lazy loading
+- **`ClassField(() => Class)`** - Nested object validation
+- **Field Options**: `{ each: true }` for arrays, `nullable: true`, etc.
+
+### DTO Import Structure
+```typescript
+// 1. Constants/Enums (if needed)
+import { UserRole } from "@/constants/roles.constant";
+
+// 2. Field decorators
+import {
+  EmailField,
+  EnumField,
+  StringField,
+  UUIDField
+} from "@/decorators/field.decorators";
+
+// 3. External dependencies (if needed)
+import { Transform } from "class-transformer";
+
+// 4. Local types/interfaces (if needed)
+import { SomeLocalType } from "../types/local.type";
+```
+
+### Reference Examples
+- Auth DTOs: [login.req.dto.ts](mdc:src/api/auth/dto/login.req.dto.ts), [login.res.dto.ts](mdc:src/api/auth/dto/login.res.dto.ts)
+- User DTOs: [create-user.req.dto.ts](mdc:src/api/user/dto/create-user.req.dto.ts), [user.res.dto.ts](mdc:src/api/user/dto/user.res.dto.ts)
+- Roles DTOs: [assign-role.req.dto.ts](mdc:src/api/roles/dto/assign-role.req.dto.ts), [assign-role.res.dto.ts](mdc:src/api/roles/dto/assign-role.res.dto.ts)
+- Files DTOs: [upload-file.req.dto.ts](mdc:src/api/files/dto/upload-file.req.dto.ts), [file.res.dto.ts](mdc:src/api/files/dto/file.res.dto.ts)
+
+## Controller Patterns
+
+### Controller Structure
+```typescript
+@ApiTags("resource-name") // lowercase, kebab-case
+@Controller({
+  path: "resource-name",
+  version: "1",
+})
+@UseGuards(RolesGuard) // For RBAC-protected controllers
+export class ResourceController {
+  constructor(private readonly resourceService: ResourceService) {}
+}
+```
+
+### Endpoint Decorators
+- Use `@ApiAuth` for authenticated endpoints
+- Use `@ApiPublic` for public endpoints
+- Use `@ApiParam` for route parameters
+- Apply permission decorators: `@RequirePermission()`, `@RequireRole()`
+
+### Controller Examples
+```typescript
+// ✅ CORRECT: Authenticated endpoint
+@Post()
+@ApiAuth({
+  type: UserResDto,
+  summary: "Create user",
+  statusCode: HttpStatus.CREATED,
+})
+@RequirePermission(Permission.CREATE_USER)
+async createUser(@Body() createUserDto: CreateUserReqDto): Promise<UserResDto> {
+  return this.userService.create(createUserDto);
+}
+
+// ✅ CORRECT: Public endpoint
+@Get(":id")
+@ApiPublic({
+  type: FileResDto,
+  summary: "Get file details",
+})
+@ApiParam({ name: "id", type: "String" })
+async getFile(@Param("id") id: string): Promise<FileResDto> {
+  return this.fileService.getFile(id);
+}
+
+// ✅ CORRECT: RBAC protected endpoint
+@Delete(":id")
+@ApiAuth({
+  type: UserResDto,
+  summary: "Delete user",
+})
+@RequirePermission(Permission.DELETE_USER)
+@ApiParam({ name: "id", type: "String" })
+async remove(@Param("id") id: string): Promise<UserResDto> {
+  return this.userService.remove(id);
+}
+```
+
+### Controller Import Structure
+```typescript
+import { CurrentUser } from "@/decorators/current-user.decorator";
+import { ApiAuth, ApiPublic } from "@/decorators/http.decorators";
+import { RequirePermission } from "@/decorators/roles.decorator";
+import { RolesGuard } from "@/guards/roles.guard";
+import { Permission } from "@/constants/roles.constant";
+// NestJS imports
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { ApiParam, ApiTags } from "@nestjs/swagger";
+// Local DTOs
+import { CreateResourceReqDto } from "./dto/create-resource.req.dto";
+import { UpdateResourceReqDto } from "./dto/update-resource.req.dto";
+import { ResourceResDto } from "./dto/resource.res.dto";
+```
+
+### Reference Examples
+- Auth Controller: [auth.controller.ts](mdc:src/api/auth/auth.controller.ts)
+- User Controller: [user.controller.ts](mdc:src/api/user/user.controller.ts)
+- Roles Controller: [roles.controller.ts](mdc:src/api/roles/roles.controller.ts)
+- Files Controller: [file.controller.ts](mdc:src/api/files/file.controller.ts)
+
+### RBAC Integration
+```typescript
+// Controller-Level Protection
+@UseGuards(RolesGuard)
+export class ProtectedController {
+  // All endpoints require authentication
+}
+
+// Endpoint-Level Protection
+@RequirePermission(Permission.CREATE_USER)
+@RequireRole(UserRole.ADMIN)
+async protectedEndpoint() {
+  // Implementation
+}
+```
+
+### Permission Constants
+Reference the permission system: [roles.constant.ts](mdc:src/constants/roles.constant.ts)
+
+## Module Types & Patterns
+
+### 1. Feature Modules (Domain-Specific)
+**Example**: [auth.module.ts](mdc:src/api/auth/auth.module.ts)
+
+```typescript
+@Module({
+  imports: [
+    UserModule,                    // Other feature modules
+    MongooseModule.forFeature([    // Database schemas
+      { name: "Session", schema: SessionSchema }
+    ]),
+    JwtModule.register({}),        // NestJS modules
+    BullModule.registerQueue({     // External services
+      name: QueueName.EMAIL,
+      prefix: QueuePrefix.AUTH,
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService],
+  // No exports - feature module for API endpoints
+})
+export class AuthModule {}
+```
+
+**Characteristics:**
+- Focus on specific business domain
+- Import shared modules they depend on
+- May use external services (JWT, queues, etc.)
+- Usually don't export services (unless shared)
+
+### 2. Shared Data Modules
+**Example**: [user.module.ts](mdc:src/api/user/user.module.ts)
+
+```typescript
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: "User", schema: UserSchemaFactory() }
+    ])
+  ],
+  controllers: [UserController],
+  providers: [UserService, UserRepository],
+  exports: [UserService, UserRepository],  // Shared with other modules
+})
+export class UserModule {}
+```
+
+**Characteristics:**
+- Manage core data entities
+- Export services/repositories for reuse
+- Include both API endpoints and shared services
+- Repository pattern implementation
+
+## Service Patterns
+
+### Service Structure
+**Reference**: [auth.service.ts](mdc:src/api/auth/auth.service.ts), [user.service.ts](mdc:src/api/user/user.service.ts)
+
+```typescript
+@Injectable()
+export class FeatureService {
+  private readonly logger = new Logger(FeatureService.name);
+
+  constructor(
+    private readonly configService: ConfigService<AllConfigType>,
+    private readonly repository: FeatureRepository,
+    @InjectModel(Entity.MODEL) private readonly model: Model<Document>,
+    @InjectQueue(QueueName.QUEUE) private readonly queue: Queue,
+  ) {}
+
+  async businessMethod(dto: RequestDto): Promise<ResponseDto> {
+    // Business logic implementation
+    // Error handling
+    // DTO transformation
+    return plainToInstance(ResponseDto, result);
+  }
+}
+```
+
+### Key Service Patterns:
+1. **Constructor Injection**: All dependencies via constructor
+2. **Logger**: Private readonly logger for each service
+3. **Repository Pattern**: Data access through repositories
+4. **DTO Transformation**: Use `plainToInstance` for responses
+5. **Error Handling**: Custom exceptions with error codes
+6. **External Services**: Queues, caching, email, etc.
+
+## Repository Patterns
+
+### Repository Structure
+**Reference**: [user.repository.ts](mdc:src/api/user/user.repository.ts)
+
+```typescript
+@Injectable()
+export class FeatureRepository {
+  constructor(
+    @InjectModel("ModelName") public readonly model: Model<Document>
+  ) {}
+
+  async findById(id: string): Promise<Document | null> {
+    return this.model.findById(id).exec();
+  }
+
+  async findByField(field: string): Promise<Document | null> {
+    return this.model.findOne({ field, deletedAt: null }).exec();
+  }
+
+  async create(data: CreateDto): Promise<ResponseDto> {
+    const entity = new this.model(data);
+    await entity.save();
+    return plainToInstance(ResponseDto, entity);
+  }
+
+  async updateById(id: string, data: UpdateDto): Promise<Document | null> {
+    return this.model.findByIdAndUpdate(id, data, { new: true }).exec();
+  }
+
+  async softDelete(id: string): Promise<ResponseDto | null> {
+    const entity = await this.model
+      .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
+      .exec();
+    return plainToInstance(ResponseDto, entity);
+  }
+}
+```
+
+### Repository Patterns:
+1. **Injectable**: Always use `@Injectable()` decorator
+2. **Model Injection**: Use `@InjectModel()` for Mongoose models
+3. **Public Model**: Expose model as `public readonly` for advanced queries
+4. **Soft Delete**: Include `deletedAt: null` in find queries
+5. **Return Types**: Consistent Document | null return types
+6. **DTO Transform**: Transform entities to DTOs in create/update operations
+
+## Import Patterns
+
+### Module Import Order
+```typescript
+// 1. Internal application imports (with @/ alias)
+import { ErrorCode } from "@/constants/error-code.constant";
+import { ValidationException } from "@/exceptions/validation.exception";
+import { UserRepository } from "@/api/user/user.repository";
+
+// 2. NestJS framework imports
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { ConfigService } from "@nestjs/config";
+
+// 3. External library imports
+import { plainToInstance } from "class-transformer";
+import { Model } from "mongoose";
+import ms from "ms";
+
+// 4. Local relative imports
+import { CreateUserReqDto } from "./dto/create-user.req.dto";
+import { UserResDto } from "./dto/user.res.dto";
+import { UserDocument } from "./entities/user.entity";
+```
+
+## Dependency Injection Patterns
+
+### Constructor Injection
+```typescript
+constructor(
+  // Configuration (usually first)
+  private readonly configService: ConfigService<AllConfigType>,
+
+  // Repositories/Services (core dependencies)
+  private readonly userRepository: UserRepository,
+  private readonly authService: AuthService,
+
+  // Models (with @InjectModel)
+  @InjectModel(Entity.SESSION) private readonly sessionModel: Model<SessionDocument>,
+
+  // Queues/External services (with specific decorators)
+  @InjectQueue(QueueName.EMAIL) private readonly emailQueue: Queue<IEmailJob>,
+
+  // Optional dependencies last
+  // @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+) {}
+```
+
+## Error Handling Patterns
+
+### Service Error Handling
+```typescript
+// Validation errors
+if (isExistUser) {
+  throw new ValidationException(ErrorCode.E003);
+}
+
+// Not found errors
+if (!user) {
+  throw new NotFoundException(ErrorCode.E002);
+}
+
+// Unauthorized errors
+if (!isPasswordValid) {
+  throw new UnauthorizedException();
+}
+```
+
+### Error Code Constants
+Reference: [error-code.constant.ts](mdc:src/constants/error-code.constant.ts)
+
+## Integration Patterns
+
+### API Module Registration
+Add new modules to [api.module.ts](mdc:src/api/api.module.ts):
+
+```typescript
+@Module({
+  imports: [
+    AuthModule,
+    UserModule,
+    RolesModule,
+    FilesModule,
+    // Add new feature modules here
+  ],
+})
+export class ApiModule {}
+```
+
+## Reference Examples
+
+### Complete Module Examples:
+- **Feature Module**: [auth.module.ts](mdc:src/api/auth/auth.module.ts)
+- **Shared Module**: [user.module.ts](mdc:src/api/user/user.module.ts)
+- **Service**: [user.service.ts](mdc:src/api/user/user.service.ts)
+- **Repository**: [user.repository.ts](mdc:src/api/user/user.repository.ts)
+
+## Best Practices
+
+1. **Single Responsibility**: Each module handles one business domain
+2. **Dependency Direction**: Feature modules depend on shared modules, not vice versa
+3. **Export Strategy**: Only export what other modules need
+4. **Constructor Injection**: All dependencies through constructor
+5. **Error Handling**: Use custom exceptions with error codes
+6. **Logging**: Include logger in all services
+7. **DTO Transformation**: Always transform entities to DTOs
+8. **Repository Pattern**: Separate data access from business logic
+9. **Consistency**: Always follow the established naming patterns
+10. **Separation**: Keep DTOs in separate files
+11. **Documentation**: Use proper Swagger decorators
+12. **Security**: Apply appropriate RBAC permissions
+13. **Validation**: Use class-validator decorators in DTOs
+14. **Types**: Use proper TypeScript types and return types
+
+## Anti-Patterns (❌ AVOID)
+
+```typescript
+// ❌ DON'T: Circular dependencies
+// UserModule imports AuthModule AND AuthModule imports UserModule
+
+// ❌ DON'T: Direct database queries in services
+async createUser() {
+  return this.userModel.create(data); // Use repository instead
+}
+
+// ❌ DON'T: Missing error handling
+async findUser(id: string) {
+  return await this.repository.findById(id); // Should check for null
+}
+
+// ❌ DON'T: Inconsistent constructor parameter order
+constructor(
+  @InjectModel('User') private model: Model<UserDocument>,
+  private config: ConfigService, // Config should be first
+) {}
+
+// ❌ DON'T: Multiple DTOs in one file
+export class UserReqDto { }
+export class UserResDto { }
+
+// ❌ DON'T: Manual @ApiProperty decorators
+@ApiProperty({ description: "User email", type: String })
+@IsEmail()
+email: string; // Use @EmailField() instead
+
+// ❌ DON'T: Individual Swagger decorators
+@ApiOperation({ summary: "Create user" })
+@ApiResponse({ status: 201, description: "User created" })
+
+// ❌ DON'T: Manual validation decorators
+@IsUUID()
+@ApiProperty({ description: "User ID" })
+id: string; // Use @UUIDField() instead
+
+// ❌ DON'T: Inconsistent naming
+export class UserRequestDto { } // Should be UserReqDto
+export class CreateUserResponse { } // Should be UserResDto
+
+// ❌ DON'T: enum: EnumObject in @ApiProperty
+@ApiProperty({ enum: UserRole }) // Use @EnumField(() => UserRole) instead
+```

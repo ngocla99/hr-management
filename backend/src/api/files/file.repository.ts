@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
+import { CreateFileReqDto } from "./dto/create-file.req.dto";
 import { File, FileDocument } from "./entities/file.entity";
 
 @Injectable()
@@ -10,7 +11,7 @@ export class FilesRepository {
     private readonly fileModel: Model<FileDocument>,
   ) {}
 
-  async create(fileData: Partial<File>): Promise<FileDocument> {
+  async create(fileData: CreateFileReqDto): Promise<FileDocument> {
     const file = new this.fileModel(fileData);
     return file.save();
   }

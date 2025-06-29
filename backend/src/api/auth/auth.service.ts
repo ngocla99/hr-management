@@ -78,6 +78,7 @@ export class AuthService {
       id: user.id,
       sessionId: session.id,
       hash,
+      role: user.role,
     });
 
     return plainToInstance(LoginResDto, {
@@ -156,6 +157,7 @@ export class AuthService {
       id: user.id,
       sessionId: session.id,
       hash: newHash,
+      role: user.role,
     });
   }
 
@@ -211,7 +213,12 @@ export class AuthService {
     );
   }
 
-  private async createToken(data: { id: string; sessionId: string; hash: string }): Promise<Token> {
+  private async createToken(data: {
+    id: string;
+    sessionId: string;
+    hash: string;
+    role: string;
+  }): Promise<Token> {
     const tokenExpiresIn = this.configService.getOrThrow("auth.expires", {
       infer: true,
     });
@@ -221,7 +228,7 @@ export class AuthService {
       await this.jwtService.signAsync(
         {
           id: data.id,
-          role: "", // TODO: add role
+          role: data.role,
           sessionId: data.sessionId,
         },
         {

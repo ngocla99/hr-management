@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { plainToInstance } from "class-transformer";
 import { promises as fs } from "fs";
 import { Types } from "mongoose";
 import * as path from "path";
@@ -174,7 +175,7 @@ export class FilesService {
 
     const updatedFile = await this.filesRepository.updateById(id, {
       tags: updateData.tags,
-      metadata: updateData.metadata,
+      metadata: updateData.metadata ? JSON.parse(updateData.metadata) : undefined,
       expiresAt: updateData.expiresAt ? new Date(updateData.expiresAt) : undefined,
     });
 
@@ -224,7 +225,7 @@ export class FilesService {
   }
 
   private mapToResponseDto(file: FileDocument): FileResDto {
-    return {
+    return plainToInstance(FileResDto, {
       id: file.id,
       originalName: file.originalName,
       filename: file.filename,
@@ -236,6 +237,6 @@ export class FilesService {
       metadata: file.metadata,
       createdAt: file.createdAt,
       expiresAt: file.expiresAt,
-    };
+    });
   }
 }

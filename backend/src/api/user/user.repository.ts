@@ -1,3 +1,4 @@
+import { UserRole } from "@/constants/roles.constant";
 import { applyMongoQueryOptions } from "@/utils/build-query-options";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
@@ -45,5 +46,13 @@ export class UserRepository {
 
   async findAllActive(): Promise<UserDocument[]> {
     return this.userModel.find({ deletedAt: null }).exec();
+  }
+
+  async updateById(id: string, data: Partial<UserDocument>): Promise<UserDocument | null> {
+    return this.userModel.findByIdAndUpdate(id, data, { new: true }).exec();
+  }
+
+  async findByRole(role: UserRole): Promise<UserDocument[]> {
+    return this.userModel.find({ role, deletedAt: null }).exec();
   }
 }
