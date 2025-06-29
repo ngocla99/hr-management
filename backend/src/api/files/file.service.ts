@@ -10,7 +10,9 @@ import { promises as fs } from "fs";
 import { Types } from "mongoose";
 import * as path from "path";
 import { v4 as uuidv4 } from "uuid";
-import { FileListResponseDto, FileResponseDto, UploadFileDto } from "./dto/upload-file.dto";
+import { FileListResDto } from "./dto/file-list.res.dto";
+import { FileResDto } from "./dto/file.res.dto";
+import { UploadFileReqDto } from "./dto/upload-file.req.dto";
 import { FileDocument } from "./entities/file.entity";
 import { FilesRepository } from "./file.repository";
 
@@ -40,7 +42,7 @@ export class FilesService {
     ];
   }
 
-  async uploadFile(file: any, uploadDto: UploadFileDto, userId: string): Promise<FileResponseDto> {
+  async uploadFile(file: any, uploadDto: UploadFileReqDto, userId: string): Promise<FileResDto> {
     // Validate file
     this.validateFile(file);
 
@@ -122,7 +124,7 @@ export class FilesService {
     userId: string,
     page: number = 1,
     limit: number = 10,
-  ): Promise<FileListResponseDto> {
+  ): Promise<FileListResDto> {
     const skip = (page - 1) * limit;
 
     const [files, total, totalSize] = await Promise.all([
@@ -161,9 +163,9 @@ export class FilesService {
 
   async updateFile(
     id: string,
-    updateData: Partial<UploadFileDto>,
+    updateData: Partial<UploadFileReqDto>,
     userId: string,
-  ): Promise<FileResponseDto> {
+  ): Promise<FileResDto> {
     const file = await this.filesRepository.findByIdAndUser(id, userId);
 
     if (!file) {
@@ -221,7 +223,7 @@ export class FilesService {
     }
   }
 
-  private mapToResponseDto(file: FileDocument): FileResponseDto {
+  private mapToResponseDto(file: FileDocument): FileResDto {
     return {
       id: file.id,
       originalName: file.originalName,
