@@ -32,5 +32,5 @@ export class UsersByRoleResDto {
     example: UserRole.EMPLOYEE,
   })
   @Expose()
-  role: string;
+  role: UserRole;
 }

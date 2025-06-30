@@ -38,9 +38,7 @@ export class RolesController {
   })
   @ApiParam({ name: "role", enum: UserRole })
   @RequireRole(UserRole.HR_MANAGER)
-  getRolePermissions(
-    @Param("role", new ParseEnumPipe(UserRole)) role: UserRole,
-  ): RolePermissionsResDto {
+  getRolePermissions(@Param("role", new ParseEnumPipe(UserRole)) role): RolePermissionsResDto {
     return this.rolesService.getRolePermissions(role);
   }
 
@@ -77,7 +75,7 @@ export class RolesController {
   @RequirePermission(Permission.ASSIGN_ROLES)
   async canAssignRole(
     @Param("userId") userId: string,
-    @Param("role", new ParseEnumPipe(UserRole)) role: UserRole,
+    @Param("role", new ParseEnumPipe(UserRole)) role,
     @CurrentUser("id") assignerId: string,
   ): Promise<{ canAssign: boolean }> {
     const canAssign = await this.rolesService.canAssignRole(assignerId, role);
@@ -92,7 +90,7 @@ export class RolesController {
   @ApiParam({ name: "role", enum: UserRole })
   @RequireRole(UserRole.HR_MANAGER)
   async getUsersByRole(
-    @Param("role", new ParseEnumPipe(UserRole)) role: UserRole,
+    @Param("role", new ParseEnumPipe(UserRole)) role,
   ): Promise<UsersByRoleResDto[]> {
     return this.rolesService.getUsersByRole(role);
   }
