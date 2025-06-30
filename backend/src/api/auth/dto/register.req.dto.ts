@@ -1,12 +1,18 @@
 import { EmailField, PasswordField, StringFieldOptional } from "@/decorators/field.decorators";
 
 export class RegisterReqDto {
-  @StringFieldOptional()
+  @StringFieldOptional({
+    example: "nemo",
+  })
   username: string;
 
-  @EmailField()
+  @EmailField({
+    example: "nemo@gmail.com",
+  })
   email!: string;
 
-  @PasswordField()
+  @PasswordField({
+    example: "Qwer1234!@#$",
+  })
   password!: string;
 }
