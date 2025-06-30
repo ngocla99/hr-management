@@ -72,7 +72,7 @@ export class FileResDto {
     example: '{"department": "hr", "category": "resume"}',
   })
   @Expose()
-  metadata?: string;
+  metadata?: Record<string, any>;
 
   @DateField({
     description: "Upload timestamp",

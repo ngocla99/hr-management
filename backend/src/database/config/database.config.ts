@@ -43,10 +43,6 @@ export default registerAs<DatabaseConfig>("database", () => {
   if (process.env.DATABASE_URL) {
     return {
       uri: process.env.DATABASE_URL,
-      options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
     };
   }
 
@@ -79,9 +75,5 @@ export default registerAs<DatabaseConfig>("database", () => {
 
   return {
     uri,
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
   };
 });

@@ -8,7 +8,6 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { plainToInstance } from "class-transformer";
 import { promises as fs } from "fs";
-import { Types } from "mongoose";
 import * as path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { FileListResDto } from "./dto/file-list.res.dto";
@@ -68,7 +67,7 @@ export class FilesService {
         path: filepath,
         url: `/api/files/${filename}`,
         storage: "local",
-        uploadedBy: new Types.ObjectId(userId),
+        uploadedBy: userId,
         tags: uploadDto.tags,
         metadata: uploadDto.metadata,
         expiresAt: uploadDto.expiresAt ? new Date(uploadDto.expiresAt) : undefined,

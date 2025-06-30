@@ -24,7 +24,6 @@ export class User extends BaseEntity {
 
   @Prop({
     required: true,
-    unique: true,
     match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
   })
   email: string;
@@ -36,7 +35,6 @@ export class User extends BaseEntity {
 
   @Prop({
     required: true,
-    unique: true,
   })
   username: string;
 
@@ -73,8 +71,8 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 export const UserSchemaFactory = () => {
   const userSchema = UserSchema;
-  userSchema.index({ email: 1 }, { unique: true });
-  userSchema.index({ username: 1 }, { unique: true });
+  userSchema.index({ email: 1 });
+  userSchema.index({ username: 1 });
 
   userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();

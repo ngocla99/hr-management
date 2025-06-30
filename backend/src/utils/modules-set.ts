@@ -30,10 +30,8 @@ function generateModulesSet() {
     imports: [ConfigModule],
     useFactory: (configService: ConfigService<AllConfigType>) => {
       const uri = configService.getOrThrow("database.uri", { infer: true });
-      const options = configService.getOrThrow("database.options", { infer: true });
       return {
         uri,
-        ...options,
       };
     },
     inject: [ConfigService],

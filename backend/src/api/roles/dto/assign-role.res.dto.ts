@@ -18,8 +18,8 @@ export class AssignRoleResDto {
   previousRole: UserRole;
 
   @EnumField(() => UserRole, {
-    description: "New assigned role",
-    example: UserRole.RECRUITER,
+    description: "New role assigned",
+    example: UserRole.HR_MANAGER,
   })
   @Expose()
   newRole: UserRole;

@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:8
+    container_name: mongo-local
+    ports:
+      - "27017:27017"
+    volumes:
+      - /e/Nemo/data/mongo:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    restart: always
+
+  redis:
+    image: redis:7
+    container_name: redis-local
+    ports:
+      - "6379:6379"
+    volumes:
+      - /e/Nemo/data/redis:/data
+    restart: always
