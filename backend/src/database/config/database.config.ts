@@ -74,6 +74,6 @@ export default registerAs<DatabaseConfig>("database", () => {
   }
 
   return {
-    uri,
+    uri: `${uri}?authSource=admin`,
   };
 });
