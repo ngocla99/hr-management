@@ -17,19 +17,24 @@ export type I18nTranslations = {
     };
     "department": {
         "error": {
-            "department_name_exists": string;
-            "department_self_reference": string;
-            "department_has_child": string;
-            "department_has_active_teams": string;
-            "department_not_found": string;
+            "name_exists": string;
             "manager_not_found": string;
             "parent_department_not_found": string;
-            "root_department_exists": string;
-            "name_exists": string;
             "self_reference": string;
             "has_child_departments": string;
             "has_active_teams": string;
             "not_found": string;
+            "root_department_exists": string;
+        };
+    };
+    "team": {
+        "error": {
+            "name_exists": string;
+            "team_lead_not_found": string;
+            "department_not_found": string;
+            "not_found": string;
+            "has_members": string;
+            "has_active_members": string;
         };
     };
     "user": {

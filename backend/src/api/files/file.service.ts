@@ -15,6 +15,7 @@ import { FileResDto } from "./dto/file.res.dto";
 import { UploadFileReqDto } from "./dto/upload-file.req.dto";
 import { FileDocument } from "./entities/file.entity";
 import { FilesRepository } from "./file.repository";
+import { Types } from 'mongoose';
 
 @Injectable()
 export class FilesService {
@@ -67,14 +68,14 @@ export class FilesService {
         path: filepath,
         url: `/api/files/${filename}`,
         storage: "local",
-        uploadedBy: userId,
+        uploadedBy: new Types.ObjectId(userId),
         tags: uploadDto.tags,
-        metadata: uploadDto.metadata,
+        metadata: uploadDto.metadata ? JSON.parse(uploadDto.metadata) : undefined,
         expiresAt: uploadDto.expiresAt ? new Date(uploadDto.expiresAt) : undefined,
       };
 
       const savedFile = await this.filesRepository.create(fileData);
-      return this.mapToResponseDto(savedFile);
+      return this.mapToResponseDto(savedFile.toObject() as FileDocument);
     } catch (error) {
       // Clean up file if database save fails
       try {

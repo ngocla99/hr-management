@@ -30,5 +30,5 @@ export class CreateUserReqDto {
     enum: UserRole,
     default: UserRole.EMPLOYEE,
   })
-  role: UserRole;
+  role?: UserRole;
 }
