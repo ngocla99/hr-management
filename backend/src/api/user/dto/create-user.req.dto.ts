@@ -1,3 +1,4 @@
+import { UserRole } from "@/constants/roles.constant";
 import {
   EmailField,
   PasswordField,
@@ -8,19 +9,26 @@ import { lowerCaseTransformer } from "@/utils/transformers/lower-case.transforme
 import { Transform } from "class-transformer";
 
 export class CreateUserReqDto {
-  @StringField()
+  @StringField({
+    example: "emp-nemo",
+  })
   @Transform(lowerCaseTransformer)
   username: string;
 
-  @EmailField()
+  @EmailField({
+    example: "emp-nemo@gmail.com",
+  })
   email: string;
 
-  @PasswordField()
+  @PasswordField({
+    example: "Qwer1234!@#$",
+  })
   password: string;
 
-  @StringFieldOptional()
-  bio?: string;
-
-  @StringFieldOptional()
-  image?: string;
+  @StringFieldOptional({
+    example: "EMPLOYEE",
+    enum: UserRole,
+    default: UserRole.EMPLOYEE,
+  })
+  role: UserRole;
 }

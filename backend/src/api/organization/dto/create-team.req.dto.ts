@@ -1,11 +1,5 @@
 import { TeamStatus } from "@/api/organization/entities/team.entity";
-import {
-  EnumFieldOptional,
-  StringField,
-  StringFieldOptional,
-  UUIDField,
-  UUIDFieldOptional,
-} from "@/decorators/field.decorators";
+import { EnumFieldOptional, StringField, StringFieldOptional } from "@/decorators/field.decorators";
 
 export class CreateTeamReqDto {
   @StringField({
@@ -23,13 +17,13 @@ export class CreateTeamReqDto {
   })
   description?: string;
 
-  @UUIDField({
+  @StringField({
     description: "Department ID where the team belongs",
     example: "60b5f8c2e4b0a12b8c2e4b0a",
   })
   department: string;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Team lead user ID",
     example: "60b5f8c2e4b0a12b8c2e4b0b",
   })

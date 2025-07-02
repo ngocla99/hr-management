@@ -1,0 +1,12 @@
+{
+  "error": {
+    "name_exists": "Department name already exists",
+    "manager_not_found": "Manager not found",
+    "parent_department_not_found": "Parent department not found",
+    "self_reference": "Department cannot be its own parent",
+    "has_child_departments": "Department has child departments",
+    "has_active_teams": "Department has active teams",
+    "not_found": "Department not found",
+    "root_department_exists": "A root department already exists. Only one root department is allowed per organization."
+  }
+}

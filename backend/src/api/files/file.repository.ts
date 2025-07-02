@@ -1,7 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { plainToInstance } from "class-transformer";
 import { Model, Types } from "mongoose";
 import { CreateFileReqDto } from "./dto/create-file.req.dto";
+import { FileResDto } from "./dto/file.res.dto";
 import { File, FileDocument } from "./entities/file.entity";
 
 @Injectable()
@@ -11,9 +13,10 @@ export class FilesRepository {
     private readonly fileModel: Model<FileDocument>,
   ) {}
 
-  async create(fileData: CreateFileReqDto): Promise<FileDocument> {
+  async create(fileData: CreateFileReqDto): Promise<FileResDto> {
     const file = new this.fileModel(fileData);
-    return file.save();
+    const fileRes = await file.save();
+    return plainToInstance(FileResDto, fileRes.toObject());
   }
 
   async findById(id: string): Promise<FileDocument | null> {

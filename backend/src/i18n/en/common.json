@@ -1,6 +1,7 @@
 {
   "validation": {
-    "error": "Common validation"
+    "error": "Common validation",
+    "is_empty": "Field is required"
   },
   "error": {
     "internal_server_error": "Has occurred an internal server error",

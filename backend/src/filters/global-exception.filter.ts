@@ -12,6 +12,7 @@ import {
   HttpException,
   HttpStatus,
   Logger,
+  NotFoundException,
   UnprocessableEntityException,
   ValidationError,
 } from "@nestjs/common";
@@ -42,6 +43,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       error = this.handleUnprocessableEntityException(exception);
     } else if (exception instanceof ValidationException) {
       error = this.handleValidationException(exception);
+    } else if (exception instanceof NotFoundException) {
+      error = this.handleNotFoundException(exception);
     } else if (exception instanceof HttpException) {
       error = this.handleHttpException(exception);
     } else if (exception instanceof MongooseError.CastError) {
@@ -106,6 +109,33 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       error: STATUS_CODES[statusCode]!,
       errorCode: Object.keys(ErrorCode)[Object.values(ErrorCode).indexOf(r.errorCode)],
       message: r.message || this.i18n.t(r.errorCode as unknown as keyof I18nTranslations),
+    };
+
+    this.logger.debug(exception);
+
+    return errorRes;
+  }
+
+  /**
+   * Handles NotFoundException
+   * @param exception NotFoundException
+   * @returns ErrorDto
+   */
+  private handleNotFoundException(exception: NotFoundException): ErrorDto {
+    const r = exception.getResponse() as {
+      message: string;
+    };
+
+    const statusCode = exception.getStatus();
+
+    const errorRes = {
+      timestamp: new Date().toISOString(),
+      statusCode,
+      error: STATUS_CODES[statusCode]!,
+      errorCode: "N001",
+      message:
+        (this.i18n.t(r.message as unknown as keyof I18nTranslations) as string) ||
+        this.i18n.t("common.error.entity_not_found")!,
     };
 
     this.logger.debug(exception);

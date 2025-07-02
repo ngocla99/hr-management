@@ -4,7 +4,6 @@ import {
   NumberFieldOptional,
   StringField,
   StringFieldOptional,
-  UUIDFieldOptional,
 } from "@/decorators/field.decorators";
 
 export class CreateDepartmentReqDto {
@@ -23,13 +22,13 @@ export class CreateDepartmentReqDto {
   })
   description?: string;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Department manager user ID",
-    example: "60b5f8c2e4b0a12b8c2e4b0a",
+    example: "68629b5276ca03ffd0d4c38e",
   })
   manager?: string;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Parent department ID",
     example: "60b5f8c2e4b0a12b8c2e4b0b",
   })
@@ -44,7 +43,7 @@ export class CreateDepartmentReqDto {
 
   @StringFieldOptional({
     description: "Department location",
-    example: "New York Office, Floor 3",
+    example: "Ha Noi, Viet Nam",
     maxLength: 200,
   })
   location?: string;

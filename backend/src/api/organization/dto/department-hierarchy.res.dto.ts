@@ -5,12 +5,10 @@ import {
   NumberFieldOptional,
   StringField,
   StringFieldOptional,
-  UUIDField,
-  UUIDFieldOptional,
 } from "@/decorators/field.decorators";
 
 export class DepartmentHierarchyResDto {
-  @UUIDField({
+  @StringField({
     description: "Department ID",
     example: "60b5f8c2e4b0a12b8c2e4b0a",
   })
@@ -28,7 +26,7 @@ export class DepartmentHierarchyResDto {
   })
   description?: string;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Department manager user ID",
     example: "60b5f8c2e4b0a12b8c2e4b0b",
   })

@@ -20,19 +20,20 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(dto: CreateUserReqDto): Promise<UserResDto> {
-    const { username, email, password } = dto;
+    const { username, email, password, role } = dto;
 
     // check uniqueness of username/email
     const user = await this.userRepository.findByUsername(username);
 
     if (user) {
-      throw new ValidationException(ErrorCode.E001);
+      throw new ValidationException(ErrorCode.U001);
     }
 
     const newUser = await this.userRepository.createUser({
       username,
       email,
       password,
+      role,
     });
 
     this.logger.debug(newUser);
@@ -84,7 +85,7 @@ export class UserService {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new NotFoundException(ErrorCode.U002);
     }
 
     await this.userRepository.updateUser(id, updateUserDto);
@@ -94,7 +95,7 @@ export class UserService {
     const user = await this.userRepository.softDeleteUser(id);
 
     if (!user) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new NotFoundException(ErrorCode.U002);
     }
 
     return plainToInstance(UserResDto, user);

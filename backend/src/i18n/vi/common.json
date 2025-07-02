@@ -1,6 +1,7 @@
 {
   "validation": {
-    "error": "Lỗi xác thực"
+    "error": "Lỗi xác thực",
+    "is_empty": "Trường này không được để trống"
   },
   "error": {
     "internal_server_error": "Đã xảy ra lỗi máy chủ nội bộ",

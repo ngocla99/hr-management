@@ -71,7 +71,6 @@ export class OrganizationController {
   @ApiAuth({
     type: DepartmentHierarchyResDto,
     summary: "Get department hierarchy",
-    isArray: true,
   })
   @RequirePermission(Permission.READ_DEPARTMENT)
   async getDepartmentHierarchy(): Promise<DepartmentHierarchyResDto[]> {
@@ -144,7 +143,6 @@ export class OrganizationController {
   @ApiAuth({
     type: TeamResDto,
     summary: "Find teams by department",
-    isArray: true,
   })
   @ApiParam({ name: "departmentId", type: "String" })
   @RequirePermission(Permission.READ_DEPARTMENT)

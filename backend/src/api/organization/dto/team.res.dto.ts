@@ -4,12 +4,10 @@ import {
   EnumField,
   StringField,
   StringFieldOptional,
-  UUIDField,
-  UUIDFieldOptional,
 } from "@/decorators/field.decorators";
 
 export class TeamResDto {
-  @UUIDField({
+  @StringField({
     description: "Team ID",
     example: "60b5f8c2e4b0a12b8c2e4b0a",
   })
@@ -27,13 +25,13 @@ export class TeamResDto {
   })
   description?: string;
 
-  @UUIDField({
+  @StringField({
     description: "Department ID where the team belongs",
     example: "60b5f8c2e4b0a12b8c2e4b0b",
   })
   department: string;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Team lead user ID",
     example: "60b5f8c2e4b0a12b8c2e4b0c",
   })
@@ -45,7 +43,7 @@ export class TeamResDto {
   })
   status: TeamStatus;
 
-  @UUIDField({
+  @StringField({
     description: "ID of user who created the team",
     example: "60b5f8c2e4b0a12b8c2e4b0d",
   })

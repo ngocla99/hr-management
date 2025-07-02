@@ -1,0 +1,10 @@
+{
+  "error": {
+    "name_exists": "Tên nhóm đã tồn tại",
+    "team_lead_not_found": "Người dẫn đầu nhóm không tồn tại",
+    "department_not_found": "Phòng ban không tồn tại",
+    "not_found": "Nhóm không tồn tại",
+    "has_members": "Nhóm có thành viên",
+    "has_active_members": "Nhóm có thành viên hoạt động"
+  }
+}

@@ -4,7 +4,7 @@ import { applyMongoQueryOptions } from "@/utils/build-query-options";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { plainToInstance } from "class-transformer";
-import { Model, Types } from "mongoose";
+import { FilterQuery, Model, Types } from "mongoose";
 import { CreateDepartmentReqDto } from "./dto/create-department.req.dto";
 import { CreateTeamReqDto } from "./dto/create-team.req.dto";
 import { DepartmentResDto } from "./dto/department.res.dto";
@@ -36,7 +36,7 @@ export class OrganizationRepository {
   ): Promise<DepartmentResDto> {
     const department = new this.departmentModel(data);
     await department.save();
-    return plainToInstance(DepartmentResDto, department);
+    return plainToInstance(DepartmentResDto, department.toObject());
   }
 
   async updateDepartment(
@@ -61,7 +61,7 @@ export class OrganizationRepository {
   async findDepartmentsByFilter(
     filter: ListDepartmentsReqDto,
   ): Promise<[DepartmentDocument[], number]> {
-    const query: any = { deletedAt: null };
+    const query: FilterQuery<DepartmentDocument> = { deletedAt: null };
 
     if (filter.search) {
       query.name = { $regex: filter.search, $options: "i" };
@@ -82,8 +82,8 @@ export class OrganizationRepository {
     const [departments, count] = await Promise.all([
       this.departmentModel
         .find(query)
-        .skip((filter.page - 1) * filter.limit)
-        .limit(filter.limit)
+        .skip((filter.page! - 1) * filter.limit!)
+        .limit(filter.limit!)
         .sort({ createdAt: -1 })
         .exec(),
       this.departmentModel.countDocuments(query).exec(),
@@ -124,7 +124,7 @@ export class OrganizationRepository {
   }
 
   async findTeamByName(name: string, departmentId?: string): Promise<TeamDocument | null> {
-    const query: any = { name, deletedAt: null };
+    const query: FilterQuery<TeamDocument> = { name, deletedAt: null };
     if (departmentId) {
       query.department = departmentId;
     }
@@ -134,7 +134,7 @@ export class OrganizationRepository {
   async createTeam(data: CreateTeamReqDto & { createdBy: string }): Promise<TeamResDto> {
     const team = new this.teamModel(data);
     await team.save();
-    return plainToInstance(TeamResDto, team);
+    return plainToInstance(TeamResDto, team.toObject());
   }
 
   async updateTeam(id: string, data: UpdateTeamReqDto): Promise<TeamDocument | null> {

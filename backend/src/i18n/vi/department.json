@@ -1,0 +1,12 @@
+{
+  "error": {
+    "name_exists": "Tên phòng ban đã tồn tại",
+    "manager_not_found": "Quản lý phòng ban không tồn tại",
+    "parent_department_not_found": "Phòng ban cha không tồn tại",
+    "self_reference": "Phòng ban không thể là cha của chính nó",
+    "has_child_departments": "Phòng ban có phòng ban con",
+    "has_active_teams": "Phòng ban có nhóm hoạt động",
+    "not_found": "Phòng ban không tồn tại",
+    "root_department_exists": "Đã tồn tại phòng ban gốc. Mỗi tổ chức chỉ được phép có một phòng ban gốc."
+  }
+}

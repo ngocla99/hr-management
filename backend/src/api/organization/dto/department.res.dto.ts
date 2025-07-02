@@ -10,7 +10,7 @@ import {
 } from "@/decorators/field.decorators";
 
 export class DepartmentResDto {
-  @UUIDField({
+  @StringField({
     description: "Department ID",
     example: "60b5f8c2e4b0a12b8c2e4b0a",
   })

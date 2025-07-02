@@ -1,12 +1,8 @@
 import { DepartmentStatus } from "@/api/organization/entities/department.entity";
-import { OffsetPageOptionsDto } from "@/common/dto/offset-pagination/page-options.dto";
-import {
-  EnumFieldOptional,
-  StringFieldOptional,
-  UUIDFieldOptional,
-} from "@/decorators/field.decorators";
+import { PageOptionsDto } from "@/common/dto/offset-pagination/page-options.dto";
+import { EnumFieldOptional, StringFieldOptional } from "@/decorators/field.decorators";
 
-export class ListDepartmentsReqDto extends OffsetPageOptionsDto {
+export class ListDepartmentsReqDto extends PageOptionsDto {
   @StringFieldOptional({
     description: "Search departments by name",
     example: "Engineering",
@@ -19,13 +15,13 @@ export class ListDepartmentsReqDto extends OffsetPageOptionsDto {
   })
   status?: DepartmentStatus;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Filter by parent department ID",
     example: "60b5f8c2e4b0a12b8c2e4b0a",
   })
   parentDepartment?: string;
 
-  @UUIDFieldOptional({
+  @StringFieldOptional({
     description: "Filter by department manager ID",
     example: "60b5f8c2e4b0a12b8c2e4b0b",
   })

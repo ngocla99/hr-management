@@ -8,20 +8,31 @@ export type I18nTranslations = {
     "common": {
         "validation": {
             "error": string;
+            "is_empty": string;
         };
         "error": {
             "internal_server_error": string;
             "entity_not_found": string;
         };
     };
+    "department": {
+        "error": {
+            "department_name_exists": string;
+            "department_self_reference": string;
+            "department_has_child": string;
+            "department_has_active_teams": string;
+            "department_not_found": string;
+            "manager_not_found": string;
+            "parent_department_not_found": string;
+            "root_department_exists": string;
+            "name_exists": string;
+            "self_reference": string;
+            "has_child_departments": string;
+            "has_active_teams": string;
+            "not_found": string;
+        };
+    };
     "user": {
-        "unique": {
-            "username": string;
-            "email": string;
-        };
-        "validation": {
-            "is_empty": string;
-        };
         "error": {
             "username_or_email_exists": string;
             "email_exists": string;

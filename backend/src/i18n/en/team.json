@@ -1,0 +1,10 @@
+{
+  "error": {
+    "name_exists": "Team name already exists",
+    "team_lead_not_found": "Team lead not found",
+    "department_not_found": "Department not found",
+    "not_found": "Team not found",
+    "has_members": "Team has members",
+    "has_active_members": "Team has active members"
+  }
+}

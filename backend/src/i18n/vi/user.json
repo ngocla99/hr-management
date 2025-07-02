@@ -1,11 +1,4 @@
 {
-  "unique": {
-    "username": "Người dùng đã tồn tại",
-    "email": "Người dùng đã tồn tại"
-  },
-  "validation": {
-    "is_empty": "Trường này không được để trống"
-  },
   "error": {
     "username_or_email_exists": "Tên người dùng hoặc email đã tồn tại",
     "email_exists": "Tài khoản với email này đã tồn tại",

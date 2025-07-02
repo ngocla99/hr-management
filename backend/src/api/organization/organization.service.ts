@@ -6,6 +6,7 @@ import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
+import { UserDocument } from "../user/entities/user.entity";
 import { CreateDepartmentReqDto } from "./dto/create-department.req.dto";
 import { CreateTeamReqDto } from "./dto/create-team.req.dto";
 import { DepartmentHierarchyResDto } from "./dto/department-hierarchy.res.dto";
@@ -36,22 +37,33 @@ export class OrganizationService {
     // Check if department name is unique
     const existingDepartment = await this.organizationRepository.findDepartmentByName(name);
     if (existingDepartment) {
-      throw new ValidationException(ErrorCode.E001);
+      throw new ValidationException(ErrorCode.D001);
     }
 
     // Validate manager exists if provided
     if (manager) {
       const managerUser = await this.userRepository.findById(manager);
       if (!managerUser) {
-        throw new NotFoundException("Manager user not found");
+        throw new NotFoundException(ErrorCode.D002);
       }
     }
 
-    // Validate parent department exists if provided
-    if (parentDepartment) {
+    // Handle root department vs child department validation
+    if (!parentDepartment) {
+      // Creating a root department - check if one already exists
+      const existingRootDepartments = await this.organizationRepository.findAllDepartments();
+      const rootDepartments = existingRootDepartments.filter((dept) => !dept.parentDepartment);
+
+      if (rootDepartments.length > 0) {
+        throw new ValidationException(ErrorCode.D008); // Root department already exists
+      }
+
+      this.logger.debug(`Creating root department: ${name}`);
+    } else {
+      // Validate parent department exists if provided
       const parentDept = await this.organizationRepository.findDepartmentById(parentDepartment);
       if (!parentDept) {
-        throw new NotFoundException("Parent department not found");
+        throw new NotFoundException(ErrorCode.D003);
       }
     }
 
@@ -81,7 +93,7 @@ export class OrganizationService {
   async findDepartmentById(id: Uuid): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
-      throw new NotFoundException("Department not found");
+      throw new NotFoundException(ErrorCode.D002);
     }
     return plainToInstance(DepartmentResDto, department);
   }
@@ -89,28 +101,28 @@ export class OrganizationService {
   async updateDepartment(id: Uuid, updateDto: UpdateDepartmentReqDto): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
-      throw new NotFoundException("Department not found");
+      throw new NotFoundException(ErrorCode.D002);
     }
 
     // Validate manager exists if provided
     if (updateDto.manager) {
       const managerUser = await this.userRepository.findById(updateDto.manager);
       if (!managerUser) {
-        throw new NotFoundException("Manager user not found");
+        throw new NotFoundException(ErrorCode.D002);
       }
     }
 
     // Validate parent department exists and prevent circular references
     if (updateDto.parentDepartment) {
       if (updateDto.parentDepartment === id) {
-        throw new ValidationException(ErrorCode.E001, "Department cannot be its own parent");
+        throw new ValidationException(ErrorCode.D004);
       }
 
       const parentDept = await this.organizationRepository.findDepartmentById(
         updateDto.parentDepartment,
       );
       if (!parentDept) {
-        throw new NotFoundException("Parent department not found");
+        throw new ValidationException(ErrorCode.D003);
       }
     }
 
@@ -121,27 +133,24 @@ export class OrganizationService {
   async removeDepartment(id: Uuid): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
-      throw new NotFoundException("Department not found");
+      throw new NotFoundException(ErrorCode.D002);
     }
 
     // Check for child departments
     const childDepartments = await this.organizationRepository.findChildDepartments(id);
     if (childDepartments.length > 0) {
-      throw new ValidationException(
-        ErrorCode.E001,
-        "Cannot delete department with child departments",
-      );
+      throw new ValidationException(ErrorCode.D005);
     }
 
     // Check for teams in the department
     const teams = await this.organizationRepository.findTeamsByDepartment(id);
     if (teams.length > 0) {
-      throw new ValidationException(ErrorCode.E001, "Cannot delete department with active teams");
+      throw new ValidationException(ErrorCode.D006);
     }
 
     const deletedDepartment = await this.organizationRepository.softDeleteDepartment(id);
     if (!deletedDepartment) {
-      throw new NotFoundException("Department not found");
+      throw new NotFoundException(ErrorCode.D002);
     }
 
     return deletedDepartment;
@@ -163,13 +172,11 @@ export class OrganizationService {
 
     // Get user names for managers
     const managerIds = allDepartments.map((dept) => dept.manager).filter(Boolean);
-    const managers = await Promise.all(
-      managerIds.map((id) => this.userRepository.findById(id.toString())),
-    );
+    const managers = await Promise.all(managerIds.map((id) => this.userRepository.findById(id)));
     const managerMap = managers.reduce(
-      (acc, manager) => {
+      (acc, manager: UserDocument | null) => {
         if (manager) {
-          acc[manager._id.toString()] = `${manager.firstName} ${manager.lastName}`;
+          acc[manager.id as string] = `${manager.firstName} ${manager.lastName}`;
         }
         return acc;
       },
@@ -182,7 +189,7 @@ export class OrganizationService {
 
     // First pass: create all department nodes
     allDepartments.forEach((dept) => {
-      const deptId = dept._id.toString();
+      const deptId = dept.id;
       const hierarchyDto: DepartmentHierarchyResDto = {
         id: deptId,
         name: dept.name,
@@ -190,7 +197,7 @@ export class OrganizationService {
         manager: dept.manager?.toString(),
         managerName: dept.manager ? managerMap[dept.manager.toString()] : undefined,
         employeeCount: dept.employees.length,
-        teamCount: teamsByDepartment[deptId] || 0,
+        teamCount: teamsByDepartment[deptId as string] || 0,
         status: dept.status,
         children: [],
       };
@@ -199,7 +206,7 @@ export class OrganizationService {
 
     // Second pass: build hierarchy
     allDepartments.forEach((dept) => {
-      const deptId = dept._id.toString();
+      const deptId = dept.id;
       const deptDto = departmentMap.get(deptId)!;
 
       if (dept.parentDepartment) {
@@ -226,20 +233,20 @@ export class OrganizationService {
     // Validate department exists
     const departmentDoc = await this.organizationRepository.findDepartmentById(department);
     if (!departmentDoc) {
-      throw new NotFoundException("Department not found");
+      throw new NotFoundException(ErrorCode.D002);
     }
 
     // Check if team name is unique within the department
     const existingTeam = await this.organizationRepository.findTeamByName(name, department);
     if (existingTeam) {
-      throw new ValidationException(ErrorCode.E001, "Team name already exists in this department");
+      throw new ValidationException(ErrorCode.T001);
     }
 
     // Validate team lead exists if provided
     if (teamLead) {
       const teamLeadUser = await this.userRepository.findById(teamLead);
       if (!teamLeadUser) {
-        throw new NotFoundException("Team lead user not found");
+        throw new NotFoundException(ErrorCode.D002);
       }
     }
 
@@ -255,7 +262,7 @@ export class OrganizationService {
   async findTeamById(id: Uuid): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
-      throw new NotFoundException("Team not found");
+      throw new NotFoundException(ErrorCode.T004);
     }
     return plainToInstance(TeamResDto, team);
   }
@@ -268,7 +275,7 @@ export class OrganizationService {
   async updateTeam(id: Uuid, updateDto: UpdateTeamReqDto): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
-      throw new NotFoundException("Team not found");
+      throw new NotFoundException(ErrorCode.T004);
     }
 
     // Validate department exists if provided
@@ -277,7 +284,7 @@ export class OrganizationService {
         updateDto.department,
       );
       if (!departmentDoc) {
-        throw new NotFoundException("Department not found");
+        throw new NotFoundException(ErrorCode.D002);
       }
     }
 
@@ -285,7 +292,7 @@ export class OrganizationService {
     if (updateDto.teamLead) {
       const teamLeadUser = await this.userRepository.findById(updateDto.teamLead);
       if (!teamLeadUser) {
-        throw new NotFoundException("Team lead user not found");
+        throw new NotFoundException(ErrorCode.T002);
       }
     }
 
@@ -296,31 +303,31 @@ export class OrganizationService {
   async removeTeam(id: Uuid): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
-      throw new NotFoundException("Team not found");
+      throw new NotFoundException(ErrorCode.T004);
     }
 
     const deletedTeam = await this.organizationRepository.softDeleteTeam(id);
     if (!deletedTeam) {
-      throw new NotFoundException("Team not found");
+      throw new NotFoundException(ErrorCode.T004);
     }
 
     return deletedTeam;
   }
 
-  async addTeamMember(teamId: Uuid, userId: Uuid): Promise<TeamResDto> {
+  async addTeamMember(teamId: string, userId: string): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(teamId);
     if (!team) {
-      throw new NotFoundException("Team not found");
+      throw new NotFoundException(ErrorCode.T004);
     }
 
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new NotFoundException("User not found");
+      throw new NotFoundException(ErrorCode.U002);
     }
 
     // Check if user is already a member
     if (team.members.some((memberId) => memberId.toString() === userId)) {
-      throw new ValidationException(ErrorCode.E001, "User is already a team member");
+      throw new ValidationException(ErrorCode.T005);
     }
 
     const updatedTeam = await this.organizationRepository.addMemberToTeam(teamId, userId);
@@ -330,7 +337,7 @@ export class OrganizationService {
   async removeTeamMember(teamId: Uuid, userId: Uuid): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(teamId);
     if (!team) {
-      throw new NotFoundException("Team not found");
+      throw new NotFoundException(ErrorCode.T004);
     }
 
     const updatedTeam = await this.organizationRepository.removeMemberFromTeam(teamId, userId);

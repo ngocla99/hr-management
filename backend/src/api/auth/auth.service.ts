@@ -92,7 +92,7 @@ export class AuthService {
     const isExistUser = await this.userRepository.findByEmail(dto.email);
 
     if (isExistUser) {
-      throw new ValidationException(ErrorCode.E003);
+      throw new ValidationException(ErrorCode.U003);
     }
 
     // Register user
