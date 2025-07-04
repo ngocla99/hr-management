@@ -1,0 +1,60 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Architecture & Folder Structure
+
+This project follows a feature-based architecture with clear separation of concerns.
+
+## Root Structure
+```
+├── src/                    # Main source code
+├── public/                 # Static assets
+├── .cursor/               # Cursor IDE rules
+└── config files           # Build and tool configurations
+```
+
+## Source Code Organization (`src/`)
+
+### Feature-Based Architecture
+- **Features** ([src/features/](mdc:src/features)): Domain-specific feature modules
+  - `auth/` - Authentication functionality
+  - `dashboard/` - Dashboard components and logic
+  - `users/` - User management
+  - `tasks/` - Task management
+  - `chats/` - Chat functionality
+  - `settings/` - Application settings
+  - `apps/` - App management
+  - `errors/` - Error handling components
+
+### Core Directories
+- **Components** ([src/components/](mdc:src/components)): Reusable UI components
+  - `ui/` - Base UI components (ShadcnUI)
+  - `layout/` - Layout-specific components
+  - Root level: Custom application components
+
+- **Routes** ([src/routes/](mdc:src/routes)): TanStack Router definitions
+  - `_authenticated/` - Protected routes requiring authentication
+  - `(auth)/` - Authentication routes
+  - `(errors)/` - Error page routes
+  - `__root.tsx` - Root route component
+
+- **State Management**:
+  - **Stores** ([src/stores/](mdc:src/stores)): Zustand stores (e.g., authStore)
+  - **Atoms** (src/atoms/): Jotai atoms for fine-grained state
+  - **Context** ([src/context/](mdc:src/context)): React Context providers
+
+- **Utilities & Configuration**:
+  - **Hooks** ([src/hooks/](mdc:src/hooks)): Custom React hooks
+  - **Utils** ([src/utils/](mdc:src/utils)): Utility functions
+  - **Lib** ([src/lib/](mdc:src/lib)): Library configurations and helpers
+  - **Config** ([src/config/](mdc:src/config)): Application configuration
+
+## Architectural Principles
+1. **Feature-First**: Group related functionality by domain/feature
+2. **Component Reusability**: Shared UI components in dedicated directories
+3. **Type Safety**: Full TypeScript coverage with strict configuration
+4. **State Isolation**: Multiple state management solutions for different use cases
+5. **Route-Based Code Splitting**: Automatic splitting via TanStack Router
+

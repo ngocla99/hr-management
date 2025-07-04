@@ -11,7 +11,7 @@ export function applyMongoQueryOptions<T>(
   query: Query<T, any>,
   options?: MongoQueryOptions,
 ): Query<T, any> {
-  const { select, projection, lean = true, populate } = options || {};
+  const { select, projection, lean, populate } = options || {};
 
   if (!options) return query;
 

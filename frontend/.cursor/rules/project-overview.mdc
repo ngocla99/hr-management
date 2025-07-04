@@ -1,0 +1,41 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Project Overview - Next gERP Dashboard
+
+This is a React-based admin dashboard UI built with modern web technologies, focusing on responsiveness and accessibility.
+
+## Project Purpose
+- Next gERP Dashboard UI crafted with ShadcnUI and Vite
+- Built with responsiveness and accessibility in mind
+- Reusable collection of dashboard UI components for future projects
+- Features 10+ pages with custom components
+
+## Tech Stack
+- **Framework**: React 19 with TypeScript
+- **Build Tool**: [Vite](mdc:vite.config.ts) with SWC
+- **UI Library**: ShadcnUI (TailwindCSS + RadixUI)
+- **Routing**: TanStack Router with [routeTree.gen.ts](mdc:src/routeTree.gen.ts)
+- **State Management**: Zustand stores + TanStack Query
+- **Styling**: TailwindCSS v4
+- **Icons**: Tabler Icons + Lucide React
+- **Forms**: React Hook Form with Zod validation
+- **Testing/Quality**: ESLint, Prettier, TypeScript, Knip
+
+## Key Features
+- Light/dark theme switching
+- Responsive design
+- Accessibility focused
+- Built-in Sidebar component
+- Global Search Command
+- Authentication system
+- Form handling with validation
+
+## Main Entry Points
+- Application entry: [src/main.tsx](mdc:src/main.tsx)
+- Root route: [src/routes/__root.tsx](mdc:src/routes/__root.tsx)
+- Main HTML: [index.html](mdc:index.html)
+- Package config: [package.json](mdc:package.json)
+

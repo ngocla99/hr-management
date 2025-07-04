@@ -1,0 +1,78 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Routing & Navigation
+
+This project uses TanStack Router for type-safe routing with automatic code splitting.
+
+## Router Configuration
+
+### Entry Point
+- **Router Setup**: [src/main.tsx](mdc:src/main.tsx) - Router instance creation and provider setup
+- **Route Tree**: [src/routeTree.gen.ts](mdc:src/routeTree.gen.ts) - Auto-generated route definitions
+- **Root Route**: [src/routes/__root.tsx](mdc:src/routes/__root.tsx) - Root layout component
+
+### Route Organization
+
+#### Protected Routes ([src/routes/_authenticated/](mdc:src/routes/_authenticated))
+Routes requiring user authentication:
+- `index.tsx` - Dashboard home page
+- `users/` - User management pages
+- `tasks/` - Task management pages
+- `chats/` - Chat interface pages
+- `settings/` - Application settings pages
+- `apps/` - App management pages
+- `help-center/` - Help and support pages
+
+#### Authentication Routes ([src/routes/(auth)/](mdc:src/routes/(auth)/))
+Public authentication-related pages:
+- Sign in, sign up, forgot password, OTP verification
+
+#### Error Routes ([src/routes/(errors)/](mdc:src/routes/(errors)/))
+Error handling pages:
+- 404, 500, and other error states
+
+## Routing Features
+
+### Authentication Guard
+- Protected routes automatically redirect unauthenticated users
+- Auth state managed via [src/stores/authStore.ts](mdc:src/stores/authStore.ts)
+- Session handling with automatic logout on 401 errors
+
+### Code Splitting
+- Automatic route-based code splitting via TanStack Router
+- Lazy loading for optimal performance
+- Preloading on hover/intent for smooth navigation
+
+### Type Safety
+- Full TypeScript integration with route parameters
+- Type-safe navigation with proper intellisense
+- Compile-time route validation
+
+## Navigation Components
+
+### Global Navigation
+- **Sidebar**: Main navigation component in [src/components/ui/sidebar.tsx](mdc:src/components/ui/sidebar.tsx)
+- **Command Menu**: Global search and navigation via [src/components/command-menu.tsx](mdc:src/components/command-menu.tsx)
+- **Profile Dropdown**: User menu in [src/components/profile-dropdown.tsx](mdc:src/components/profile-dropdown.tsx)
+
+### Progress Indication
+- **Loading Bar**: Global loading indicator in [src/components/navigation-progress.tsx](mdc:src/components/navigation-progress.tsx)
+- Route transition feedback for better UX
+
+## Route Patterns
+
+### File-Based Routing
+- Routes follow file system structure
+- Nested routes via folder nesting
+- Layout routes for shared components
+- Protected route groups with `_authenticated` prefix
+- Route groups with parentheses for organization
+
+### Search Parameters & State
+- Type-safe search parameter handling
+- URL state synchronization
+- Navigation state persistence
+

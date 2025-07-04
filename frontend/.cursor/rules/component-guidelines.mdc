@@ -1,0 +1,90 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Component Guidelines & UI System
+
+This project uses a layered component architecture with ShadcnUI as the foundation.
+
+## Component Hierarchy
+
+### 1. Base UI Components ([src/components/ui/](mdc:src/components/ui))
+Core design system components built on RadixUI primitives:
+
+**Form & Input Components:**
+- [button.tsx](mdc:src/components/ui/button.tsx) - Button variants and states
+- [input.tsx](mdc:src/components/ui/input.tsx) - Text input component
+- [textarea.tsx](mdc:src/components/ui/textarea.tsx) - Multi-line text input
+- [checkbox.tsx](mdc:src/components/ui/checkbox.tsx) - Checkbox component
+- [radio-group.tsx](mdc:src/components/ui/radio-group.tsx) - Radio button groups
+- [switch.tsx](mdc:src/components/ui/switch.tsx) - Toggle switch
+- [select.tsx](mdc:src/components/ui/select.tsx) - Dropdown select
+- [form.tsx](mdc:src/components/ui/form.tsx) - Form utilities and validation
+- [calendar.tsx](mdc:src/components/ui/calendar.tsx) - Date picker calendar
+- [input-otp.tsx](mdc:src/components/ui/input-otp.tsx) - OTP input component
+
+**Navigation & Layout:**
+- [sidebar.tsx](mdc:src/components/ui/sidebar.tsx) - Main navigation sidebar
+- [tabs.tsx](mdc:src/components/ui/tabs.tsx) - Tab navigation
+- [separator.tsx](mdc:src/components/ui/separator.tsx) - Visual separators
+- [scroll-area.tsx](mdc:src/components/ui/scroll-area.tsx) - Scrollable areas
+
+**Feedback & Overlays:**
+- [dialog.tsx](mdc:src/components/ui/dialog.tsx) - Modal dialogs
+- [alert-dialog.tsx](mdc:src/components/ui/alert-dialog.tsx) - Confirmation dialogs
+- [sheet.tsx](mdc:src/components/ui/sheet.tsx) - Slide-out panels
+- [popover.tsx](mdc:src/components/ui/popover.tsx) - Floating content
+- [tooltip.tsx](mdc:src/components/ui/tooltip.tsx) - Hover tooltips
+- [alert.tsx](mdc:src/components/ui/alert.tsx) - Alert messages
+- [sonner.tsx](mdc:src/components/ui/sonner.tsx) - Toast notifications
+
+**Data Display:**
+- [table.tsx](mdc:src/components/ui/table.tsx) - Data tables
+- [card.tsx](mdc:src/components/ui/card.tsx) - Content containers
+- [badge.tsx](mdc:src/components/ui/badge.tsx) - Status indicators
+- [avatar.tsx](mdc:src/components/ui/avatar.tsx) - User avatars
+- [skeleton.tsx](mdc:src/components/ui/skeleton.tsx) - Loading placeholders
+
+**Interactive:**
+- [command.tsx](mdc:src/components/ui/command.tsx) - Command palette
+- [dropdown-menu.tsx](mdc:src/components/ui/dropdown-menu.tsx) - Context menus
+- [collapsible.tsx](mdc:src/components/ui/collapsible.tsx) - Expandable content
+
+### 2. Application Components ([src/components/](mdc:src/components))
+Higher-level components combining UI primitives:
+
+- [theme-switch.tsx](mdc:src/components/theme-switch.tsx) - Theme toggle
+- [search.tsx](mdc:src/components/search.tsx) - Global search
+- [profile-dropdown.tsx](mdc:src/components/profile-dropdown.tsx) - User menu
+- [command-menu.tsx](mdc:src/components/command-menu.tsx) - Global command palette
+- [confirm-dialog.tsx](mdc:src/components/confirm-dialog.tsx) - Confirmation dialogs
+- [password-input.tsx](mdc:src/components/password-input.tsx) - Password field with visibility toggle
+- [select-dropdown.tsx](mdc:src/components/select-dropdown.tsx) - Enhanced select component
+
+### 3. Layout Components ([src/components/layout/](mdc:src/components/layout))
+Structural components for page layout and navigation.
+
+### 4. Feature Components ([src/features/](mdc:src/features))
+Domain-specific components organized by feature area.
+
+## Design System Principles
+
+### Styling Approach
+- **TailwindCSS**: Utility-first CSS framework
+- **Class Variance Authority (CVA)**: Component variant management
+- **Tailwind Merge**: Intelligent class merging
+- **Custom CSS**: Minimal custom styles in [src/index.css](mdc:src/index.css)
+
+### Component Patterns
+1. **Composition over Inheritance**: Build complex components from simple primitives
+2. **Variant-Based Design**: Use CVA for component variations
+3. **Accessibility-First**: Built on RadixUI for a11y compliance
+4. **TypeScript Integration**: Full type safety with proper prop interfaces
+5. **Responsive by Default**: Mobile-first responsive design
+
+### Naming Conventions
+- UI components: lowercase with hyphens (e.g., `button.tsx`)
+- Application components: kebab-case (e.g., `theme-switch.tsx`)
+- Feature components: descriptive names within feature folders
+

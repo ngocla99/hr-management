@@ -1,0 +1,23 @@
+{
+  "page.title": "Dự án",
+  "page.description": "Quản lý dự án và theo dõi tiến trình của chúng.",
+  "filter.placeholder": "Lọc dự án...",
+  "dialog.create.title": "Tạo dự án",
+  "dialog.create.description": "Thêm dự án mới bằng cách cung cấp thông tin cần thiết. Nhấn lưu khi bạn hoàn thành.",
+  "dialog.update.title": "Cập nhật dự án",
+  "dialog.update.description": "Cập nhật dự án bằng cách cung cấp thông tin cần thiết. Nhấn lưu khi bạn hoàn thành.",
+  "dialog.delete.title": "Xóa dự án",
+  "dialog.delete.description": "Bạn có chắc chắn muốn xóa \"{{name}}\"? Hành động này không thể được hoàn tác.",
+  "form.name.placeholder": "Nhập tên dự án",
+  "form.description.placeholder": "Nhập mô tả dự án",
+  "button.create": "Tạo dự án",
+  "button.update": "Cập nhật dự án",
+  "button.delete": "Xóa dự án",
+  "message.success.created": "Dự án đã được tạo thành công",
+  "message.success.updated": "Dự án đã được cập nhật thành công",
+  "message.success.deleted": "Dự án đã được xóa thành công",
+  "message.error.createFailed": "Không thể tạo dự án",
+  "message.error.updateFailed": "Không thể cập nhật dự án",
+  "message.error.deleteFailed": "Không thể xóa dự án",
+  "mockGerpData": "Dự án mẫu"
+}

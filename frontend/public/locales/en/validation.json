@@ -1,0 +1,11 @@
+{
+    "required": "This field is required",
+    "invalidEmail": "Email is invalid",
+    "minLengthPassword": "Password must be at least 8 characters long",
+    "minLowercasePassword": "Password must contain at least one lowercase letter",
+    "minNumberPassword": "Password must contain at least one number",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "emailRequired": "Please enter your email",
+    "passwordRequired": "Please enter your password",
+    "passwordMinLength": "Password must be at least 7 characters long"
+}

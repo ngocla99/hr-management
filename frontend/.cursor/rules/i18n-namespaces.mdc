@@ -1,0 +1,27 @@
+---
+description: 
+globs: *.tsx
+alwaysApply: false
+---
+# i18n Namespaces Usage Guide
+
+This project uses the following i18next namespaces for translations:
+
+- **common**: For generic UI labels and actions (e.g., Save, Cancel, Edit, Delete, Search...)
+- **validation**: For all validation and error messages (e.g., This field is required, Invalid email address)
+- **glossary**: For key terms, product names, and technical words that must be translated consistently everywhere (e.g., User, Project, Task)
+- **feature-specific**: Separate files for each feature (e.g., dashboard.json, auth.json, etc.)
+
+## Usage
+- You can use a namespace by passing it to `useTranslation('namespace')` or by passing `{ ns: 'namespace' }` to the `t()` function.
+- See [i18n-namespaces-guide.md](mdc:public/locales/i18n-namespaces-guide.md) for detailed examples, project structure, and best practices.
+
+## Best Practices
+1. Keep translation keys flat without nesting
+2. Use `glossary` for domain-specific terms that need consistent translation
+3. Use `common` for reusable UI elements and actions
+4. Use `validation` for all error and validation messages
+5. Create separate files (like `dashboard.json`) for feature-specific translations
+6. Group related translations in feature-specific files to maintain a clean structure
+
+

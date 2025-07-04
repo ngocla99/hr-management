@@ -1,0 +1,22 @@
+{
+  "page.title": "User List",
+  "page.description": "Manage your users and their roles here.",
+  "filter.placeholder": "Filter users...",
+  "addUser": "Add User",
+  "inviteUser": "Invite User",
+  "inviteUserDescription": "Invite new user to join your team by sending them an email invitation. Assign a role to define their access level.",
+  "dialog.create.title": "Create User",
+  "dialog.create.description": "Fill in the details below to create a new user.",
+  "dialog.edit.title": "Edit User",
+  "dialog.edit.description": "Update the user details below.",
+  "dialog.delete.title": "Delete User",
+  "dialog.delete.description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+  "form.name.placeholder": "Enter user name",
+  "form.enterDescriptionPlaceholder": "Add a personal note to your invitation (optional)",
+  "message.success.created": "User created successfully",
+  "message.success.updated": "User updated successfully",
+  "message.success.deleted": "User deleted successfully",
+  "message.error.createFailed": "Failed to create user",
+  "message.error.updateFailed": "Failed to update user",
+  "message.error.deleteFailed": "Failed to delete user"
+}

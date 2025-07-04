@@ -1,0 +1,23 @@
+{
+  "page.title": "Projects",
+  "page.description": "Manage your projects and track their progress.",
+  "filter.placeholder": "Filter projects...",
+  "dialog.create.title": "Create Project",
+  "dialog.create.description": "Fill in the details below to create a new project.",
+  "dialog.edit.title": "Edit Project",
+  "dialog.edit.description": "Update the project details below.",
+  "dialog.delete.title": "Delete Project",
+  "dialog.delete.description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+  "form.name.placeholder": "Enter project name",
+  "form.description.placeholder": "Enter project description",
+  "button.create": "Create Project",
+  "button.update": "Update Project",
+  "button.delete": "Delete Project",
+  "message.success.created": "Project created successfully",
+  "message.success.updated": "Project updated successfully",
+  "message.success.deleted": "Project deleted successfully",
+  "message.error.createFailed": "Failed to create project",
+  "message.error.updateFailed": "Failed to update project",
+  "message.error.deleteFailed": "Failed to delete project",
+  "mockGerpData": "Mock GERP Data"
+}

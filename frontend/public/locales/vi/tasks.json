@@ -1,0 +1,18 @@
+{
+    "page.title": "Công việc",
+    "page.description": "Đây là danh sách công việc của bạn trong tháng này!",
+    "filter.placeholder": "Lọc công việc...",
+    "dialog.create.title": "Tạo công việc",
+    "dialog.update.title": "Cập nhật công việc",
+    "dialog.create.description": "Thêm công việc mới bằng cách cung cấp thông tin cần thiết. Nhấn lưu khi hoàn tất.",
+    "dialog.update.description": "Cập nhật công việc bằng cách cung cấp thông tin cần thiết. Nhấn lưu khi hoàn tất.",
+    "message.success.saved": "Lưu công việc thành công",
+    "message.error.saveFailed": "Không thể lưu công việc",
+    "message.success.updated": "Cập nhật công việc thành công",
+    "message.success.deleted": "Xóa công việc thành công",
+    "message.success.completed": "Hoàn thành công việc thành công",
+    "message.success.assigned": "Gán công việc thành công",
+    "mockGerpTasks": "Tạo công việc mẫu",
+    "calendarView": "Chế độ lịch",
+    "listView": "Chế độ danh sách"
+}

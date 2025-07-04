@@ -1,0 +1,114 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Development Workflow & Tools
+
+This project uses modern development tools for code quality, formatting, and build processes.
+
+## Development Scripts
+
+### Core Commands ([package.json](mdc:package.json))
+```bash
+# Development
+npm run dev          # Start Vite dev server
+npm run build        # Production build (TypeScript + Vite)
+npm run preview      # Preview production build
+
+# Code Quality
+npm run lint         # ESLint checking
+npm run format:check # Prettier format checking
+npm run format       # Auto-format with Prettier
+```
+
+## Build Configuration
+
+### Vite Setup ([vite.config.ts](mdc:vite.config.ts))
+- **React SWC**: Fast React refresh and compilation
+- **TailwindCSS**: Vite plugin for optimal CSS processing
+- **TanStack Router**: Auto-generation of route trees
+- **Path Aliases**: `@/` mapped to `src/` directory
+- **Icon Optimization**: Tabler icons ESM import fix
+
+### TypeScript Configuration
+- **Main Config**: [tsconfig.json](mdc:tsconfig.json) - Base TypeScript settings
+- **App Config**: [tsconfig.app.json](mdc:tsconfig.app.json) - Application-specific settings
+- **Node Config**: [tsconfig.node.json](mdc:tsconfig.node.json) - Build tool configuration
+
+## Code Quality Tools
+
+### ESLint ([eslint.config.js](mdc:eslint.config.js))
+- **React Rules**: React hooks and refresh patterns
+- **TypeScript**: Full TypeScript integration
+- **TanStack Query**: Specialized query linting rules
+- **Modern Config**: ESLint 9+ flat config format
+
+### Prettier Configuration ([.prettierrc](mdc:.prettierrc))
+- **Tailwind Plugin**: Automatic class sorting
+- **Import Sorting**: Auto-organize imports with @trivago/prettier-plugin-sort-imports
+- **Consistent Formatting**: Unified code style across team
+
+### Additional Tools
+- **Knip** ([knip.config.ts](mdc:knip.config.ts)): Dead code detection
+- **Git Ignore** ([.gitignore](mdc:.gitignore)): Standard exclusions
+
+## Development Guidelines
+
+### File Organization
+1. **Feature-First**: Group related files by domain
+2. **Consistent Naming**: kebab-case for files, PascalCase for components
+3. **Index Files**: Use for clean exports and barrel patterns
+4. **Type Definitions**: Co-locate with implementation
+
+### Code Style
+1. **TypeScript-First**: Strict typing for all code
+2. **Functional Components**: Prefer function components over classes
+3. **Custom Hooks**: Extract reusable logic into hooks
+4. **Composition**: Build complex components from simple primitives
+
+### Import Organization
+```typescript
+// 1. React and core libraries
+import { useState } from 'react'
+
+// 2. Third-party libraries
+import { Button } from '@/components/ui/button'
+
+// 3. Internal utilities and hooks
+import { useAuth } from '@/hooks/useAuth'
+
+// 4. Relative imports
+import './styles.css'
+```
+
+### Component Patterns
+1. **Props Interface**: Always define TypeScript interfaces for props
+2. **Default Props**: Use default parameters instead of defaultProps
+3. **Ref Forwarding**: Use forwardRef for reusable components
+4. **Error Boundaries**: Wrap features in error boundaries
+
+## Asset Management
+
+### Static Assets ([public/](mdc:public))
+- **Images**: Organized in `public/images/`
+- **Fonts**: Configured in [src/config/fonts.ts](mdc:src/config/fonts.ts)
+- **Favicon**: Standard favicon files in public root
+
+### Styling
+- **Global Styles**: [src/index.css](mdc:src/index.css) for base styles
+- **Component Styles**: Inline Tailwind classes
+- **Theme Variables**: CSS custom properties for theme system
+
+## Performance Considerations
+
+### Bundle Optimization
+- **Code Splitting**: Automatic route-based splitting
+- **Tree Shaking**: Vite handles unused code elimination
+- **Asset Optimization**: Vite handles image and asset optimization
+
+### Runtime Performance
+- **React Query**: Efficient data fetching and caching
+- **Lazy Loading**: Route components loaded on demand
+- **Memoization**: Use React.memo and useMemo strategically
+

@@ -1,0 +1,137 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Feature Organization & Development
+
+This project organizes code by business domains/features for better maintainability and team collaboration.
+
+## Feature Structure ([src/features/](mdc:src/features))
+
+Each feature follows a consistent internal structure:
+
+### Authentication Feature ([src/features/auth/](mdc:src/features/auth))
+Complete authentication system with multiple flows:
+
+**Layout Component**: [auth-layout.tsx](mdc:src/features/auth/auth-layout.tsx)
+- Shared layout for all auth pages
+- Consistent styling and branding
+
+**Sub-Features**:
+- `sign-in/` - User login functionality
+- `sign-up/` - User registration
+- `forgot-password/` - Password reset flow
+- `otp/` - One-time password verification
+
+### Core Business Features
+
+**Dashboard** ([src/features/dashboard/](mdc:src/features/dashboard))
+- Main dashboard views and widgets
+- Analytics and overview components
+- Data visualization components
+
+**User Management** ([src/features/users/](mdc:src/features/users))
+- User listing and search
+- User profile management
+- User permissions and roles
+
+**Task Management** ([src/features/tasks/](mdc:src/features/tasks))
+- Task creation and editing
+- Task listing and filtering
+- Task status management
+
+**Chat System** ([src/features/chats/](mdc:src/features/chats))
+- Real-time messaging interface
+- Chat history and management
+- User presence and notifications
+
+**Settings** ([src/features/settings/](mdc:src/features/settings))
+- Application configuration
+- User preferences
+- System settings
+
+**App Management** ([src/features/apps/](mdc:src/features/apps))
+- Third-party app integrations
+- App marketplace and installation
+- App configuration management
+
+**Error Handling** ([src/features/errors/](mdc:src/features/errors))
+- Error page components
+- Error boundary implementations
+- User-friendly error messages
+
+## Feature Development Patterns
+
+### Standard Feature Structure
+```
+src/features/[feature-name]/
+├── components/          # Feature-specific components
+├── hooks/              # Feature-specific custom hooks
+├── types/              # TypeScript type definitions
+├── api/                # API calls and mutations
+├── utils/              # Feature utility functions
+├── stores/             # Feature-specific state (if needed)
+└── index.ts            # Feature barrel exports
+```
+
+### Component Organization
+1. **Feature Components**: Business logic components
+2. **UI Components**: Reusable within the feature
+3. **Layout Components**: Feature-specific layouts
+4. **Form Components**: Feature-specific forms
+
+### State Management per Feature
+1. **Local State**: Component-level useState
+2. **Feature State**: Zustand stores for feature-wide state
+3. **Server State**: TanStack Query for API data
+4. **Shared State**: Access global stores when needed
+
+### API Integration
+- **Query Hooks**: Custom hooks wrapping TanStack Query
+- **Mutation Hooks**: Form submission and data updates
+- **Error Handling**: Feature-specific error boundaries
+- **Loading States**: Consistent loading patterns
+
+## Cross-Feature Communication
+
+### Shared Resources
+- **Global Components**: [src/components/](mdc:src/components) for reusable UI
+- **Global Hooks**: [src/hooks/](mdc:src/hooks) for shared logic
+- **Global State**: [src/stores/](mdc:src/stores) for cross-feature state
+- **Utilities**: [src/utils/](mdc:src/utils) for shared functions
+
+### Feature Boundaries
+1. **Loose Coupling**: Features should be independent
+2. **Shared Interfaces**: Use TypeScript interfaces for contracts
+3. **Event Communication**: Use global state or context for communication
+4. **Avoid Deep Imports**: Import from feature index files
+
+### Integration Points
+- **Routes**: Feature routes in [src/routes/](mdc:src/routes)
+- **Navigation**: Feature links in sidebar and menus
+- **Global Search**: Feature content in command palette
+- **Notifications**: Feature events in global notification system
+
+## Development Workflow
+
+### Adding New Features
+1. Create feature directory in `src/features/`
+2. Set up standard feature structure
+3. Add routes in appropriate route directory
+4. Update navigation and sidebar
+5. Add to global search if applicable
+6. Write feature-specific tests
+
+### Feature Dependencies
+- **Minimize**: Keep features as independent as possible
+- **Document**: Clear documentation of dependencies
+- **Interfaces**: Use TypeScript for contracts
+- **Lazy Loading**: Implement code splitting for large features
+
+### Code Sharing
+- **Extract Common**: Move reusable code to shared directories
+- **Compose**: Build features from shared components
+- **Standardize**: Use consistent patterns across features
+- **Document**: Clear guidelines for shared resource usage
+

@@ -1,0 +1,144 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# State Management Strategy
+
+This project uses a focused state management approach with three primary tools, each optimized for specific use cases.
+
+## State Management Layers
+
+### 1. Server State - TanStack Query
+Primary tool for server state management and data fetching.
+
+**Configuration**: [src/main.tsx](mdc:src/main.tsx)
+- Global query client with comprehensive error handling
+- Automatic retries and intelligent caching
+- Optimistic updates and mutations
+- Background refetching for data freshness
+
+**Key Features**:
+- Automatic 401 handling with auth store integration
+- Global error handling with toast notifications
+- Development-friendly retry logic (disabled in dev, max 3 in prod)
+- 10-second stale time for optimal caching performance
+- Automatic 500 error routing and 304 handling
+
+**Query Cache Configuration**:
+- Session expiry handling (401 → logout + redirect)
+- Internal server error routing (500 → error page)
+- Forbidden access handling (403)
+
+### 2. Global Application State - Zustand
+
+**Auth Store**: [src/stores/authStore.ts](mdc:src/stores/authStore.ts)
+- User authentication state management
+- Session persistence and management
+- Login/logout action handlers
+- Token storage and validation
+
+**Zustand Patterns**:
+- Simple, boilerplate-free state management
+- Direct state mutations with immer-like syntax
+- Subscription-based reactive updates
+- TypeScript-first approach with full type safety
+- Middleware support for persistence and devtools
+
+### 3. React Context Providers
+
+**Theme Context**: [src/context/theme-context](mdc:src/context)
+- Light/dark theme state management
+- Theme switching logic and transitions
+- Persistent theme storage with localStorage
+- System theme detection and preferences
+
+**Font Context**: [src/context/font-context](mdc:src/context)
+- Font family preferences and management
+- Typography settings and customization
+- Font loading and fallback handling
+
+## State Management Guidelines
+
+### When to Use Each Tool
+
+**TanStack Query** - Use for:
+- All API data fetching and caching
+- Server state synchronization
+- Background data updates
+- Optimistic updates for mutations
+- Real-time data that needs periodic refresh
+
+**Zustand** - Use for:
+- Global application state (auth, user preferences)
+- Cross-component shared state
+- Complex state that needs actions and computed values
+- State that persists across route changes
+- Performance-critical global state
+
+**React Context** - Use for:
+- Theme and UI configuration
+- Dependency injection patterns
+- Cross-cutting concerns (fonts, locale)
+- Stable, infrequently changing configuration
+- Provider-based architecture needs
+
+**Local State (useState)** - Use for:
+- Component-specific state
+- Form inputs and UI interactions
+- Temporary state that doesn't need sharing
+- Simple boolean flags and counters
+
+### State Flow Architecture
+
+1. **API Layer**: TanStack Query manages all server communication
+2. **Global State**: Zustand stores for application-wide state
+3. **Component State**: React useState for local interactions
+4. **Configuration**: React Context for theming and settings
+5. **URL State**: TanStack Router for navigation state
+
+## Custom Hooks Pattern
+
+**Authentication Hook**: [src/hooks/useAuth.ts](mdc:src/hooks/useAuth.ts)
+- Centralized auth state access
+- Login/logout utility functions
+- User information and permission checking
+- Auth-dependent navigation logic
+
+**Dialog State Hook**: [src/hooks/use-dialog-state.tsx](mdc:src/hooks/use-dialog-state.tsx)
+- Reusable modal and dialog state management
+- Open/close state with controlled patterns
+- Multiple dialog coordination
+
+**Mobile Detection Hook**: [src/hooks/use-mobile.tsx](mdc:src/hooks/use-mobile.tsx)
+- Responsive behavior state management
+- Mobile/desktop detection logic
+- Breakpoint-based state updates
+
+## Error Handling Strategy
+
+### Global Error Management
+- **Query Errors**: Centralized handling in TanStack Query configuration
+- **Auth Errors**: Automatic logout and redirect on 401
+- **Server Errors**: Automatic routing to error pages on 500
+- **User Feedback**: Toast notifications for all error states
+
+### Error State Patterns
+- **Server Errors**: Handled by TanStack Query error boundaries
+- **Form Errors**: Managed by React Hook Form with Zod validation
+- **Route Errors**: Error pages in dedicated error route groups
+- **Component Errors**: React error boundaries for component failures
+
+## Performance Optimizations
+
+### State Update Optimization
+- **Selective Subscriptions**: Zustand allows granular store subscriptions
+- **Query Deduplication**: TanStack Query prevents duplicate requests
+- **Background Updates**: Efficient data synchronization patterns
+- **Memoization**: Strategic use of useMemo and useCallback
+
+### Memory Management
+- **Query Garbage Collection**: Automatic cleanup of unused queries
+- **Store Cleanup**: Proper subscription cleanup in useEffect
+- **Context Optimization**: Minimal context re-renders with split providers
+
