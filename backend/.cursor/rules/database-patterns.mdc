@@ -303,3 +303,4 @@ async createUserWithProfile(userData: CreateUserDto) {
 6. **Add indexes** for frequently queried fields
 7. **Use transactions** for multi-collection operations
 8. **Always call .exec()** on queries for proper typing
+

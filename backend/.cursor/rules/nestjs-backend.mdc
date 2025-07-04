@@ -160,3 +160,4 @@ src/
 6. Implement proper logging
 7. Use DTOs for data validation and transformation
 8. Follow repository pattern for database operations
+
