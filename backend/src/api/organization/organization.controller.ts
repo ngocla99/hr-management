@@ -84,7 +84,7 @@ export class OrganizationController {
   })
   @ApiParam({ name: "id", type: "String" })
   @RequirePermission(Permission.READ_DEPARTMENT)
-  async findDepartment(@Param("id", ParseUUIDPipe) id: Uuid): Promise<DepartmentResDto> {
+  async findDepartment(@Param("id") id: string): Promise<DepartmentResDto> {
     return await this.organizationService.findDepartmentById(id);
   }
 
@@ -96,7 +96,7 @@ export class OrganizationController {
   @ApiParam({ name: "id", type: "String" })
   @RequirePermission(Permission.UPDATE_DEPARTMENT)
   async updateDepartment(
-    @Param("id", ParseUUIDPipe) id: Uuid,
+    @Param("id") id: string,
     @Body() updateDepartmentDto: UpdateDepartmentReqDto,
   ): Promise<DepartmentResDto> {
     return await this.organizationService.updateDepartment(id, updateDepartmentDto);
@@ -135,7 +135,7 @@ export class OrganizationController {
   })
   @ApiParam({ name: "id", type: "String" })
   @RequirePermission(Permission.READ_DEPARTMENT)
-  async findTeam(@Param("id", ParseUUIDPipe) id: Uuid): Promise<TeamResDto> {
+  async findTeam(@Param("id") id: string): Promise<TeamResDto> {
     return await this.organizationService.findTeamById(id);
   }
 

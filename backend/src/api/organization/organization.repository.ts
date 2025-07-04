@@ -3,13 +3,10 @@ import { TeamStatus } from "@/api/organization/entities/team.entity";
 import { applyMongoQueryOptions } from "@/utils/build-query-options";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { plainToInstance } from "class-transformer";
 import { FilterQuery, Model, Types } from "mongoose";
 import { CreateDepartmentReqDto } from "./dto/create-department.req.dto";
 import { CreateTeamReqDto } from "./dto/create-team.req.dto";
-import { DepartmentResDto } from "./dto/department.res.dto";
 import { ListDepartmentsReqDto } from "./dto/list-departments.req.dto";
-import { TeamResDto } from "./dto/team.res.dto";
 import { UpdateDepartmentReqDto } from "./dto/update-department.req.dto";
 import { UpdateTeamReqDto } from "./dto/update-team.req.dto";
 import { DepartmentDocument } from "./entities/department.entity";
@@ -33,10 +30,8 @@ export class OrganizationRepository {
 
   async createDepartment(
     data: CreateDepartmentReqDto & { createdBy: string },
-  ): Promise<DepartmentResDto> {
-    const department = new this.departmentModel(data);
-    await department.save();
-    return plainToInstance(DepartmentResDto, department.toObject());
+  ): Promise<DepartmentDocument> {
+    return this.departmentModel.create(data);
   }
 
   async updateDepartment(
@@ -46,11 +41,10 @@ export class OrganizationRepository {
     return this.departmentModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
-  async softDeleteDepartment(id: string): Promise<DepartmentResDto | null> {
-    const department = await this.departmentModel
+  async softDeleteDepartment(id: string): Promise<DepartmentDocument | null> {
+    return this.departmentModel
       .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
       .exec();
-    return plainToInstance(DepartmentResDto, department);
   }
 
   async findAllDepartments(options?: { select?: string[] }): Promise<DepartmentDocument[]> {
@@ -131,21 +125,16 @@ export class OrganizationRepository {
     return this.teamModel.findOne(query).exec();
   }
 
-  async createTeam(data: CreateTeamReqDto & { createdBy: string }): Promise<TeamResDto> {
-    const team = new this.teamModel(data);
-    await team.save();
-    return plainToInstance(TeamResDto, team.toObject());
+  async createTeam(data: CreateTeamReqDto & { createdBy: string }): Promise<TeamDocument> {
+    return this.teamModel.create(data);
   }
 
   async updateTeam(id: string, data: UpdateTeamReqDto): Promise<TeamDocument | null> {
     return this.teamModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
-  async softDeleteTeam(id: string): Promise<TeamResDto | null> {
-    const team = await this.teamModel
-      .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
-      .exec();
-    return plainToInstance(TeamResDto, team);
+  async softDeleteTeam(id: string): Promise<TeamDocument | null> {
+    return this.teamModel.findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true }).exec();
   }
 
   async findTeamsByDepartment(departmentId: string): Promise<TeamDocument[]> {

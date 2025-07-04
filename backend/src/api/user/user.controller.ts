@@ -74,14 +74,14 @@ export class UserController {
   @Get(":id")
   @ApiAuth({ type: UserResDto, summary: "Find user by id" })
   @ApiParam({ name: "id", type: "String" })
-  async findUser(@Param("id", ParseUUIDPipe) id: Uuid): Promise<UserResDto> {
+  async findUser(@Param("id") id: string): Promise<UserResDto> {
     return await this.userService.findOne(id);
   }
 
   @Patch(":id")
   @ApiAuth({ type: UserResDto, summary: "Update user" })
   @ApiParam({ name: "id", type: "String" })
-  updateUser(@Param("id", ParseUUIDPipe) id: Uuid, @Body() reqDto: UpdateUserReqDto) {
+  updateUser(@Param("id") id: string, @Body() reqDto: UpdateUserReqDto) {
     return this.userService.update(id, reqDto);
   }
 

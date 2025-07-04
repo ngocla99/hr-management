@@ -26,5 +26,5 @@ export async function paginate<T>(
 
   const metaDto = new OffsetPaginationDto(count, pageOptionsDto);
 
-  return [entities, metaDto];
+  return [entities.map((entity) => entity.toObject()), metaDto];
 }

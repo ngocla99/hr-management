@@ -6,10 +6,10 @@ import { HydratedDocument } from "mongoose";
 
 export type UserDocument = HydratedDocument<User>;
 
-export enum GENDER {
-  Male = "MALE",
-  Female = "FEMALE",
-  Other = "OTHER",
+export enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+  OTHER = "other",
 }
 
 @Schema({
@@ -55,7 +55,7 @@ export class User extends BaseEntity {
   dateOfBirth: Date;
 
   @Prop({
-    enum: GENDER,
+    enum: Gender,
   })
   gender: string;
 

@@ -73,7 +73,7 @@ export class OrganizationService {
     });
 
     this.logger.debug(`Created department: ${newDepartment.name}`);
-    return newDepartment;
+    return plainToInstance(DepartmentResDto, newDepartment);
   }
 
   async findAllDepartments(
@@ -87,10 +87,16 @@ export class OrganizationService {
         takeAll: false,
       },
     );
-    return new OffsetPaginatedDto(plainToInstance(DepartmentResDto, departments), metaDto);
+
+    return new OffsetPaginatedDto(
+      departments.map((department) =>
+        plainToInstance(DepartmentResDto, department, { excludeExtraneousValues: true }),
+      ),
+      metaDto,
+    );
   }
 
-  async findDepartmentById(id: Uuid): Promise<DepartmentResDto> {
+  async findDepartmentById(id: string): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
       throw new NotFoundException(ErrorCode.D002);
@@ -98,7 +104,7 @@ export class OrganizationService {
     return plainToInstance(DepartmentResDto, department);
   }
 
-  async updateDepartment(id: Uuid, updateDto: UpdateDepartmentReqDto): Promise<DepartmentResDto> {
+  async updateDepartment(id: string, updateDto: UpdateDepartmentReqDto): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
       throw new NotFoundException(ErrorCode.D002);
@@ -153,7 +159,7 @@ export class OrganizationService {
       throw new NotFoundException(ErrorCode.D002);
     }
 
-    return deletedDepartment;
+    return plainToInstance(DepartmentResDto, deletedDepartment);
   }
 
   async getDepartmentHierarchy(): Promise<DepartmentHierarchyResDto[]> {
@@ -256,10 +262,10 @@ export class OrganizationService {
     });
 
     this.logger.debug(`Created team: ${newTeam.name} in department: ${department}`);
-    return newTeam;
+    return plainToInstance(TeamResDto, newTeam);
   }
 
-  async findTeamById(id: Uuid): Promise<TeamResDto> {
+  async findTeamById(id: string): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
       throw new NotFoundException(ErrorCode.T004);
@@ -267,12 +273,12 @@ export class OrganizationService {
     return plainToInstance(TeamResDto, team);
   }
 
-  async findTeamsByDepartment(departmentId: Uuid): Promise<TeamResDto[]> {
+  async findTeamsByDepartment(departmentId: string): Promise<TeamResDto[]> {
     const teams = await this.organizationRepository.findTeamsByDepartment(departmentId);
-    return plainToInstance(TeamResDto, teams);
+    return teams.map((team) => plainToInstance(TeamResDto, team));
   }
 
-  async updateTeam(id: Uuid, updateDto: UpdateTeamReqDto): Promise<TeamResDto> {
+  async updateTeam(id: string, updateDto: UpdateTeamReqDto): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
       throw new NotFoundException(ErrorCode.T004);
@@ -311,7 +317,7 @@ export class OrganizationService {
       throw new NotFoundException(ErrorCode.T004);
     }
 
-    return deletedTeam;
+    return plainToInstance(TeamResDto, deletedTeam);
   }
 
   async addTeamMember(teamId: string, userId: string): Promise<TeamResDto> {

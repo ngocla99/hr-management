@@ -74,14 +74,16 @@ export class UserService {
   //   return new CursorPaginatedDto(plainToInstance(UserResDto, data), metaDto);
   // }
 
-  async findOne(id: Uuid): Promise<UserResDto> {
+  async findOne(id: string): Promise<UserResDto> {
     assert(id, "id is required");
     const user = await this.userRepository.findById(id);
+    console.log("🚀 ~ UserService ~ findOne ~ user:", user);
+    console.log(plainToInstance(UserResDto, user));
 
     return plainToInstance(UserResDto, user);
   }
 
-  async update(id: Uuid, updateUserDto: UpdateUserReqDto) {
+  async update(id: string, updateUserDto: UpdateUserReqDto) {
     const user = await this.userRepository.findById(id);
 
     if (!user) {

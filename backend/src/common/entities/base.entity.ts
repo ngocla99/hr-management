@@ -7,7 +7,7 @@ export class BaseEntity {
 
   @Expose()
   // eslint-disable-next-line
-  @Transform((value) => value.obj?._id?.toString(), { toClassOnly: true })
+  @Transform(({ obj }) => obj?._id?.toString(), { toClassOnly: true })
   id?: string;
 
   @Prop({ default: null })
