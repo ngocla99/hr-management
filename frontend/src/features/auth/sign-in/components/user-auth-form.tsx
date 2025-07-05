@@ -56,12 +56,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       toast.success(t('loginSuccess', { ns: 'auth' }))
       router.navigate({ to: '/' })
     },
-    onError: (error) => {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : t('loginFailed', { ns: 'auth' })
-      toast.error(errorMessage)
+    onError: () => {
+      toast.error(t('loginFailed', { ns: 'auth' }))
     },
   })
 

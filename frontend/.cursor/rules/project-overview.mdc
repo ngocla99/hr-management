@@ -3,12 +3,12 @@ description:
 globs:
 alwaysApply: true
 ---
-# Project Overview - Next gERP Dashboard
+# Project Overview - Tutti Dashboard
 
 This is a React-based admin dashboard UI built with modern web technologies, focusing on responsiveness and accessibility.
 
 ## Project Purpose
-- Next gERP Dashboard UI crafted with ShadcnUI and Vite
+- Tutti Dashboard UI crafted with ShadcnUI and Vite
 - Built with responsiveness and accessibility in mind
 - Reusable collection of dashboard UI components for future projects
 - Features 10+ pages with custom components

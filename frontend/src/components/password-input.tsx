@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { IconEye, IconEyeOff } from '@tabler/icons-react'
+import Lottie from 'lottie-react'
+import visibility from '@/assets/lotties/eye/visibility-V3.json'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 
@@ -11,6 +12,25 @@ type PasswordInputProps = Omit<
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, disabled, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)
+    const lottieRef = React.useRef<any>(null)
+
+    const handleTogglePassword = () => {
+      setShowPassword((prev) => !prev)
+      if (lottieRef.current) {
+        if (!showPassword) {
+          lottieRef.current.playSegments([17, 0], true)
+        } else {
+          lottieRef.current.playSegments([0, 17], true)
+        }
+      }
+    }
+
+    const handleLottieLoad = () => {
+      if (lottieRef.current) {
+        lottieRef.current.playSegments([0, 17], true)
+      }
+    }
+
     return (
       <div className={cn('relative rounded-md', className)}>
         <input
@@ -26,9 +46,16 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           variant='ghost'
           disabled={disabled}
           className='text-muted-foreground absolute top-1/2 right-1 h-6 w-6 -translate-y-1/2 rounded-md'
-          onClick={() => setShowPassword((prev) => !prev)}
+          onClick={handleTogglePassword}
         >
-          {showPassword ? <IconEye size={18} /> : <IconEyeOff size={18} />}
+          <Lottie
+            lottieRef={lottieRef}
+            animationData={visibility}
+            loop={false}
+            autoplay={false}
+            style={{ width: '18px', height: '18px' }}
+            onDOMLoaded={handleLottieLoad}
+          />
         </Button>
       </div>
     )

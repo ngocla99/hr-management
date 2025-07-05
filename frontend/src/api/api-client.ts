@@ -30,11 +30,12 @@ apiClient.interceptors.response.use(
     return response.data
   },
   async (error) => {
-    const originalRequest = error.config
-
-    // If the error status is 401 and there is no originalRequest._retry flag,
+    // If the error status is 401 and the error message is not 'INVALID_CREDENTIALS',
     // it means the token has expired and we need to refresh it
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 401 &&
+      error.response.data.message !== 'INVALID_CREDENTIALS'
+    ) {
       Cookies.set('token', '')
       window.location.replace('/sign-in')
     }

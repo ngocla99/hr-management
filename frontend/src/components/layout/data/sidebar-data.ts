@@ -24,7 +24,7 @@ export const sidebarData: SidebarData = {
   },
   teams: [
     {
-      name: 'Next gERP',
+      name: 'Tutti',
       logo: Command,
       plan: 'simplifyYourWorkflow',
     },

@@ -63,7 +63,9 @@ export class AuthService {
     const isPasswordValid = user && (await verifyPassword(password, user.password));
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        message: "INVALID_CREDENTIALS",
+      });
     }
 
     const hash = crypto.createHash("sha256").update(randomStringGenerator()).digest("hex");
@@ -169,7 +171,7 @@ export class AuthService {
       payload = this.jwtService.verify(token, {
         secret: this.configService.getOrThrow("auth.secret", { infer: true }),
       });
-    } catch {
+    } catch (error) {
       throw new UnauthorizedException();
     }
 

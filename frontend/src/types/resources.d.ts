@@ -43,7 +43,7 @@ interface Resources {
     "google": "Google",
     "facebook": "Facebook",
     "termsAndPrivacy": "By clicking login, you agree to our Terms of Service and Privacy Policy.",
-    "appName": "Next gERP",
+    "appName": "Tutti",
     "forgotPasswordTitle": "Forgot Password",
     "forgotPasswordSubtitle": "Enter your registered email and we will send you a link to reset your password.",
     "continue": "Continue",

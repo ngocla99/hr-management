@@ -1,9 +1,14 @@
 import { Pagination, PaginationInput } from '@/types/common'
-import { CreateUserSchema, DeleteUserSchema, MeSchema, UserSchema } from '@/lib/validations/user'
+import {
+  CreateUserSchema,
+  DeleteUserSchema,
+  MeSchema,
+  UserSchema,
+} from '@/lib/validations/user'
 import apiClient from '../api-client'
 
 export const getMeApi = (): Promise<MeSchema> => {
-  return apiClient.get('/user/me')
+  return apiClient.get('/users/me')
 }
 
 export const getUsersApi = (
@@ -12,15 +17,15 @@ export const getUsersApi = (
   data: UserSchema[]
   pagination: Pagination
 }> => {
-  return apiClient.get('/user', { params: input })
+  return apiClient.get('/users', { params: input })
 }
 
 export const createUserApi = (
   input: CreateUserSchema
 ): Promise<Pick<UserSchema, 'id' | 'email' | 'name'>> => {
-  return apiClient.post('/user', input)
+  return apiClient.post('/users', input)
 }
 
 export const deleteUserApi = (input: DeleteUserSchema) => {
-  return apiClient.delete('/user', { data: input })
+  return apiClient.delete('/users', { data: input })
 }

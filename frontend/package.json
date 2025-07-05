@@ -49,6 +49,7 @@
     "i18next-resources-for-ts": "^1.6.0",
     "input-otp": "^1.4.2",
     "js-cookie": "^3.0.5",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.514.0",
     "motion": "^12.23.0",
     "react": "^19.1.0",
