@@ -6,6 +6,7 @@
     "admin": "Admin",
     "user": "User",
     "name": "Name",
+    "username": "Username",
     "status": "Status",
     "priority": "Priority",
     "assignee": "Assignee",

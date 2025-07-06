@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Link, useRouter } from '@tanstack/react-router'
-import { IconBrandFacebook, IconBrandGoogle } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { logInApi } from '@/api/services/auth'
@@ -21,6 +20,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
+import { FacebookSignIn } from './facebook-sign-in'
+import { TwitterSignIn } from './twitter-sign-in'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
@@ -117,6 +118,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             : t('login', { ns: 'auth' })}
         </Button>
 
+        <div className='text-center text-sm'>
+          <span className='text-muted-foreground'>
+            {t('dontHaveAccount', { ns: 'auth' })}{' '}
+          </span>
+          <Link
+            to='/sign-up'
+            className='text-primary font-medium hover:underline'
+          >
+            {t('signUp', { ns: 'auth' })}
+          </Link>
+        </div>
+
         <div className='relative my-2'>
           <div className='absolute inset-0 flex items-center'>
             <span className='w-full border-t' />
@@ -129,22 +142,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <Button
-            variant='outline'
-            type='button'
-            disabled={logInMutation.isPending}
-          >
-            <IconBrandGoogle className='h-4 w-4' />{' '}
-            {t('google', { ns: 'auth' })}
-          </Button>
-          <Button
-            variant='outline'
-            type='button'
-            disabled={logInMutation.isPending}
-          >
-            <IconBrandFacebook className='h-4 w-4' />{' '}
-            {t('facebook', { ns: 'auth' })}
-          </Button>
+          <FacebookSignIn disabled={logInMutation.isPending} />
+          <TwitterSignIn disabled={logInMutation.isPending} />
         </div>
       </form>
     </Form>

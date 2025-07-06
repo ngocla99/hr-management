@@ -42,13 +42,20 @@ interface Resources {
     "orContinueWith": "Or continue with",
     "google": "Google",
     "facebook": "Facebook",
+    "twitter": "Twitter",
     "termsAndPrivacy": "By clicking login, you agree to our Terms of Service and Privacy Policy.",
     "appName": "Tutti",
     "forgotPasswordTitle": "Forgot Password",
     "forgotPasswordSubtitle": "Enter your registered email and we will send you a link to reset your password.",
     "continue": "Continue",
     "dontHaveAccount": "Don't have an account?",
-    "signUp": "Sign up"
+    "alreadyHaveAccount": "Already have an account?",
+    "confirmPassword": "Confirm Password",
+    "signUp": "Sign up",
+    "signUpSubtitle": "Enter your email and password to create an account.",
+    "usernamePlaceholder": "Enter your username",
+    "signUpSuccess": "Sign up successful!",
+    "signUpFailed": "Sign up failed"
   },
   "common": {
     "save": "Save",
@@ -155,6 +162,7 @@ interface Resources {
     "admin": "Admin",
     "user": "User",
     "name": "Name",
+    "username": "Username",
     "status": "Status",
     "priority": "Priority",
     "assignee": "Assignee",
@@ -289,13 +297,14 @@ interface Resources {
   },
   "validation": {
     "required": "This field is required",
+    "usernameRequired": "Please enter your username",
+    "emailRequired": "Please enter your email",
+    "passwordRequired": "Please enter your password",
     "invalidEmail": "Email is invalid",
     "minLengthPassword": "Password must be at least 8 characters long",
     "minLowercasePassword": "Password must contain at least one lowercase letter",
     "minNumberPassword": "Password must contain at least one number",
     "passwordsDoNotMatch": "Passwords do not match",
-    "emailRequired": "Please enter your email",
-    "passwordRequired": "Please enter your password",
     "passwordMinLength": "Password must be at least 7 characters long"
   }
 }

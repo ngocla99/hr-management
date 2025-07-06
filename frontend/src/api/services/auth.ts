@@ -1,13 +1,18 @@
-import { AuthRequestSchema, AuthResponseSchema } from '@/lib/validations/auth'
+import {
+  LoginReqSchema,
+  LoginResSchema,
+  RegisterReqSchema,
+  RegisterResSchema,
+} from '@/lib/validations/auth'
 import apiClient from '../api-client'
 
-export const logInApi = (
-  user: AuthRequestSchema
-): Promise<AuthResponseSchema> => {
+export const logInApi = (user: LoginReqSchema): Promise<LoginResSchema> => {
   return apiClient.post('/auth/email/login', user)
 }
 
-export const registerApi = (user: AuthRequestSchema) => {
+export const registerApi = (
+  user: RegisterReqSchema
+): Promise<RegisterResSchema> => {
   return apiClient.post('/auth/email/register', user)
 }
 

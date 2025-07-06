@@ -1,64 +1,72 @@
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes } from 'react'
 import { z } from 'zod'
+import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { useMutation } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import { registerApi } from '@/api/services/auth'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Form } from '@/components/ui/form'
+import { FormInput } from '@/components/form-field/form-input'
 import { PasswordInput } from '@/components/password-input'
+import { FacebookSignIn } from '../../sign-in/components/facebook-sign-in'
+import { TwitterSignIn } from '../../sign-in/components/twitter-sign-in'
 
 type SignUpFormProps = HTMLAttributes<HTMLFormElement>
 
-const formSchema = z
-  .object({
-    email: z
-      .string()
-      .min(1, { message: 'Please enter your email' })
-      .email({ message: 'Invalid email address' }),
-    password: z
-      .string()
-      .min(1, {
-        message: 'Please enter your password',
-      })
-      .min(7, {
-        message: 'Password must be at least 7 characters long',
-      }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
-    path: ['confirmPassword'],
-  })
-
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const { t } = useTranslation()
+  const router = useRouter()
+
+  const formSchema = z
+    .object({
+      username: z.string({ required_error: 'required' }),
+      email: z
+        .string()
+        .min(1, { message: 'emailRequired' })
+        .email({ message: 'invalidEmail' }),
+      password: z.string().min(1, { message: 'passwordRequired' }).min(7, {
+        message: 'passwordMinLength',
+      }),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: 'passwordsDoNotMatch',
+      path: ['confirmPassword'],
+    })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
+  const signUpMutation = useMutation({
+    mutationFn: registerApi,
+    onSuccess: () => {
+      toast.success(t('signUpSuccess', { ns: 'auth' }))
+      router.navigate({ to: '/sign-in' })
+    },
+    onError: (error) => {
+      let errorMessage = t('signUpFailed', { ns: 'auth' })
+      if (error instanceof AxiosError) {
+        errorMessage = error.response?.data?.message
+      }
+      toast.error(errorMessage)
+    },
+  })
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    if (signUpMutation.isPending) return
+    signUpMutation.mutate(data)
   }
 
   return (
@@ -68,47 +76,33 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
         className={cn('grid gap-3', className)}
         {...props}
       >
-        <FormField
-          control={form.control}
+        <FormInput
+          name='username'
+          label={t('username', { ns: 'glossary' })}
+          placeholder={t('usernamePlaceholder', { ns: 'auth' })}
+          required
+        />
+        <FormInput
           name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder='name@example.com' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label={t('email', { ns: 'auth' })}
+          placeholder={t('emailPlaceholder', { ns: 'auth' })}
+          required
         />
-        <FormField
-          control={form.control}
+        <FormInput
           name='password'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput placeholder='********' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label={t('password', { ns: 'glossary' })}
+          placeholder={t('passwordPlaceholder', { ns: 'auth' })}
+          InputComponent={PasswordInput}
+          required
         />
-        <FormField
-          control={form.control}
+        <FormInput
           name='confirmPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <PasswordInput placeholder='********' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label={t('confirmPassword', { ns: 'auth' })}
+          placeholder={t('passwordPlaceholder', { ns: 'auth' })}
+          InputComponent={PasswordInput}
         />
-        <Button className='mt-2' disabled={isLoading}>
-          Create Account
+        <Button className='mt-2' disabled={signUpMutation.isPending}>
+          {t('signUp', { ns: 'auth' })}
         </Button>
 
         <div className='relative my-2'>
@@ -117,28 +111,14 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
             <span className='bg-background text-muted-foreground px-2'>
-              Or continue with
+              {t('orContinueWith', { ns: 'auth' })}
             </span>
           </div>
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <Button
-            variant='outline'
-            className='w-full'
-            type='button'
-            disabled={isLoading}
-          >
-            <IconBrandGithub className='h-4 w-4' /> GitHub
-          </Button>
-          <Button
-            variant='outline'
-            className='w-full'
-            type='button'
-            disabled={isLoading}
-          >
-            <IconBrandFacebook className='h-4 w-4' /> Facebook
-          </Button>
+          <FacebookSignIn disabled={signUpMutation.isPending} />
+          <TwitterSignIn disabled={signUpMutation.isPending} />
         </div>
       </form>
     </Form>

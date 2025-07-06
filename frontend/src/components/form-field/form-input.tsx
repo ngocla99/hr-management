@@ -15,6 +15,7 @@ interface FormInputProps extends Omit<React.ComponentProps<'input'>, 'size'> {
   label?: string
   placeholder?: string
   required?: boolean
+  InputComponent?: React.ComponentType<React.ComponentProps<'input'>>
 }
 
 export const FormInput = ({
@@ -23,6 +24,7 @@ export const FormInput = ({
   label,
   placeholder,
   required,
+  InputComponent = Input,
   ...props
 }: FormInputProps) => {
   const form = useFormContext()
@@ -36,11 +38,11 @@ export const FormInput = ({
           {label && (
             <FormLabel>
               {label}
-              {required && <span className='text-text-error ml-1'>*</span>}
+              {required && <span className='text-destructive'>*</span>}
             </FormLabel>
           )}
           <FormControl>
-            <Input
+            <InputComponent
               type={type}
               placeholder={placeholder}
               {...field}

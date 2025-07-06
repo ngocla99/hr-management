@@ -6,6 +6,7 @@
     "admin": "Quản trị viên",
     "user": "Người dùng",
     "name": "Tên",
+    "username": "Tên người dùng",
     "status": "Trạng thái",
     "priority": "Độ ưu tiên",
     "assignee": "Nhân viên",

@@ -1,22 +1,28 @@
 import { z } from 'zod'
 
-export const authSchema = z.object({
+export const loginReqSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
 
-export const authRequestSchema = authSchema.extend({
-  deviceName: z.string().optional(),
-  ip: z.string().optional(),
-})
-
-export const authResponseSchema = z.object({
+export const loginResSchema = z.object({
   userId: z.string(),
   accessToken: z.string(),
   refreshToken: z.string(),
   tokenExpires: z.number(),
 })
 
-export type AuthSchema = z.infer<typeof authSchema>
-export type AuthRequestSchema = z.infer<typeof authRequestSchema>
-export type AuthResponseSchema = z.infer<typeof authResponseSchema>
+export const registerReqSchema = z.object({
+  username: z.string(),
+  email: z.string().email(),
+  password: z.string().min(8),
+})
+
+export const registerResSchema = z.object({
+  userId: z.string(),
+})
+
+export type LoginReqSchema = z.infer<typeof loginReqSchema>
+export type LoginResSchema = z.infer<typeof loginResSchema>
+export type RegisterReqSchema = z.infer<typeof registerReqSchema>
+export type RegisterResSchema = z.infer<typeof registerResSchema>
