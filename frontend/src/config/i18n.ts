@@ -6,8 +6,8 @@ i18n
   .use(i18nBackend)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'vi',
-    lng: 'vi',
+    fallbackLng: 'en',
+    lng: 'en',
     ns: [
       'common',
       'glossary',

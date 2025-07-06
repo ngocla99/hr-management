@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { FormInput } from '@/components/form-field/form-input'
 import { PasswordInput } from '@/components/password-input'
 import { FacebookSignIn } from './facebook-sign-in'
 import { TwitterSignIn } from './twitter-sign-in'
@@ -74,21 +75,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className={cn('grid gap-3', className)}
         {...props}
       >
-        <FormField
-          control={form.control}
+        <FormInput
           name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('email', { ns: 'auth' })}</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder={t('emailPlaceholder', { ns: 'auth' })}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label={t('email', { ns: 'auth' })}
+          placeholder={t('emailPlaceholder', { ns: 'auth' })}
         />
         <FormField
           control={form.control}

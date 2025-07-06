@@ -24,7 +24,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
   const formSchema = z
     .object({
-      username: z.string({ required_error: 'required' }),
+      username: z.string().min(1, {
+        message: 'usernameRequired',
+      }),
       email: z
         .string()
         .min(1, { message: 'emailRequired' })
