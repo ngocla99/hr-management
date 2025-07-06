@@ -67,12 +67,7 @@ export default function DashboardPage() {
               </SelectItem>
             </SelectContent>
           </Select>
-          <Button
-            variant='default'
-            className='bg-black text-white hover:bg-gray-800'
-          >
-            {t('allTime', { ns: 'common' })}
-          </Button>
+          <Button>{t('allTime', { ns: 'common' })}</Button>
         </div>
       </div>
 

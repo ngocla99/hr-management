@@ -18,17 +18,18 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({
     return fonts.includes(savedFont as Font) ? (savedFont as Font) : fonts[0]
   })
 
-  useEffect(() => {
-    const applyFont = (font: string) => {
-      const root = document.documentElement
-      root.classList.forEach((cls) => {
-        if (cls.startsWith('font-')) root.classList.remove(cls)
-      })
-      root.classList.add(`font-${font}`)
-    }
+  // TODO: currently cannot change font
+  // useEffect(() => {
+  //   const applyFont = (font: string) => {
+  //     const root = document.documentElement
+  //     root.classList.forEach((cls) => {
+  //       if (cls.startsWith('font-')) root.classList.remove(cls)
+  //     })
+  //     root.classList.add(`font-${font}`)
+  //   }
 
-    applyFont(font)
-  }, [font])
+  //   applyFont(font)
+  // }, [font])
 
   const setFont = (font: Font) => {
     localStorage.setItem('font', font)
