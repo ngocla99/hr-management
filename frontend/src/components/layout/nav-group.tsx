@@ -35,7 +35,9 @@ export function NavGroup({ title, items }: NavGroup) {
   const { t } = useTranslation(['glossary'])
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{t(title as any)}</SidebarGroupLabel>
+      <SidebarGroupLabel className='uppercase text-muted-foreground text-[11px]'>
+        {t(title as any)}
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           const key = `${item.title}-${item.url}`

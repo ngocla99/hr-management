@@ -1,8 +1,8 @@
 export interface Pagination {
-  page: number
+  currentPage: number
   limit: number
   totalPages?: number
-  total?: number
+  totalRecords?: number
 }
 
 export interface SelectOption {
@@ -13,8 +13,8 @@ export interface SelectOption {
 export interface PaginationInput {
   page?: number
   limit?: number
-  sortBy?: string
-  sortOrder?: 'asc' | 'desc'
+  q?: string
+  order?: 'asc' | 'desc'
 }
 
 export interface MutationOptions {
