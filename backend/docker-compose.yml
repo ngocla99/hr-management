@@ -1,17 +1,17 @@
 version: "3.8"
 
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongo-local
-    ports:
-      - "27017:27017"
-    volumes:
-      - /d/Docker/data/mongo:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    restart: always
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo-local
+  #   ports:
+  #     - "27020:27017"
+  #   volumes:
+  #     - /d/Docker/data/mongo:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: example
+  #   restart: always
 
   redis:
     image: redis:latest

@@ -22,7 +22,7 @@ export const getUsersApi = (
 
 export const createUserApi = (
   input: CreateUserSchema
-): Promise<Pick<UserSchema, 'id' | 'email' | 'name'>> => {
+): Promise<Pick<UserSchema, 'id' | 'email' | 'username'>> => {
   return apiClient.post('/users', input)
 }
 

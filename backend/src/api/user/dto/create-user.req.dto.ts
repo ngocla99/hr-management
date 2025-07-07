@@ -21,12 +21,12 @@ export class CreateUserReqDto {
   email: string;
 
   @PasswordField({
-    example: "Qwer1234!@#$",
+    example: "Qwe123!@#",
   })
   password: string;
 
   @StringFieldOptional({
-    example: "EMPLOYEE",
+    example: "employee",
     enum: UserRole,
     default: UserRole.EMPLOYEE,
   })

@@ -23,13 +23,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
+import { UserRole } from '../constants/constants'
 import { userTypesFn } from '../data/data'
 import { User } from '../data/schema'
 import { useCreateUser } from '../hooks/use-user-api'
 
 const formSchema = z
   .object({
-    name: z.string().min(1, { message: 'required' }),
+    username: z.string().min(1, { message: 'required' }),
     email: z
       .string()
       .min(1, { message: 'required' })
@@ -38,7 +39,7 @@ const formSchema = z
       .string()
       .min(1, { message: 'required' })
       .transform((pwd) => pwd.trim()),
-    role: z.enum(['user', 'admin']),
+    role: z.enum(Object.values(UserRole) as [string, ...string[]]),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
   })
@@ -110,9 +111,9 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
           isEdit,
         }
       : {
-          name: '',
+          username: '',
           email: '',
-          role: 'user',
+          role: 'employee',
           password: '',
           confirmPassword: '',
           isEdit,
@@ -128,7 +129,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
     } else {
       createUserMutation.mutate({
         email: values.email,
-        name: values.name,
+        username: values.username,
         password: values.password,
       })
     }
@@ -171,7 +172,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
             >
               <FormField
                 control={form.control}
-                name='name'
+                name='username'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-right'>
@@ -182,8 +183,10 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                         placeholder={t('form.name.placeholder', {
                           ns: 'users',
                         })}
-                        className='col-span-4'
                         autoComplete='new-password'
+                        classes={{
+                          root: 'col-span-4',
+                        }}
                         {...field}
                       />
                     </FormControl>
@@ -204,7 +207,9 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                         placeholder={t('form.enterEmail', {
                           ns: 'glossary',
                         })}
-                        className='col-span-4'
+                        classes={{
+                          root: 'col-span-4',
+                        }}
                         autoComplete='new-password'
                         {...field}
                       />

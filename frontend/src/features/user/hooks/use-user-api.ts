@@ -15,12 +15,7 @@ import {
   getUsersApi,
 } from '@/api/services/user'
 import { QUERY_KEYS } from '@/lib/constants/constant'
-import {
-  CreateUserSchema,
-  DeleteUserSchema,
-  MeSchema,
-  UserSchema,
-} from '@/lib/validations/user'
+import { MeSchema, UserSchema } from '@/lib/validations/user'
 import { adaptApiUsersToLocalUsers } from '../utils/adapters'
 
 export const userKeys = {
@@ -62,7 +57,7 @@ export const useCreateUser = ({ onSuccess, onError }: MutationOptions) => {
   const { t } = useTranslation('users')
 
   return useMutation({
-    mutationFn: (data: CreateUserSchema) => createUserApi(data),
+    mutationFn: createUserApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists({}) })
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DASHBOARD] })
@@ -72,7 +67,7 @@ export const useCreateUser = ({ onSuccess, onError }: MutationOptions) => {
     onError: (error: Error) => {
       const errorMessage =
         error instanceof AxiosError
-          ? error.response?.data?.error || error.message
+          ? error.response?.data?.message
           : t('message.error.createFailed')
       toast.error(errorMessage)
       onError?.(error)
@@ -85,7 +80,7 @@ export const useDeleteUser = ({ onSuccess, onError }: MutationOptions) => {
   const { t } = useTranslation('users')
 
   return useMutation({
-    mutationFn: (data: DeleteUserSchema) => deleteUserApi(data),
+    mutationFn: deleteUserApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists({}) })
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DASHBOARD] })
@@ -95,7 +90,7 @@ export const useDeleteUser = ({ onSuccess, onError }: MutationOptions) => {
     onError: (error: Error) => {
       const errorMessage =
         error instanceof AxiosError
-          ? error.response?.data?.error || error.message
+          ? error.response?.data?.message
           : t('message.error.deleteFailed')
       toast.error(errorMessage)
       onError?.(error)

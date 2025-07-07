@@ -1,7 +1,10 @@
 import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { Uuid } from "@/common/types/common.type";
+import { UserRole } from "@/constants/roles.constant";
 import { CurrentUser } from "@/decorators/current-user.decorator";
 import { ApiAuth } from "@/decorators/http.decorators";
+import { RequireRole } from "@/decorators/roles.decorator";
+import { RolesGuard } from "@/guards/roles.guard";
 import {
   Body,
   Controller,
@@ -13,6 +16,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import { ApiParam, ApiTags } from "@nestjs/swagger";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
@@ -26,6 +30,7 @@ import { UserService } from "./user.service";
   path: "users",
   version: "1",
 })
+@UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -44,6 +49,7 @@ export class UserController {
     summary: "Create user",
     statusCode: HttpStatus.CREATED,
   })
+  @RequireRole(UserRole.ADMIN)
   async createUser(@Body() createUserDto: CreateUserReqDto): Promise<UserResDto> {
     return await this.userService.create(createUserDto);
   }

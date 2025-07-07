@@ -1,3 +1,4 @@
+import { UserRole } from "@/constants/roles.constant";
 import { ClassField, StringField, StringFieldOptional } from "@/decorators/field.decorators";
 import { Exclude, Expose } from "class-transformer";
 
@@ -14,6 +15,10 @@ export class UserResDto {
   @StringField()
   @Expose()
   email: string;
+
+  @StringField()
+  @Expose()
+  role: UserRole;
 
   @StringFieldOptional()
   @Expose()

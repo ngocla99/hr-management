@@ -10,7 +10,7 @@
       "request": "launch",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start:dev"],
-      "port": 8000, // Default debugging port for Node.js
+      "port": 8080, // Default debugging port for Node.js
       "skipFiles": ["<node_internals>/**"],
       "console": "integratedTerminal",
       "env": {
