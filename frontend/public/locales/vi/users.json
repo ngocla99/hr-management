@@ -5,6 +5,7 @@
   "addUser": "Thêm người dùng",
   "inviteUser": "Mời người dùng",
   "inviteUserDescription": "Mời người dùng mới để tham gia vào nhóm của bạn bằng cách gửi email mời. Gán vai trò để xác định mức truy cập của họ.",
+  "suspendDescription": "Bạn có chắc chắn muốn tạm dừng <strong>{{name}}</strong>?<br/> Hành động này sẽ ngăn người dùng đăng nhập vào hệ thống.",
   "dialog.create.title": "Tạo người dùng",
   "dialog.create.description": "Điền thông tin bên dưới để tạo người dùng mới.",
   "dialog.edit.title": "Sửa người dùng",
@@ -16,7 +17,11 @@
   "message.success.created": "Người dùng đã được tạo thành công",
   "message.success.updated": "Người dùng đã được cập nhật thành công",
   "message.success.deleted": "Người dùng đã được xóa thành công",
+  "message.success.suspended": "Người dùng đã được tạm dừng thành công",
+  "message.success.activated": "Người dùng đã được kích hoạt thành công",
   "message.error.createFailed": "Không thể tạo người dùng",
   "message.error.updateFailed": "Không thể cập nhật người dùng",
-  "message.error.deleteFailed": "Không thể xóa người dùng"
+  "message.error.deleteFailed": "Không thể xóa người dùng",
+  "message.error.suspendFailed": "Không thể tạm dừng người dùng",
+  "message.error.activateFailed": "Không thể kích hoạt người dùng"
 }

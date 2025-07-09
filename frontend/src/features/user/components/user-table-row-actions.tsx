@@ -1,8 +1,8 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
-import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { IconEdit, IconTrash, IconUser } from '@tabler/icons-react'
 import { User } from '@/types/api'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import confirm from '@/components/confirm'
+import { useActivateUser } from '../api/activate-user'
+import { useSuspendUser } from '../api/suspend-user'
 import { useUser } from '../context/user-context'
 
 interface UsersTableRowActionsProps {
@@ -22,6 +24,39 @@ interface UsersTableRowActionsProps {
 export function UsersTableRowActions({ row }: UsersTableRowActionsProps) {
   const { t } = useTranslation()
   const { setOpen, setCurrentRow } = useUser()
+
+  const suspendUserMutation = useSuspendUser()
+  const activateUserMutation = useActivateUser()
+
+  const handleSuspendUser = () => {
+    if (suspendUserMutation.isPending) return
+
+    confirm({
+      type: 'warning',
+      title: t('suspend', { ns: 'common' }),
+      description: (
+        <Trans
+          i18nKey='suspendDescription'
+          ns='users'
+          values={{ name: row.original.username }}
+          components={{
+            strong: <strong />,
+          }}
+        />
+      ),
+      confirmText: t('confirm', { ns: 'common' }),
+      cancelText: t('cancel', { ns: 'common' }),
+      onConfirm: () => {
+        suspendUserMutation.mutate({ id: row.original.id })
+      },
+    })
+  }
+
+  const handleActivateUser = () => {
+    if (activateUserMutation.isPending) return
+    activateUserMutation.mutate({ id: row.original.id })
+  }
+
   return (
     <>
       <DropdownMenu modal={false}>
@@ -49,19 +84,18 @@ export function UsersTableRowActions({ row }: UsersTableRowActionsProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              confirm({
-                type: 'warning',
-                title: t('suspend', { ns: 'common' }),
-                description: t('suspend_description', { ns: 'glossary' }),
-                confirmText: t('confirm', { ns: 'common' }),
-                cancelText: t('cancel', { ns: 'common' }),
-                onConfirm: () => {},
-              })
+              if (row.original.status === 'active') {
+                handleSuspendUser()
+              } else {
+                handleActivateUser()
+              }
             }}
           >
-            {t('suspend', { ns: 'common' })}
+            {row.original.status === 'active'
+              ? t('suspend', { ns: 'common' })
+              : t('activate', { ns: 'common' })}
             <DropdownMenuShortcut>
-              <IconEdit size={16} />
+              <IconUser size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
