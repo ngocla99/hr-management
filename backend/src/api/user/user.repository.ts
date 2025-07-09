@@ -42,6 +42,10 @@ export class UserRepository {
     return this.userModel.deleteOne({ _id: id });
   }
 
+  async hardDeleteManyUsers(ids: string[]): Promise<DeleteResult> {
+    return this.userModel.deleteMany({ _id: { $in: ids } });
+  }
+
   async findAllActive(): Promise<UserDocument[]> {
     return this.userModel.find({ deletedAt: null }).exec();
   }

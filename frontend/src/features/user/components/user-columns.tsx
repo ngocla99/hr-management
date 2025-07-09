@@ -6,7 +6,8 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import LongText from '@/components/long-text'
-import { callTypes, userTypesFn } from '../data/data'
+import { userStatusStyles } from '../constants/user-constants'
+import { userRoleOptionsFn } from '../constants/user-options'
 import { UsersTableRowActions } from './user-table-row-actions'
 
 export const useUserColumns = (): ColumnDef<User>[] => {
@@ -77,7 +78,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       ),
       cell: ({ row }) => {
         const { status } = row.original
-        const badgeColor = callTypes.get(status)
+        const badgeColor = userStatusStyles.get(status)
         return (
           <div className='flex space-x-2'>
             <Badge variant='outline' className={cn('capitalize', badgeColor)}>
@@ -104,7 +105,9 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       ),
       cell: ({ row }) => {
         const { role } = row.original
-        const userType = userTypesFn(t).find(({ value }) => value === role)
+        const userType = userRoleOptionsFn(t).find(
+          ({ value }) => value === role
+        )
 
         if (!userType) {
           return null

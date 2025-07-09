@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { SelectDropdown } from '@/components/select-dropdown'
-import { userTypesFn } from '../data/data'
+import { userRoleOptionsFn } from '../constants/user-options'
 
 const formSchema = z.object({
   email: z
@@ -105,7 +105,7 @@ export function UserInviteDialog({ open, onOpenChange }: Props) {
                     defaultValue={field.value}
                     onValueChange={field.onChange}
                     placeholder={t('form.selectRole', { ns: 'glossary' })}
-                    items={userTypesFn(t).map(({ label, value }) => ({
+                    items={userRoleOptionsFn(t).map(({ label, value }) => ({
                       label,
                       value,
                     }))}

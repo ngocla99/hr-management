@@ -8,7 +8,10 @@ import { Input } from '@/components/ui/input'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter'
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options'
-import { userTypesFn } from '../data/data'
+import {
+  userRoleOptionsFn,
+  userStatusOptionsFn,
+} from '../constants/user-options'
 
 interface UsersTableToolbarProps<TData> {
   table: Table<TData>
@@ -43,27 +46,14 @@ export function UsersTableToolbar({
             <DataTableFacetedFilter
               column={table.getColumn('status')}
               title={t('status', { ns: 'glossary' })}
-              options={[
-                {
-                  label: t('status.active', { ns: 'glossary' }),
-                  value: 'active',
-                },
-                {
-                  label: t('status.inactive', { ns: 'glossary' }),
-                  value: 'inactive',
-                },
-                {
-                  label: t('status.suspended', { ns: 'glossary' }),
-                  value: 'suspended',
-                },
-              ]}
+              options={userStatusOptionsFn(t)}
             />
           )}
           {table.getColumn('role') && (
             <DataTableFacetedFilter
               column={table.getColumn('role')}
               title={t('role', { ns: 'glossary' })}
-              options={userTypesFn(t).map((t) => ({ ...t }))}
+              options={userRoleOptionsFn(t)}
             />
           )}
         </div>

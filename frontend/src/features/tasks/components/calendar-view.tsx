@@ -1,11 +1,9 @@
-import { getUsersApi } from '@/api/services/user'
+import { getRouteApi } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { ChangeBadgeVariantInput } from '@/components/calendar/components/change-badge-variant-input'
 import { ClientContainer } from '@/components/calendar/components/client-container'
 import { CalendarProvider } from '@/components/calendar/contexts/calendar-context'
-import { QUERY_KEYS } from '@/lib/constants/constant'
-import { useQuery } from '@tanstack/react-query'
-import { getRouteApi } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
+import { useUsers } from '@/features/user/api/get-users'
 import { useTasks } from '../hooks/use-tasks-api'
 import {
   adaptApiTasksToCalendarTasks,
@@ -22,12 +20,8 @@ export default function CalendarView({
     route.useSearch()
 
   // Fetch users for calendar
-  const { data: userData } = useQuery({
-    queryKey: [QUERY_KEYS.USERS],
-    queryFn: () => getUsersApi(),
-    select: (data) => data.data,
-  })
-  const users = adaptApiUsersToCalendarUsers(userData ?? [])
+  const { data: userData } = useUsers()
+  const users = adaptApiUsersToCalendarUsers(userData?.data ?? [])
 
   // Fetch tasks using the same filters as the table
   const { tasks, isLoading: isTasksLoading } = useTasks({

@@ -6,6 +6,7 @@ import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import assert from "assert";
 import { plainToInstance } from "class-transformer";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
+import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
 import { UserResDto } from "./dto/user.res.dto";
@@ -91,7 +92,7 @@ export class UserService {
     return plainToInstance(UserResDto, updatedUser);
   }
 
-  async remove(id: string): Promise<{ message: string }> {
+  async delete(id: string): Promise<{ message: string }> {
     const result = await this.userRepository.hardDeleteUser(id);
 
     if (result.deletedCount === 0) {
@@ -100,6 +101,18 @@ export class UserService {
 
     return {
       message: "User deleted successfully",
+    };
+  }
+
+  async deleteMany(reqDto: DeleteUsersReqDto): Promise<{ message: string }> {
+    const result = await this.userRepository.hardDeleteManyUsers(reqDto.ids);
+
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(ErrorCode.U002);
+    }
+
+    return {
+      message: "Users deleted successfully",
     };
   }
 

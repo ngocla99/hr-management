@@ -17,8 +17,9 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiParam, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
+import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
 import { UserResDto } from "./dto/user.res.dto";
@@ -90,6 +91,16 @@ export class UserController {
     return this.userService.update(id, reqDto);
   }
 
+  @Delete("delete-many")
+  @ApiAuth({
+    summary: "Delete many users",
+    errorResponses: [400, 401, 500],
+  })
+  @ApiBody({ type: DeleteUsersReqDto })
+  deleteManyUsers(@Body() reqDto: DeleteUsersReqDto): Promise<MessageResponse> {
+    return this.userService.deleteMany(reqDto);
+  }
+
   @Delete(":id")
   @ApiAuth({
     summary: "Delete user",
@@ -97,7 +108,7 @@ export class UserController {
   })
   @ApiParam({ name: "id", type: "String" })
   removeUser(@Param("id") id: string): Promise<MessageResponse> {
-    return this.userService.remove(id);
+    return this.userService.delete(id);
   }
 
   @Patch(":id/suspend")

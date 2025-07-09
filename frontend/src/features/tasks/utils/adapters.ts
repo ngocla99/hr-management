@@ -1,5 +1,5 @@
+import { User } from '@/types/api'
 import { TaskSchema } from '@/lib/validations/task'
-import { UserSchema } from '@/lib/validations/user'
 import { IEvent, IUser } from '@/components/calendar/interfaces'
 
 /**
@@ -34,13 +34,11 @@ export const adaptApiTasksToLocalTasks = (
   return apiTasks.map(adaptApiTaskToLocalTask)
 }
 
-export const adaptApiUsersToCalendarUsers = (
-  apiUsers: UserSchema[]
-): IUser[] => {
+export const adaptApiUsersToCalendarUsers = (apiUsers: User[]): IUser[] => {
   return apiUsers.map((apiUser, index) => {
     return {
       id: apiUser.id,
-      name: apiUser.name,
+      name: apiUser.username,
       picturePath: `/avatars/0${index + 1}.png`,
     }
   })

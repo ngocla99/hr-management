@@ -1,39 +1,29 @@
 import { z } from 'zod'
 import { AxiosError } from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { User } from '@/types/api'
-import { PaginationInput } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
-import { USER_ROLES } from '@/features/user/constants/user-constants'
 import { getUsersQueryOptions } from './get-users'
 
-export const createUserSchema = z.object({
-  email: z.string().email(),
-  username: z.string(),
-  password: z.string(),
-  role: z.enum(USER_ROLES),
+export const deleteUsersSchema = z.object({
+  ids: z.array(z.string()),
 })
 
-export type CreateUserInput = z.infer<typeof createUserSchema>
+export type DeleteUsersInput = z.infer<typeof deleteUsersSchema>
 
-export const createUserApi = (
-  input: CreateUserInput
-): Promise<Pick<User, 'id' | 'email' | 'username'>> => {
-  return apiClient.post('/users', input)
+export const deleteUsersApi = (input: DeleteUsersInput): Promise<void> => {
+  return apiClient.delete(`/users/delete-many`, { data: input })
 }
 
-type UseCreateUserOptions = {
-  inputQuery?: PaginationInput
-  mutationConfig?: MutationConfig<typeof createUserApi>
+type UseDeleteUsersOptions = {
+  mutationConfig?: MutationConfig<typeof deleteUsersApi>
 }
 
-export const useCreateUser = ({
-  inputQuery,
+export const useDeleteUsers = ({
   mutationConfig,
-}: UseCreateUserOptions = {}) => {
+}: UseDeleteUsersOptions = {}) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
@@ -42,19 +32,20 @@ export const useCreateUser = ({
   return useMutation({
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryOptions(inputQuery).queryKey,
+        queryKey: getUsersQueryOptions().queryKey,
       })
+      toast.success(t('message.success.deletedMany', { ns: 'users' }))
       onSuccess?.(...args)
     },
     onError: (error: Error, ...args) => {
       const errorMessage =
         error instanceof AxiosError
           ? error.response?.data?.message
-          : t('message.error.createFailed', { ns: 'users' })
+          : t('message.error.deleteManyFailed', { ns: 'users' })
       toast.error(errorMessage)
       onError?.(error, ...args)
     },
     ...restConfig,
-    mutationFn: createUserApi,
+    mutationFn: deleteUsersApi,
   })
 }

@@ -31,7 +31,13 @@ type UseUsersOptions = {
   queryConfig?: QueryConfig<typeof getUsersQueryOptions>
 }
 
-export const useUsers = ({ input, queryConfig }: UseUsersOptions) => {
+export const useUsers = ({
+  input = {
+    page: PAGINATION.DEFAULT_PAGE,
+    limit: PAGINATION.DEFAULT_LIMIT,
+  },
+  queryConfig,
+}: UseUsersOptions = {}) => {
   return useQuery({
     ...getUsersQueryOptions(input),
     ...queryConfig,

@@ -19,9 +19,11 @@
   "message.success.deleted": "User deleted successfully",
   "message.success.suspended": "User suspended successfully",
   "message.success.activated": "User activated successfully",
+  "message.success.deletedMany": "Users deleted successfully",
   "message.error.createFailed": "Failed to create user",
   "message.error.updateFailed": "Failed to update user",
   "message.error.deleteFailed": "Failed to delete user",
   "message.error.suspendFailed": "Failed to suspend user",
-  "message.error.activateFailed": "Failed to activate user"
+  "message.error.activateFailed": "Failed to activate user",
+  "message.error.deleteManyFailed": "Failed to delete users"
 }

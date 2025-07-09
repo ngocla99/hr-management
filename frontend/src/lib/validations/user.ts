@@ -1,4 +1,4 @@
-import { USER_ROLES } from '@/features/user/constants/constants'
+import { USER_ROLES } from '@/features/user/constants/user-constants'
 import { z } from 'zod'
 
 export const meSchema = z.object({

@@ -9,13 +9,14 @@ export type Entity<T> = {
   [K in keyof T]: T[K]
 } & BaseEntity
 
-export type UserRole =
-  | 'super_admin'
-  | 'admin'
-  | 'hr_manager'
-  | 'recruiter'
-  | 'hiring_manager'
-  | 'employee'
+export enum UserRole {
+  SUPER_ADMIN = 'super_admin',
+  ADMIN = 'admin',
+  HR_MANAGER = 'hr_manager',
+  RECRUITER = 'recruiter',
+  HIRING_MANAGER = 'hiring_manager',
+  EMPLOYEE = 'employee',
+}
 
 export enum UserStatus {
   ACTIVE = 'active',

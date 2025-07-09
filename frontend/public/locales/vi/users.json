@@ -19,9 +19,11 @@
   "message.success.deleted": "Người dùng đã được xóa thành công",
   "message.success.suspended": "Người dùng đã được tạm dừng thành công",
   "message.success.activated": "Người dùng đã được kích hoạt thành công",
+  "message.success.deletedMany": "Người dùng đã được xóa thành công",
   "message.error.createFailed": "Không thể tạo người dùng",
   "message.error.updateFailed": "Không thể cập nhật người dùng",
   "message.error.deleteFailed": "Không thể xóa người dùng",
   "message.error.suspendFailed": "Không thể tạm dừng người dùng",
-  "message.error.activateFailed": "Không thể kích hoạt người dùng"
+  "message.error.activateFailed": "Không thể kích hoạt người dùng",
+  "message.error.deleteManyFailed": "Không thể xóa người dùng"
 }

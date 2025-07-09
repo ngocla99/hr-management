@@ -1,13 +1,13 @@
+import { User } from '@/types/api'
 import Cookies from 'js-cookie'
 import { create } from 'zustand'
-import { MeSchema } from '@/lib/validations/user'
 
 const ACCESS_TOKEN = 'access_token'
 
 interface AuthState {
   auth: {
-    user: MeSchema | null
-    setUser: (user: MeSchema | null) => void
+    user: User | null
+    setUser: (user: User | null) => void
     accessToken: string
     setAccessToken: (accessToken: string) => void
     resetAccessToken: () => void

@@ -1,13 +1,10 @@
 import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { getProjectsApi } from '@/api/services/project'
 import { createTaskApi, updateTaskApi } from '@/api/services/task'
-import { getUsersApi } from '@/api/services/user'
-import { QUERY_KEYS } from '@/lib/constants/constant'
 import {
   CreateTaskSchema,
   createTaskSchema,
@@ -38,6 +35,7 @@ import { FormDatePicker } from '@/components/form-field/form-date-picker'
 import { FormInput } from '@/components/form-field/form-input'
 import { FormSelect } from '@/components/form-field/form-select'
 import { FormTextarea } from '@/components/form-field/form-textarea'
+import { useUsers } from '@/features/user/api/get-users'
 import { priorityOptions, statusOptions } from '../data/data'
 
 interface Props {
@@ -78,22 +76,11 @@ export function TasksMutateDialog({ open, onOpenChange, currentRow }: Props) {
         },
   })
 
-  const { data: projects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: getProjectsApi,
-  })
+  const projectOptions = []
 
-  const projectOptions = (projects?.data ?? []).map((project) => ({
-    label: project.name,
-    value: project.id,
-  }))
-
-  const { data: users } = useQuery({
-    queryKey: [QUERY_KEYS.USERS],
-    queryFn: () => getUsersApi(),
-  })
+  const { data: users } = useUsers()
   const userOptions = (users?.data ?? []).map((user) => ({
-    label: user.name,
+    label: user.username,
     value: user.id,
   }))
 

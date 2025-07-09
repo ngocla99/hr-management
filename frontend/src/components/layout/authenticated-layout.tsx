@@ -1,14 +1,13 @@
 import React from 'react'
 import Cookies from 'js-cookie'
-import { useQuery } from '@tanstack/react-query'
 import { Outlet } from '@tanstack/react-router'
-import { getMeApi } from '@/api/services/user'
 import { useAuth } from '@/stores/auth-store'
 import { cn } from '@/lib/utils'
 import { SearchProvider } from '@/context/search-context'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
+import { useMe } from '@/features/user/api/get-me'
 import { LanguageSwitch } from '../language-switch'
 import { ProfileDropdown } from '../profile-dropdown'
 import { Search } from '../search'
@@ -23,10 +22,7 @@ export function AuthenticatedLayout({ children }: Props) {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false'
   const { setUser } = useAuth()
 
-  const { data: me } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMeApi,
-  })
+  const { data: me } = useMe()
 
   React.useEffect(() => {
     if (me) {

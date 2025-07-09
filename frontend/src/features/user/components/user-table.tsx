@@ -16,8 +16,8 @@ import {
 import { PAGINATION } from '@/lib/constants/constant'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
+import { useDeleteUsers } from '../api/delete-users'
 import { useUsers } from '../api/get-users'
-import { useDeleteUser } from '../hooks/use-user-api'
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
 
@@ -52,9 +52,11 @@ export function UserTable() {
   const users = data?.data ?? []
   const total = data?.pagination?.totalRecords ?? 0
 
-  const deleteUserMutation = useDeleteUser({
-    onSuccess: () => {
-      table.resetRowSelection()
+  const deleteUsersMutation = useDeleteUsers({
+    mutationConfig: {
+      onSuccess: () => {
+        table.resetRowSelection()
+      },
     },
   })
 
@@ -112,7 +114,7 @@ export function UserTable() {
       <UsersTableToolbar
         table={table}
         onDeleteAll={(onSuccess) => {
-          deleteUserMutation.mutate({ ids: selectedRowIds }, { onSuccess })
+          deleteUsersMutation.mutate({ ids: selectedRowIds }, { onSuccess })
         }}
       />
       <DataTable table={table} />
