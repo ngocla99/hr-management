@@ -3,7 +3,7 @@ import { applyMongoQueryOptions } from "@/utils/build-query-options";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { plainToInstance } from "class-transformer";
-import { Model, Types } from "mongoose";
+import { DeleteResult, Model, Types } from "mongoose";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
 import { UserResDto } from "./dto/user.res.dto";
@@ -42,6 +42,10 @@ export class UserRepository {
       .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
       .exec();
     return plainToInstance(UserResDto, user);
+  }
+
+  async hardDeleteUser(id: string): Promise<DeleteResult> {
+    return this.userModel.deleteOne({ _id: id });
   }
 
   async findAllActive(): Promise<UserDocument[]> {

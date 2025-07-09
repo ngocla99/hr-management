@@ -1,5 +1,5 @@
 import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
-import { Uuid } from "@/common/types/common.type";
+import { MessageResponse, Uuid } from "@/common/types/common.type";
 import { UserRole } from "@/constants/roles.constant";
 import { CurrentUser } from "@/decorators/current-user.decorator";
 import { ApiAuth } from "@/decorators/http.decorators";
@@ -12,7 +12,6 @@ import {
   Get,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -97,7 +96,7 @@ export class UserController {
     errorResponses: [400, 401, 403, 404, 500],
   })
   @ApiParam({ name: "id", type: "String" })
-  removeUser(@Param("id", ParseUUIDPipe) id: Uuid) {
+  removeUser(@Param("id") id: string): Promise<MessageResponse> {
     return this.userService.remove(id);
   }
 

@@ -12,6 +12,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import confirm from '@/components/confirm'
 import { useUser } from '../context/user-context'
 
 interface UsersTableRowActionsProps {
@@ -41,6 +42,24 @@ export function UsersTableRowActions({ row }: UsersTableRowActionsProps) {
             }}
           >
             {t('edit', { ns: 'common' })}
+            <DropdownMenuShortcut>
+              <IconEdit size={16} />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              confirm({
+                type: 'warning',
+                title: t('suspend', { ns: 'common' }),
+                description: t('suspend_description', { ns: 'glossary' }),
+                confirmText: t('confirm', { ns: 'common' }),
+                cancelText: t('cancel', { ns: 'common' }),
+                onConfirm: () => {},
+              })
+            }}
+          >
+            {t('suspend', { ns: 'common' })}
             <DropdownMenuShortcut>
               <IconEdit size={16} />
             </DropdownMenuShortcut>

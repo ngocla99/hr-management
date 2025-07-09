@@ -1,5 +1,4 @@
 import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
-import { Uuid } from "@/common/types/common.type";
 import { ErrorCode } from "@/constants/error-code.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
@@ -91,13 +90,15 @@ export class UserService {
     await this.userRepository.updateUser(id, updateUserDto);
   }
 
-  async remove(id: Uuid) {
-    const user = await this.userRepository.softDeleteUser(id);
+  async remove(id: string): Promise<{ message: string }> {
+    const result = await this.userRepository.hardDeleteUser(id);
 
-    if (!user) {
+    if (result.deletedCount === 0) {
       throw new NotFoundException(ErrorCode.U002);
     }
 
-    return plainToInstance(UserResDto, user);
+    return {
+      message: "User deleted successfully",
+    };
   }
 }

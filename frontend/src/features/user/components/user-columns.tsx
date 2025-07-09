@@ -76,9 +76,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => {
-        // const { status } = row.original
-        // TODO: remove mock data
-        const status = 'active'
+        const { status } = row.original
         const badgeColor = callTypes.get(status)
         return (
           <div className='flex space-x-2'>

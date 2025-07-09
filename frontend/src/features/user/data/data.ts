@@ -7,7 +7,7 @@ export const callTypes = new Map<UserStatus, string>([
   ['inactive', 'bg-neutral-300/40 border-neutral-300'],
   [
     'suspended',
-    'bg-destructive/10 dark:bg-destructive/50 text-destructive dark:text-primary border-destructive/10',
+    'bg-destructive/10 dark:bg-destructive/50 text-destructive border-destructive/10',
   ],
 ])
 

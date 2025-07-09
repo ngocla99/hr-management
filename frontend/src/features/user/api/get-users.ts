@@ -2,6 +2,7 @@ import { queryOptions, useQuery } from '@tanstack/react-query'
 import { User } from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
 import apiClient from '@/lib/api-client'
+import { PAGINATION } from '@/lib/constants/constant'
 import { QueryConfig } from '@/lib/react-query'
 
 export const getUsersApi = (
@@ -13,7 +14,12 @@ export const getUsersApi = (
   return apiClient.get('/users', { params: input })
 }
 
-export const getUsersQueryOptions = (input?: PaginationInput) => {
+export const getUsersQueryOptions = (
+  input: PaginationInput = {
+    page: PAGINATION.DEFAULT_PAGE,
+    limit: PAGINATION.DEFAULT_LIMIT,
+  }
+) => {
   return queryOptions({
     queryKey: ['users', 'list', input],
     queryFn: () => getUsersApi(input),

@@ -17,6 +17,12 @@ export type UserRole =
   | 'hiring_manager'
   | 'employee'
 
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  SUSPENDED = 'suspended',
+}
+
 export type User = Entity<{
   username: string
   email: string
@@ -25,4 +31,5 @@ export type User = Entity<{
   avatar: string
   dateOfBirth: Date
   gender: string
+  status: UserStatus
 }>

@@ -10,7 +10,7 @@
   "dialog.edit.title": "Edit User",
   "dialog.edit.description": "Update the user details below.",
   "dialog.delete.title": "Delete User",
-  "dialog.delete.description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+  "dialog.delete.description": "Are you sure you want to delete <strong>{{name}}</strong>?<br/> This action will permanently remove the user from the system. This cannot be undone.",
   "form.name.placeholder": "Enter user name",
   "form.enterDescriptionPlaceholder": "Add a personal note to your invitation (optional)",
   "message.success.created": "User created successfully",

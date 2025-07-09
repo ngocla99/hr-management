@@ -1,6 +1,13 @@
 import { UserRole } from "@/constants/roles.constant";
 import { ClassField, StringField, StringFieldOptional } from "@/decorators/field.decorators";
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose, Transform } from "class-transformer";
+import { UserDocument } from "../entities/user.entity";
+
+export enum UserStatus {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  SUSPENDED = "suspended",
+}
 
 @Exclude()
 export class UserResDto {
@@ -27,6 +34,16 @@ export class UserResDto {
   @StringField()
   @Expose()
   image: string;
+
+  @StringField()
+  @Expose()
+  @Transform(
+    ({ obj }: { obj: UserDocument }) => (obj.deletedAt ? UserStatus.SUSPENDED : UserStatus.ACTIVE),
+    {
+      toClassOnly: true,
+    },
+  )
+  status: UserStatus;
 
   @ClassField(() => Date)
   @Expose()

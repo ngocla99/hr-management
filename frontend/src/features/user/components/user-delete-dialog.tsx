@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { showSubmittedData } from '@/lib/utils/show-submitted-data'
+import { User } from '@/types/api'
+import { Trans, useTranslation } from 'react-i18next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { User } from '../data/schema'
+import { useDeleteUser } from '../api/delete-user'
 
 interface Props {
   open: boolean
@@ -15,13 +15,20 @@ interface Props {
 
 export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState('')
-  const { t } = useTranslation(['users', 'common', 'glossary'])
+  const { t } = useTranslation()
+
+  const deleteUserMutation = useDeleteUser({
+    mutationConfig: {
+      onSuccess: () => {
+        onOpenChange(false)
+      },
+    },
+  })
 
   const handleDelete = () => {
-    if (value.trim() !== currentRow.name) return
-
-    onOpenChange(false)
-    showSubmittedData(currentRow, t('message.success.deleted', { ns: 'users' }))
+    if (value.trim() !== currentRow.username) return
+    if (deleteUserMutation.isPending) return
+    deleteUserMutation.mutate({ id: currentRow.id })
   }
 
   return (
@@ -29,9 +36,19 @@ export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.name}
-      title={t('dialog.delete.title')}
-      desc={t('dialog.delete.description', { name: currentRow.name })}
+      disabled={value.trim() !== currentRow.username}
+      title={t('dialog.delete.title', { ns: 'users' })}
+      desc={
+        <Trans
+          i18nKey='dialog.delete.description'
+          ns='users'
+          values={{ name: currentRow.username }}
+          components={{
+            strong: <strong />,
+            br: <br />,
+          }}
+        />
+      }
       confirmText={t('delete', { ns: 'common' })}
       destructive
     >
@@ -46,7 +63,13 @@ export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       <Alert variant='destructive'>
         <AlertTitle>{t('warning', { ns: 'common' })}</AlertTitle>
         <AlertDescription>
-          {t('dialog.deleteConfirm', { ns: 'common' })}
+          <Trans
+            i18nKey='dialog.deleteConfirm'
+            ns='common'
+            components={{
+              br: <br />,
+            }}
+          />
         </AlertDescription>
       </Alert>
     </ConfirmDialog>
