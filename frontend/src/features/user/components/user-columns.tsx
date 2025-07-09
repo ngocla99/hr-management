@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
+import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -138,7 +139,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
           title={t('createdAt', { ns: 'glossary' })}
         />
       ),
-      cell: ({ row }) => <div>{row.getValue('createdAt')}</div>,
+      cell: ({ row }) => <div>{formatDate(row.getValue('createdAt'))}</div>,
     },
     {
       accessorKey: 'updatedAt',
@@ -148,7 +149,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
           title={t('updatedAt', { ns: 'glossary' })}
         />
       ),
-      cell: ({ row }) => <div>{row.getValue('updatedAt')}</div>,
+      cell: ({ row }) => <div>{formatDate(row.getValue('updatedAt'))}</div>,
     },
     {
       id: 'actions',

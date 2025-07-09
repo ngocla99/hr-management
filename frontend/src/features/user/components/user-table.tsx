@@ -1,23 +1,17 @@
-import React from 'react'
-import {
-  ColumnFiltersState,
-  type PaginationState,
-  RowData,
-  SortingState,
-  VisibilityState,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { PAGINATION } from '@/lib/constants/constant'
+import { getRouteApi } from '@tanstack/react-router'
+import { RowData } from '@tanstack/react-table'
+import { User, UserRole, UserStatus } from '@/types/api'
+import { DataTableFilterField } from '@/types/common'
+import { useTranslation } from 'react-i18next'
+import { useDataTable } from '@/hooks/use-data-table'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
 import { useDeleteUsers } from '../api/delete-users'
 import { useUsers } from '../api/get-users'
+import {
+  userRoleOptionsFn,
+  userStatusOptionsFn,
+} from '../constants/user-options'
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
 
@@ -28,29 +22,46 @@ declare module '@tanstack/react-table' {
   }
 }
 
+const route = getRouteApi('/_authenticated/organization/user')
+
 export function UserTable() {
+  const { t } = useTranslation()
   const columns = useUserColumns()
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: PAGINATION.DEFAULT_PAGE - 1,
-    pageSize: PAGINATION.DEFAULT_LIMIT,
-  })
+  const { page, limit, status, role } = route.useSearch()
 
   const { data, isLoading, error } = useUsers({
     input: {
-      page: pagination.pageIndex + 1,
-      limit: pagination.pageSize,
+      page,
+      limit,
+      status: status as UserStatus,
+      role: role as UserRole[],
     },
   })
 
   const users = data?.data ?? []
   const total = data?.pagination?.totalRecords ?? 0
+
+  const filterFields: DataTableFilterField<User>[] = [
+    {
+      label: t('role', { ns: 'glossary' }),
+      value: 'role',
+      options: userRoleOptionsFn(t),
+    },
+    {
+      label: t('status', { ns: 'glossary' }),
+      value: 'status',
+      options: userStatusOptionsFn(t),
+      multiple: false,
+    },
+  ]
+
+  const { table } = useDataTable({
+    route,
+    data: users,
+    columns,
+    rowCount: total,
+    filterFields,
+  })
 
   const deleteUsersMutation = useDeleteUsers({
     mutationConfig: {
@@ -60,35 +71,9 @@ export function UserTable() {
     },
   })
 
-  const table = useReactTable({
-    data: users,
-    columns,
-    rowCount: total,
-    state: {
-      pagination,
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    enableRowSelection: true,
-    manualPagination: true,
-    onPaginationChange: setPagination,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-  })
-
-  const selectedRowIds = table
-    .getFilteredSelectedRowModel()
-    .rows.map((row) => row.original.id)
+  // const selectedRowIds = table
+  //   .getFilteredSelectedRowModel()
+  //   .rows.map((row) => row.original.id)
 
   if (isLoading) {
     return (
@@ -111,12 +96,7 @@ export function UserTable() {
 
   return (
     <div className='space-y-4'>
-      <UsersTableToolbar
-        table={table}
-        onDeleteAll={(onSuccess) => {
-          deleteUsersMutation.mutate({ ids: selectedRowIds }, { onSuccess })
-        }}
-      />
+      <UsersTableToolbar table={table} filterFields={filterFields} />
       <DataTable table={table} />
     </div>
   )
