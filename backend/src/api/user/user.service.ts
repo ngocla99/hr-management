@@ -87,7 +87,8 @@ export class UserService {
       throw new NotFoundException(ErrorCode.U002);
     }
 
-    await this.userRepository.updateUser(id, updateUserDto);
+    const updatedUser = await this.userRepository.updateUser(id, updateUserDto);
+    return plainToInstance(UserResDto, updatedUser);
   }
 
   async remove(id: string): Promise<{ message: string }> {
@@ -100,5 +101,15 @@ export class UserService {
     return {
       message: "User deleted successfully",
     };
+  }
+
+  async suspend(id: string): Promise<UserResDto> {
+    const user = await this.userRepository.softDeleteUser(id);
+    return plainToInstance(UserResDto, user);
+  }
+
+  async activate(id: string): Promise<UserResDto> {
+    const user = await this.userRepository.activateUser(id);
+    return plainToInstance(UserResDto, user);
   }
 }

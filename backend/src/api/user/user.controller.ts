@@ -93,11 +93,31 @@ export class UserController {
   @Delete(":id")
   @ApiAuth({
     summary: "Delete user",
-    errorResponses: [400, 401, 403, 404, 500],
+    errorResponses: [400, 401, 500],
   })
   @ApiParam({ name: "id", type: "String" })
   removeUser(@Param("id") id: string): Promise<MessageResponse> {
     return this.userService.remove(id);
+  }
+
+  @Patch(":id/suspend")
+  @ApiAuth({
+    summary: "Suspend user",
+    errorResponses: [400, 401, 500],
+  })
+  @ApiParam({ name: "id", type: "String" })
+  suspendUser(@Param("id") id: string): Promise<UserResDto> {
+    return this.userService.suspend(id);
+  }
+
+  @Patch(":id/activate")
+  @ApiAuth({
+    summary: "Activate user",
+    errorResponses: [400, 401, 500],
+  })
+  @ApiParam({ name: "id", type: "String" })
+  activateUser(@Param("id") id: string): Promise<UserResDto> {
+    return this.userService.activate(id);
   }
 
   @ApiAuth()

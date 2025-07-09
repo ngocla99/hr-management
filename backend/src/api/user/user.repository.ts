@@ -2,11 +2,9 @@ import { UserRole } from "@/constants/roles.constant";
 import { applyMongoQueryOptions } from "@/utils/build-query-options";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { plainToInstance } from "class-transformer";
 import { DeleteResult, Model, Types } from "mongoose";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserResDto } from "./dto/user.res.dto";
 import { UserDocument } from "./entities/user.entity";
 
 @Injectable()
@@ -26,22 +24,18 @@ export class UserRepository {
     return this.userModel.findOne({ username, deletedAt: null }).exec();
   }
 
-  async createUser(data: CreateUserReqDto): Promise<UserResDto> {
+  async createUser(data: CreateUserReqDto): Promise<UserDocument> {
     const user = new this.userModel(data);
     await user.save();
-    return plainToInstance(UserResDto, user);
+    return user;
   }
 
-  async updateUser(id: string, data: UpdateUserReqDto): Promise<UserResDto | null> {
-    const user = await this.userModel.findByIdAndUpdate(id, data, { new: true }).exec();
-    return plainToInstance(UserResDto, user);
+  async updateUser(id: string, data: UpdateUserReqDto): Promise<UserDocument | null> {
+    return this.userModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
-  async softDeleteUser(id: string): Promise<UserResDto | null> {
-    const user = await this.userModel
-      .findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true })
-      .exec();
-    return plainToInstance(UserResDto, user);
+  async softDeleteUser(id: string): Promise<UserDocument | null> {
+    return this.userModel.findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true }).exec();
   }
 
   async hardDeleteUser(id: string): Promise<DeleteResult> {
@@ -58,5 +52,9 @@ export class UserRepository {
 
   async findByRole(role: UserRole): Promise<UserDocument[]> {
     return this.userModel.find({ role, deletedAt: null }).exec();
+  }
+
+  async activateUser(id: string): Promise<UserDocument | null> {
+    return this.userModel.findByIdAndUpdate(id, { deletedAt: null }, { new: true }).exec();
   }
 }
