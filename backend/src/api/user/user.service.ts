@@ -9,7 +9,7 @@ import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserResDto } from "./dto/user.res.dto";
+import { UserResDto, UserStatus } from "./dto/user.res.dto";
 import { UserDocument } from "./entities/user.entity";
 import { UserRepository } from "./user.repository";
 
@@ -42,9 +42,21 @@ export class UserService {
   }
 
   async findAll(reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
+    const filter: Record<string, any> = {};
+    if (reqDto.role) {
+      filter.role = reqDto.role;
+    }
+    if (reqDto.status) {
+      if (reqDto.status === UserStatus.SUSPENDED) {
+        filter.deletedAt = { $ne: null };
+      } else if (reqDto.status === UserStatus.ACTIVE) {
+        filter.deletedAt = null;
+      }
+    }
     const [users, metaDto] = await paginate<UserDocument>(this.userRepository.userModel, reqDto, {
       skipCount: false,
       takeAll: false,
+      filter,
     });
     return new OffsetPaginatedDto(plainToInstance(UserResDto, users), metaDto);
   }

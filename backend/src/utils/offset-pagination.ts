@@ -8,9 +8,10 @@ export async function paginate<T>(
   options?: Partial<{
     skipCount: boolean;
     takeAll: boolean;
+    filter: Record<string, any>;
   }>,
 ): Promise<[T[], OffsetPaginationDto]> {
-  let query = model.find();
+  let query = model.find(options?.filter || {});
 
   if (!options?.takeAll) {
     query = query.skip(pageOptionsDto.offset).limit(pageOptionsDto.limit!);
@@ -21,7 +22,7 @@ export async function paginate<T>(
   let count = -1;
 
   if (!options?.skipCount) {
-    count = await model.countDocuments().exec();
+    count = await model.countDocuments(options?.filter || {}).exec();
   }
 
   const metaDto = new OffsetPaginationDto(count, pageOptionsDto);
