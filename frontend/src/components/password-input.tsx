@@ -53,7 +53,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
             animationData={visibility}
             loop={false}
             autoplay={false}
-            style={{ width: '18px', height: '18px' }}
+            className='size-4.5 dark:invert'
             onDOMLoaded={handleLottieLoad}
           />
         </Button>

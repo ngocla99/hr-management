@@ -1,14 +1,6 @@
-import { HTMLAttributes } from 'react'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Link, useRouter } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { logInApi } from '@/api/services/auth'
-import { useAuth } from '@/stores/auth-store'
-import { cn } from '@/lib/utils'
+import { FormInput } from '@/components/form-field/form-input'
+import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -18,9 +10,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { FormInput } from '@/components/form-field/form-input'
-import { PasswordInput } from '@/components/password-input'
+import { cn } from '@/lib/utils'
+import { useAuth } from '@/stores/auth-store'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { Link, useRouter } from '@tanstack/react-router'
+import { HTMLAttributes } from 'react'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import { z } from 'zod'
 import { FacebookSignIn } from './facebook-sign-in'
 import { TwitterSignIn } from './twitter-sign-in'
 

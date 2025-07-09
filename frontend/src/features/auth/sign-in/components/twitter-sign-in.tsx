@@ -37,7 +37,7 @@ export function TwitterSignIn({ disabled }: TwitterSignInProps) {
         animationData={twitterAnimation}
         loop={false}
         autoplay={false}
-        className='size-6'
+        className='size-6 dark:invert'
       />
       {t('twitter', { ns: 'auth' })}
     </Button>
