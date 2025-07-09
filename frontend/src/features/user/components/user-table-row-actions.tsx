@@ -1,6 +1,8 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
 import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { User } from '@/types/api'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,13 +13,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useUser } from '../context/user-context'
-import { User } from '../data/schema'
 
 interface UsersTableRowActionsProps {
   row: Row<User>
 }
 
 export function UsersTableRowActions({ row }: UsersTableRowActionsProps) {
+  const { t } = useTranslation()
   const { setOpen, setCurrentRow } = useUser()
   return (
     <>
@@ -33,27 +35,25 @@ export function UsersTableRowActions({ row }: UsersTableRowActionsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-[160px]'>
           <DropdownMenuItem
-            disabled={true}
             onClick={() => {
               setCurrentRow(row.original)
               setOpen('edit')
             }}
           >
-            Edit
+            {t('edit', { ns: 'common' })}
             <DropdownMenuShortcut>
               <IconEdit size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            disabled={true}
             onClick={() => {
               setCurrentRow(row.original)
               setOpen('delete')
             }}
             className='text-red-500!'
           >
-            Delete
+            {t('delete', { ns: 'common' })}
             <DropdownMenuShortcut>
               <IconTrash size={16} />
             </DropdownMenuShortcut>

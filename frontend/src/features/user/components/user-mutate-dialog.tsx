@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { showSubmittedData } from '@/lib/utils/show-submitted-data'
 import { Button } from '@/components/ui/button'
@@ -23,10 +24,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
-import { UserRole } from '../constants/constants'
+import { useCreateUser } from '../api/create-user'
+import { USER_ROLES } from '../constants/constants'
 import { userTypesFn } from '../data/data'
-import { User } from '../data/schema'
-import { useCreateUser } from '../hooks/use-user-api'
 
 const formSchema = z
   .object({
@@ -39,7 +39,7 @@ const formSchema = z
       .string()
       .min(1, { message: 'required' })
       .transform((pwd) => pwd.trim()),
-    role: z.enum(Object.values(UserRole) as [string, ...string[]]),
+    role: z.enum(USER_ROLES),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
   })
@@ -98,14 +98,15 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
   const { t } = useTranslation()
   const isEdit = !!currentRow
   const createUserMutation = useCreateUser({
-    onSuccess: handleResetForm,
+    mutationConfig: {
+      onSuccess: handleResetForm,
+    },
   })
 
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
-          ...currentRow,
           password: '',
           confirmPassword: '',
           isEdit,
@@ -131,6 +132,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
         email: values.email,
         username: values.username,
         password: values.password,
+        role: values.role,
       })
     }
   }

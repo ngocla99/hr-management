@@ -1,6 +1,7 @@
 import React from 'react'
 import { Cross2Icon, TrashIcon } from '@radix-ui/react-icons'
 import { Table } from '@tanstack/react-table'
+import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,7 +9,6 @@ import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter'
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options'
 import { userTypesFn } from '../data/data'
-import { User } from '../data/schema'
 
 interface UsersTableToolbarProps<TData> {
   table: Table<TData>

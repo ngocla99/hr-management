@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -6,7 +7,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import LongText from '@/components/long-text'
 import { callTypes, userTypesFn } from '../data/data'
-import { User } from '../data/schema'
 import { UsersTableRowActions } from './user-table-row-actions'
 
 export const useUserColumns = (): ColumnDef<User>[] => {
@@ -43,7 +43,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       enableHiding: false,
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'username',
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -51,7 +51,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <LongText className='max-w-36'>{row.getValue('name')}</LongText>
+        <LongText className='max-w-36'>{row.getValue('username')}</LongText>
       ),
       meta: { className: 'w-36' },
     },
@@ -76,12 +76,14 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => {
-        const { status } = row.original
+        // const { status } = row.original
+        // TODO: remove mock data
+        const status = 'active'
         const badgeColor = callTypes.get(status)
         return (
           <div className='flex space-x-2'>
             <Badge variant='outline' className={cn('capitalize', badgeColor)}>
-              {t(('status.' + row.getValue('status')) as any, {
+              {t(('status.' + status) as any, {
                 ns: 'glossary',
               })}
             </Badge>

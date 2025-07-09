@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { USER_ROLES } from '../constants/constants'
 
 const userStatusSchema = z.union([
   z.literal('active'),
@@ -7,15 +8,13 @@ const userStatusSchema = z.union([
 ])
 export type UserStatus = z.infer<typeof userStatusSchema>
 
-const userRoleSchema = z.union([z.literal('admin'), z.literal('user')])
-
 const userSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
   phoneNumber: z.string(),
   status: userStatusSchema,
-  role: userRoleSchema,
+  role: z.enum(USER_ROLES),
   createdAt: z.string(),
   updatedAt: z.string(),
 })
