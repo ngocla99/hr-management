@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { useDataTable } from '@/hooks/use-data-table'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
-import { useDeleteUsers } from '../api/delete-users'
 import { useUsers } from '../api/get-users'
 import {
   userRoleOptionsFn,
@@ -43,6 +42,11 @@ export function UserTable() {
 
   const filterFields: DataTableFilterField<User>[] = [
     {
+      label: t('username', { ns: 'glossary' }),
+      value: 'username',
+      placeholder: t('filter.username.placeholder', { ns: 'users' }),
+    },
+    {
       label: t('role', { ns: 'glossary' }),
       value: 'role',
       options: userRoleOptionsFn(t),
@@ -62,18 +66,6 @@ export function UserTable() {
     rowCount: total,
     filterFields,
   })
-
-  const deleteUsersMutation = useDeleteUsers({
-    mutationConfig: {
-      onSuccess: () => {
-        table.resetRowSelection()
-      },
-    },
-  })
-
-  // const selectedRowIds = table
-  //   .getFilteredSelectedRowModel()
-  //   .rows.map((row) => row.original.id)
 
   if (isLoading) {
     return (

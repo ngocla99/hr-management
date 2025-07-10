@@ -1,7 +1,7 @@
 {
   "page.title": "User List",
   "page.description": "Manage your users and their roles here.",
-  "filter.placeholder": "Filter users...",
+  "filter.username.placeholder": "Search user names",
   "addUser": "Add User",
   "inviteUser": "Invite User",
   "deleteUsers": "Delete Users ({{count}})",

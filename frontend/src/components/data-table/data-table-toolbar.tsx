@@ -46,7 +46,7 @@ export function DataTableToolbar<TData>({
           searchableColumns.map(
             (column) =>
               table.getColumn(column.value ? String(column.value) : '') && (
-                <Input
+                <InputDebounced
                   key={String(column.value)}
                   placeholder={column.placeholder}
                   value={
@@ -96,4 +96,29 @@ export function DataTableToolbar<TData>({
       </div>
     </div>
   )
+}
+
+function InputDebounced({
+  value: initialValue,
+  onChange,
+  debounceTime = 500,
+  ...props
+}: React.ComponentProps<'input'> & {
+  debounceTime?: number
+}) {
+  const [value, setValue] = React.useState(initialValue)
+
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value)
+
+    setTimeout(() => {
+      onChange?.(e)
+    }, debounceTime)
+  }
+
+  return <Input value={value} onChange={handleChange} {...props} />
 }

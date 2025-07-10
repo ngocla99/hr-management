@@ -284,10 +284,10 @@ interface Resources {
   "users": {
     "page.title": "User List",
     "page.description": "Manage your users and their roles here.",
-    "filter.placeholder": "Filter users...",
+    "filter.username.placeholder": "Search usernames",
     "addUser": "Add User",
     "inviteUser": "Invite User",
-    "deleteUsers": "Delete {{count}} Users",
+    "deleteUsers": "Delete Users ({{count}})",
     "inviteUserDescription": "Invite new user to join your team by sending them an email invitation. Assign a role to define their access level.",
     "suspendDescription": "Are you sure you want to suspend <strong>{{name}}</strong>?<br/> This action will prevent the user from logging in to the system.",
     "dialog.create.title": "Create User",

@@ -1,7 +1,7 @@
 {
   "page.title": "Danh sách người dùng",
   "page.description": "Quản lý người dùng và vai trò của họ ở đây.",
-  "filter.placeholder": "Lọc người dùng...",
+  "filter.username.placeholder": "Tìm kiếm tên người dùng",
   "addUser": "Thêm người dùng",
   "inviteUser": "Mời người dùng",
   "deleteUsers": "Xóa người dùng ({{count}})",
