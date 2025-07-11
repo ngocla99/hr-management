@@ -53,6 +53,9 @@ export class UserService {
         filter.deletedAt = null;
       }
     }
+    if (reqDto.q) {
+      filter.username = { $regex: reqDto.q, $options: "i" };
+    }
     const [users, metaDto] = await paginate<UserDocument>(this.userRepository.userModel, reqDto, {
       skipCount: false,
       takeAll: false,

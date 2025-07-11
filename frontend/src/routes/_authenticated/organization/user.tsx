@@ -13,6 +13,7 @@ const userSearchSchema = z.object({
   sort: z.string().optional().default('createdAt.desc'),
   status: z.enum(USER_STATUSES).optional(),
   role: z.array(z.enum(USER_ROLES)).optional(),
+  username: z.string().optional(),
 })
 
 export type UserSearch = z.infer<typeof userSearchSchema>

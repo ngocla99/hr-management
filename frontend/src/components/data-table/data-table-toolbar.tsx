@@ -5,9 +5,9 @@ import type { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter'
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options'
+import { DataTableFacetedInput } from './data-table-faceted-input'
 
 interface DataTableToolbarProps<TData>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -46,7 +46,7 @@ export function DataTableToolbar<TData>({
           searchableColumns.map(
             (column) =>
               table.getColumn(column.value ? String(column.value) : '') && (
-                <InputDebounced
+                <DataTableFacetedInput
                   key={String(column.value)}
                   placeholder={column.placeholder}
                   value={
@@ -54,10 +54,8 @@ export function DataTableToolbar<TData>({
                       .getColumn(String(column.value))
                       ?.getFilterValue() as string) ?? ''
                   }
-                  onChange={(event) =>
-                    table
-                      .getColumn(String(column.value))
-                      ?.setFilterValue(event.target.value)
+                  onChange={(value) =>
+                    table.getColumn(String(column.value))?.setFilterValue(value)
                   }
                   className='h-8 w-40 lg:w-64'
                 />
@@ -96,29 +94,4 @@ export function DataTableToolbar<TData>({
       </div>
     </div>
   )
-}
-
-function InputDebounced({
-  value: initialValue,
-  onChange,
-  debounceTime = 500,
-  ...props
-}: React.ComponentProps<'input'> & {
-  debounceTime?: number
-}) {
-  const [value, setValue] = React.useState(initialValue)
-
-  React.useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-
-    setTimeout(() => {
-      onChange?.(e)
-    }, debounceTime)
-  }
-
-  return <Input value={value} onChange={handleChange} {...props} />
 }

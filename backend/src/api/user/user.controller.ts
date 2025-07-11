@@ -61,7 +61,6 @@ export class UserController {
     isPaginated: true,
   })
   async findAllUsers(@Query() reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
-    console.log("🚀 ~ UserController ~ findAllUsers ~ reqDto:", reqDto);
     return await this.userService.findAll(reqDto);
   }
 

@@ -3,7 +3,7 @@ import { User } from '@/types/api'
 import { UserRole } from '@/types/api'
 import { UserStatus } from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
-import qs from 'qs' 
+import qs from 'qs'
 import apiClient from '@/lib/api-client'
 import { PAGINATION } from '@/lib/constants/constant'
 import { QueryConfig } from '@/lib/react-query'
@@ -11,6 +11,7 @@ import { QueryConfig } from '@/lib/react-query'
 type UsersInput = PaginationInput & {
   role?: UserRole[]
   status?: UserStatus
+  q?: string
 }
 
 export const getUsersApi = (
