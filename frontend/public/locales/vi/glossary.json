@@ -84,5 +84,9 @@
   "enterprise": "Doanh nghiệp",
   "startup": "Công ty nhỏ",
   "selectStartDate": "Chọn ngày bắt đầu",
-  "selectDueDate": "Chọn ngày kết thúc"
+  "selectDueDate": "Chọn ngày kết thúc",
+  "selectCreatedAtFrom": "Chọn ngày tạo từ",
+  "selectCreatedAtTo": "Chọn ngày tạo đến",
+  "createdAtFrom": "Ngày tạo từ",
+  "createdAtTo": "Ngày tạo đến"
 }

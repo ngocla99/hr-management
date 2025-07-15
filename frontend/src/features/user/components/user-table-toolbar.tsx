@@ -1,9 +1,11 @@
+import { getRouteApi } from '@tanstack/react-router'
 import { Table } from '@tanstack/react-table'
 import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { TrashIcon } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
+import { SingleDayPicker } from '@/components/ui/single-day-picker'
 import confirm from '@/components/confirm'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 import { useDeleteUsers } from '../api/delete-users'
@@ -13,10 +15,15 @@ interface UsersTableToolbarProps<TData> {
   filterFields: DataTableFilterField<TData>[]
 }
 
+const route = getRouteApi('/_authenticated/organization/user')
+
 export function UsersTableToolbar({
   table,
   filterFields,
 }: UsersTableToolbarProps<User>) {
+  const { createdAtFrom } = route.useSearch()
+  const navigate = route.useNavigate()
+
   const { t } = useTranslation()
   const selectedRowIds = table
     .getFilteredSelectedRowModel()
@@ -51,19 +58,22 @@ export function UsersTableToolbar({
     })
   }
 
+  const handleCreatedAtFromChange = (date: Date | undefined) => {
+    navigate({
+      search: (prev) => ({ ...prev, createdAtFrom: date?.toISOString() }),
+    })
+  }
+
   return (
     <DataTableToolbar table={table} filterFields={filterFields}>
       <div className='flex flex-wrap items-center gap-2'>
-        {/* <div className='flex items-center gap-2'>
-            <span className='text-sm font-medium'>
-              {t('startDate', { ns: 'glossary' })}:
-            </span>
-            <SingleDayPicker
-              value={startDateValue}
-              onChange={handleStartDateChange}
-              placeholder={t('selectStartDate', { ns: 'glossary' })}
-            />
-          </div> */}
+        <div className='flex items-center gap-2'>
+          <SingleDayPicker
+            value={createdAtFrom}
+            onChange={handleCreatedAtFromChange}
+            placeholder={t('selectCreatedAtFrom', { ns: 'glossary' })}
+          />
+        </div>
         {selectedRowIds.length > 0 && (
           <Button
             variant='destructive'

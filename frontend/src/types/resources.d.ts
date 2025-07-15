@@ -242,7 +242,11 @@ interface Resources {
     "enterprise": "Enterprise",
     "startup": "Startup",
     "selectStartDate": "Select start date",
-    "selectDueDate": "Select due date"
+    "selectDueDate": "Select due date",
+    "selectCreatedAtFrom": "Select created at from",
+    "selectCreatedAtTo": "Select created at to",
+    "createdAtFrom": "Created At From",
+    "createdAtTo": "Created At To"
   },
   "projects": {
     "page.title": "Projects",

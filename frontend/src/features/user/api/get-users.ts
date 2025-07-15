@@ -11,6 +11,8 @@ import { QueryConfig } from '@/lib/react-query'
 type UsersInput = PaginationInput & {
   role?: UserRole[]
   status?: UserStatus
+  createdAtFrom?: string
+  createdAtTo?: string
 }
 
 export const getUsersApi = (

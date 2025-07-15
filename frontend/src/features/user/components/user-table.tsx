@@ -23,7 +23,16 @@ const route = getRouteApi('/_authenticated/organization/user')
 export function UserTable() {
   const { t } = useTranslation()
   const columns = useUserColumns()
-  const { status, role, username, page, limit, sort } = route.useSearch()
+  const {
+    status,
+    role,
+    username,
+    page,
+    limit,
+    sort,
+    createdAtFrom,
+    createdAtTo,
+  } = route.useSearch()
 
   const { data, isLoading, error } = useUsers({
     input: {
@@ -33,6 +42,8 @@ export function UserTable() {
       page,
       limit,
       sort,
+      createdAtFrom,
+      createdAtTo,
     },
   })
 

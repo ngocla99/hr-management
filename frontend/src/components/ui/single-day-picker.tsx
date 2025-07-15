@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/popover'
 
 type SingleDayPickerProps = React.ComponentProps<typeof Calendar> & {
-  value: PropsSingleRequired['selected']
+  value: PropsSingleRequired['selected'] | string
   onChange: PropsSingleRequired['onSelect']
   placeholder?: string
 }

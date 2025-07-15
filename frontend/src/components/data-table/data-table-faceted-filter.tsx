@@ -1,3 +1,8 @@
+import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
+import type { Column } from '@tanstack/react-table'
+import type { DataTableOption } from '@/types/common'
+import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,11 +20,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-import type { DataTableOption } from '@/types/common'
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
-import type { Column } from '@tanstack/react-table'
-import { useTranslation } from 'react-i18next'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
@@ -75,7 +75,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                           key={option.value}
                           className='rounded-sm px-1 font-normal'
                         >
-                          {option.label}
+                          {t(option.labelKey as any, { ns: 'glossary' })}
                         </Badge>
                       ))
                   )
@@ -88,7 +88,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         key={option.value}
                         className='rounded-sm px-1 font-normal'
                       >
-                        {option.label}
+                        {t(option.labelKey as any, { ns: 'glossary' })}
                       </Badge>
                     ))
                 )}
@@ -143,7 +143,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         aria-hidden='true'
                       />
                     )}
-                    <span>{option.label}</span>
+                    <span>{t(option.labelKey as any, { ns: 'glossary' })}</span>
                     {option.withCount &&
                       column?.getFacetedUniqueValues()?.get(option.value) && (
                         <span className='ml-auto flex size-4 items-center justify-center font-mono text-xs'>

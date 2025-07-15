@@ -53,9 +53,22 @@ export class UserService {
         filter.deletedAt = null;
       }
     }
+
+    const createdAtFilter: Record<string, Date> = {};
+    if (reqDto.createdAtFrom) {
+      createdAtFilter.$gte = reqDto.createdAtFrom;
+    }
+    if (reqDto.createdAtTo) {
+      createdAtFilter.$lte = reqDto.createdAtTo;
+    }
+    if (Object.keys(createdAtFilter).length > 0) {
+      filter.createdAt = createdAtFilter;
+    }
+
     if (reqDto.q) {
       filter.username = { $regex: reqDto.q, $options: "i" };
     }
+
     const [users, metaDto] = await paginate<UserDocument>(this.userRepository.userModel, reqDto, {
       skipCount: false,
       takeAll: false,
