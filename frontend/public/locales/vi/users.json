@@ -3,6 +3,7 @@
   "page.description": "Quản lý người dùng và vai trò của họ ở đây.",
   "filter.username.placeholder": "Tìm kiếm tên người dùng",
   "addUser": "Thêm người dùng",
+  "createRandomUsers": "Tạo người dùng ngẫu nhiên",
   "inviteUser": "Mời người dùng",
   "deleteUsers": "Xóa người dùng ({{count}})",
   "inviteUserDescription": "Mời người dùng mới để tham gia vào nhóm của bạn bằng cách gửi email mời. Gán vai trò để xác định mức truy cập của họ.",
@@ -22,10 +23,12 @@
   "message.success.suspended": "Người dùng đã được tạm dừng thành công",
   "message.success.activated": "Người dùng đã được kích hoạt thành công",
   "message.success.deletedMany": "Người dùng đã được xóa thành công",
+  "message.success.createdMany": "Người dùng đã được tạo thành công",
   "message.error.createFailed": "Không thể tạo người dùng",
   "message.error.updateFailed": "Không thể cập nhật người dùng",
   "message.error.deleteFailed": "Không thể xóa người dùng",
   "message.error.suspendFailed": "Không thể tạm dừng người dùng",
   "message.error.activateFailed": "Không thể kích hoạt người dùng",
-  "message.error.deleteManyFailed": "Không thể xóa người dùng"
+  "message.error.deleteManyFailed": "Không thể xóa người dùng",
+  "message.error.createManyFailed": "Không thể tạo người dùng"
 }

@@ -7,10 +7,7 @@ import { useDataTable } from '@/hooks/use-data-table'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
 import { useUsers } from '../api/get-users'
-import {
-  userRoleOptionsFn,
-  userStatusOptionsFn,
-} from '../constants/user-options'
+import { userRoleOptions, userStatusOptions } from '../constants/user-options'
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
 
@@ -51,12 +48,12 @@ export function UserTable() {
     {
       label: t('role', { ns: 'glossary' }),
       value: 'role',
-      options: userRoleOptionsFn(t),
+      options: userRoleOptions,
     },
     {
       label: t('status', { ns: 'glossary' }),
       value: 'status',
-      options: userStatusOptionsFn(t),
+      options: userStatusOptions,
       multiple: false,
     },
   ]

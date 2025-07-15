@@ -1,31 +1,54 @@
-import { IconUsersGroup, IconUserShield } from '@tabler/icons-react'
+import {
+  IconUserPlus,
+  IconUsersGroup,
+  IconUserShield,
+} from '@tabler/icons-react'
 import { UserStatus } from '@/types/api'
-import { TFunction } from 'i18next'
 
-export const userRoleOptionsFn = (t: TFunction) => [
+export const userRoleOptions = [
   {
-    label: t('admin', { ns: 'glossary' }),
+    labelKey: 'admin',
     value: 'admin',
     icon: IconUserShield,
   },
   {
-    label: t('employee', { ns: 'glossary' }),
+    labelKey: 'employee',
     value: 'employee',
     icon: IconUsersGroup,
   },
+  {
+    labelKey: 'recruiter',
+    value: 'recruiter',
+    icon: IconUserPlus,
+  },
+  {
+    labelKey: 'hiringManager',
+    value: 'hiring_manager',
+    icon: IconUserPlus,
+  },
+  {
+    labelKey: 'hrManager',
+    value: 'hr_manager',
+    icon: IconUserPlus,
+  },
+  {
+    labelKey: 'superAdmin',
+    value: 'super_admin',
+    icon: IconUserPlus,
+  },
 ]
 
-export const userStatusOptionsFn = (t: TFunction) => [
+export const userStatusOptions = [
   {
-    label: t('status.active', { ns: 'glossary' }),
+    labelKey: 'status.active',
     value: UserStatus.ACTIVE,
   },
   {
-    label: t('status.inactive', { ns: 'glossary' }),
+    labelKey: 'status.inactive',
     value: UserStatus.INACTIVE,
   },
   {
-    label: t('status.suspended', { ns: 'glossary' }),
+    labelKey: 'status.suspended',
     value: UserStatus.SUSPENDED,
   },
 ]

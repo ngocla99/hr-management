@@ -165,6 +165,10 @@ interface Resources {
     "admin": "Admin",
     "user": "User",
     "employee": "Employee",
+    "recruiter": "Recruiter",
+    "hiringManager": "Hiring Manager",
+    "hrManager": "HR Manager",
+    "superAdmin": "Super Admin",
     "organization": "Organization",
     "employees": "Employees",
     "structure": "Structure",
@@ -284,8 +288,9 @@ interface Resources {
   "users": {
     "page.title": "User List",
     "page.description": "Manage your users and their roles here.",
-    "filter.username.placeholder": "Search usernames",
+    "filter.username.placeholder": "Search user names",
     "addUser": "Add User",
+    "createRandomUsers": "Create Random Users",
     "inviteUser": "Invite User",
     "deleteUsers": "Delete Users ({{count}})",
     "inviteUserDescription": "Invite new user to join your team by sending them an email invitation. Assign a role to define their access level.",
@@ -305,12 +310,14 @@ interface Resources {
     "message.success.suspended": "User suspended successfully",
     "message.success.activated": "User activated successfully",
     "message.success.deletedMany": "Users deleted successfully",
+    "message.success.createdMany": "Users created successfully",
     "message.error.createFailed": "Failed to create user",
     "message.error.updateFailed": "Failed to update user",
     "message.error.deleteFailed": "Failed to delete user",
     "message.error.suspendFailed": "Failed to suspend user",
     "message.error.activateFailed": "Failed to activate user",
-    "message.error.deleteManyFailed": "Failed to delete users"
+    "message.error.deleteManyFailed": "Failed to delete users",
+    "message.error.createManyFailed": "Failed to create users"
   },
   "validation": {
     "required": "This field is required",

@@ -26,7 +26,7 @@ import { SelectDropdown } from '@/components/select-dropdown'
 import { useCreateUser } from '../api/create-user'
 import { useUpdateUser } from '../api/update-user'
 import { USER_ROLES } from '../constants/user-constants'
-import { userRoleOptionsFn } from '../constants/user-options'
+import { userRoleOptions } from '../constants/user-options'
 
 const formSchema = z
   .object({
@@ -246,8 +246,8 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                       onValueChange={field.onChange}
                       placeholder={t('form.selectRole', { ns: 'glossary' })}
                       className='col-span-4'
-                      items={userRoleOptionsFn(t).map(({ label, value }) => ({
-                        label,
+                      items={userRoleOptions.map(({ labelKey, value }) => ({
+                        label: t(labelKey as any, { ns: 'glossary' }),
                         value,
                       }))}
                     />

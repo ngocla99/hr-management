@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import LongText from '@/components/long-text'
 import { userStatusStyles } from '../constants/user-constants'
-import { userRoleOptionsFn } from '../constants/user-options'
+import { userRoleOptions } from '../constants/user-options'
 import { UsersTableRowActions } from './user-table-row-actions'
 
 export const useUserColumns = (): ColumnDef<User>[] => {
@@ -49,7 +49,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t('name', { ns: 'glossary' })}
+          title={t('username', { ns: 'glossary' })}
         />
       ),
       cell: ({ row }) => (
@@ -106,9 +106,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       ),
       cell: ({ row }) => {
         const { role } = row.original
-        const userType = userRoleOptionsFn(t).find(
-          ({ value }) => value === role
-        )
+        const userType = userRoleOptions.find(({ value }) => value === role)
 
         if (!userType) {
           return null
@@ -120,7 +118,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
               <userType.icon size={16} className='text-muted-foreground' />
             )}
             <span className='text-sm capitalize'>
-              {t(row.getValue('role') as any, { ns: 'glossary' })}
+              {t(userType.labelKey as any, { ns: 'glossary' })}
             </span>
           </div>
         )
