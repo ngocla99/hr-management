@@ -13,6 +13,13 @@ export async function paginate<T>(
 ): Promise<[T[], OffsetPaginationDto]> {
   let query = model.find(options?.filter || {});
 
+  if (pageOptionsDto.sort) {
+    const [field, direction] = pageOptionsDto.sort.split(".");
+    if (field) {
+      query = query.sort({ [field]: direction === "desc" ? -1 : 1 });
+    }
+  }
+
   if (!options?.takeAll) {
     query = query.skip(pageOptionsDto.offset).limit(pageOptionsDto.limit!);
   }

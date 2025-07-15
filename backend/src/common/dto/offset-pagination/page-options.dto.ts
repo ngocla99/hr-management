@@ -1,9 +1,5 @@
-import { DEFAULT_CURRENT_PAGE, DEFAULT_PAGE_LIMIT, Order } from "@/constants/app.constant";
-import {
-  EnumFieldOptional,
-  NumberFieldOptional,
-  StringFieldOptional,
-} from "@/decorators/field.decorators";
+import { DEFAULT_CURRENT_PAGE, DEFAULT_PAGE_LIMIT } from "@/constants/app.constant";
+import { NumberFieldOptional, StringFieldOptional } from "@/decorators/field.decorators";
 
 export class PageOptionsDto {
   @NumberFieldOptional({
@@ -23,8 +19,10 @@ export class PageOptionsDto {
   @StringFieldOptional()
   readonly q?: string;
 
-  @EnumFieldOptional(() => Order, { default: Order.ASC })
-  readonly order?: Order = Order.ASC;
+  @StringFieldOptional({
+    description: "Sort by field and direction, e.g., 'createdAt.desc' or 'username.asc'",
+  })
+  readonly sort?: string;
 
   get offset() {
     return this.page ? (this.page - 1) * this.limit! : 0;

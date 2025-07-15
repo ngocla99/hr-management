@@ -20,6 +20,10 @@ export function DataTableFacetedInput({
     onChange?.(newValue)
   }, [debouncedInput])
 
+  React.useEffect(() => {
+    if (_value === '') setInput('')
+  }, [_value])
+
   return (
     <Input
       value={input || ''}

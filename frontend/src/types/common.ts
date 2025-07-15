@@ -14,7 +14,7 @@ export interface PaginationInput {
   page?: number
   limit?: number
   q?: string
-  order?: 'asc' | 'desc'
+  sort?: string
 }
 
 export interface MutationOptions {
