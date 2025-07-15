@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
-import { showSubmittedData } from '@/lib/utils/show-submitted-data'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -25,6 +24,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { useCreateUser } from '../api/create-user'
+import { useUpdateUser } from '../api/update-user'
 import { USER_ROLES } from '../constants/user-constants'
 import { userRoleOptionsFn } from '../constants/user-options'
 
@@ -102,11 +102,19 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
       onSuccess: handleResetForm,
     },
   })
+  const updateUserMutation = useUpdateUser({
+    mutationConfig: {
+      onSuccess: handleResetForm,
+    },
+  })
 
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
+          username: currentRow?.username,
+          email: currentRow?.email,
+          role: currentRow?.role,
           password: '',
           confirmPassword: '',
           isEdit,
@@ -123,10 +131,13 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
 
   const onSubmit = async (values: UserForm) => {
     if (isEdit) {
-      // For edit mode, still show submitted data for now
-      form.reset()
-      onOpenChange(false)
-      showSubmittedData(values)
+      updateUserMutation.mutate({
+        id: currentRow.id!,
+        email: values.email,
+        username: values.username,
+        password: values.password,
+        role: values.role,
+      })
     } else {
       createUserMutation.mutate({
         email: values.email,
@@ -175,6 +186,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
               <FormField
                 control={form.control}
                 name='username'
+                disabled={isEdit}
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-right'>
@@ -199,6 +211,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
               <FormField
                 control={form.control}
                 name='email'
+                disabled={isEdit}
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-right'>
