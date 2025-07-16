@@ -130,7 +130,12 @@ interface Resources {
     "message.generating": "Generating...",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "filter": "Filter",
+    "inviteEmail": "Invitation Email",
+    "addEmployee": "Add Employee",
+    "searchEmployees": "Search employees...",
+    "view": "View"
   },
   "dashboard": {
     "welcome": "Welcome Back, {{name}}!",
@@ -158,6 +163,109 @@ interface Resources {
     "employee.id": "Employee ID: {{id}}",
     "employee.sales": "{{count}} Tasks Completed",
     "project.orders": "{{count}} Tasks Active"
+  },
+  "employee": {
+    "page": {
+      "title": "Employees",
+      "description": "Manage your company employees"
+    },
+    "actions": {
+      "addEmployee": "Add Employee",
+      "editEmployee": "Edit Employee",
+      "deleteEmployee": "Delete Employee",
+      "inviteEmployee": "Invite Employee",
+      "exportEmployees": "Export Employees",
+      "importEmployees": "Import Employees",
+      "viewEmployee": "View Employee",
+      "searchEmployees": "Search employees..."
+    },
+    "fields": {
+      "employeeName": "Employee Name",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "fullName": "Full Name",
+      "employeeId": "Employee ID",
+      "email": "Email",
+      "phone": "Phone",
+      "jobTitle": "Job Title",
+      "department": "Department",
+      "team": "Team",
+      "employmentType": "Employment Type",
+      "dateJoined": "Date Joined",
+      "dateHired": "Date Hired",
+      "status": "Status",
+      "contact": "Contact",
+      "gender": "Gender",
+      "education": "Education",
+      "maritalStatus": "Marital Status",
+      "address": "Address",
+      "emergencyContact": "Emergency Contact",
+      "skills": "Skills",
+      "languages": "Languages Spoken"
+    },
+    "status": {
+      "active": "Active",
+      "notActive": "Not Active",
+      "unverified": "Unverified"
+    },
+    "employmentType": {
+      "fulltime": "Full Time",
+      "parttime": "Part Time",
+      "contract": "Contract",
+      "intern": "Intern"
+    },
+    "maritalStatus": {
+      "single": "Single",
+      "married": "Married",
+      "divorced": "Divorced",
+      "widowed": "Widowed"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "teams": {
+      "designteam": "Design Team",
+      "marketing": "Marketing",
+      "development": "Development",
+      "sales": "Sales",
+      "hr": "HR",
+      "finance": "Finance",
+      "operations": "Operations"
+    },
+    "departments": {
+      "engineering": "Engineering",
+      "marketing": "Marketing",
+      "sales": "Sales",
+      "humanresources": "Human Resources",
+      "finance": "Finance",
+      "operations": "Operations",
+      "design": "Design"
+    },
+    "tabs": {
+      "details": "Details",
+      "payroll": "Payroll"
+    },
+    "sections": {
+      "personalInformation": "Personal Information",
+      "professionalInformation": "Professional Information",
+      "contactInformation": "Contact Information"
+    },
+    "messages": {
+      "noEmployeesFound": "No employees found matching your criteria.",
+      "employeeDeleted": "Employee deleted successfully",
+      "employeeUpdated": "Employee updated successfully",
+      "employeeCreated": "Employee created successfully",
+      "deleteConfirmation": "Are you sure you want to delete this employee?",
+      "payrollNotAvailable": "Payroll information is not available in this demo."
+    },
+    "placeholders": {
+      "searchByName": "Search by name, email, or job title...",
+      "filterByTeam": "Filter by team",
+      "filterByStatus": "Filter by status",
+      "filterByDepartment": "Filter by department"
+    }
   },
   "glossary": {
     "task": "Task",
@@ -203,6 +311,8 @@ interface Resources {
     "status.cancelled": "Cancelled",
     "status.inactive": "Inactive",
     "status.suspended": "Suspended",
+    "status.notactive": "Not Active",
+    "status.unverified": "Unverified",
     "priority.low": "Low",
     "priority.medium": "Medium",
     "priority.high": "High",
@@ -248,7 +358,11 @@ interface Resources {
     "selectCreatedAtFrom": "Select created at from",
     "selectCreatedAtTo": "Select created at to",
     "createdAtFrom": "Created At From",
-    "createdAtTo": "Created At To"
+    "createdAtTo": "Created At To",
+    "employeeName": "Employee Name",
+    "contact": "Contact",
+    "team": "Team",
+    "dateHired": "Date Hired"
   },
   "projects": {
     "page.title": "Projects",
