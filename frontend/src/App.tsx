@@ -5,6 +5,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { NuqsAdapter } from 'nuqs/adapters/react'
 import { toast } from 'sonner'
 import { useAuth, useAuthStore } from '@/stores/auth-store'
 import { handleServerError } from '@/lib/utils/handle-server-error'
@@ -87,10 +88,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
         <FontProvider>
-          <RouterProvider
-            router={router}
-            context={{ auth: { isAuthenticated: !!accessToken } }}
-          />
+          <NuqsAdapter>
+            <RouterProvider
+              router={router}
+              context={{ auth: { isAuthenticated: !!accessToken } }}
+            />
+          </NuqsAdapter>
         </FontProvider>
       </ThemeProvider>
     </QueryClientProvider>

@@ -22,11 +22,6 @@ export default function DashboardPage() {
   const { t } = useTranslation(['dashboard', 'common'])
   const user = useUser()
 
-  // const { data } = useSuspenseQuery({
-  //   queryKey: [QUERY_KEYS.DASHBOARD],
-  //   queryFn: getDashboardOverview,
-  //   select: (data) => DashboardOverviewSchema.parse(data),
-  // })
   const data = {
     recentProjects: [],
     recentTasks: [],

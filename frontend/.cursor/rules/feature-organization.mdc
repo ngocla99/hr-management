@@ -1,137 +1,189 @@
----
-description: 
-globs: 
-alwaysApply: false
----
 # Feature Organization & Development
 
-This project organizes code by business domains/features for better maintainability and team collaboration.
+This project organizes code by business domains/features for better maintainability and team collaboration. The [user module](mdc:src/features/user) serves as the reference implementation.
 
 ## Feature Structure ([src/features/](mdc:src/features))
 
-Each feature follows a consistent internal structure:
+Each feature follows the established pattern from the user module:
 
-### Authentication Feature ([src/features/auth/](mdc:src/features/auth))
-Complete authentication system with multiple flows:
+### User Management Feature ([src/features/user/](mdc:src/features/user))
+Complete user management system serving as the template:
 
-**Layout Component**: [auth-layout.tsx](mdc:src/features/auth/auth-layout.tsx)
-- Shared layout for all auth pages
-- Consistent styling and branding
+**Entry Point**: [index.tsx](mdc:src/features/user/index.tsx)
+- Provider wrapper pattern for feature-level state
+- Separation of concerns with UserContent component
+- Main layout integration with consistent styling
 
-**Sub-Features**:
-- `sign-in/` - User login functionality
-- `sign-up/` - User registration
-- `forgot-password/` - Password reset flow
-- `otp/` - One-time password verification
+**Feature Structure**:
+```
+src/features/user/
+├── api/                    # TanStack Query hooks for all CRUD operations
+│   ├── get-users.ts        # Paginated user listing with filters
+│   ├── create-user.ts      # User creation mutation
+│   ├── update-user.ts      # User update mutation
+│   ├── delete-user.ts      # Single user deletion
+│   ├── delete-users.ts     # Bulk user deletion
+│   ├── activate-user.ts    # User activation
+│   ├── suspend-user.ts     # User suspension
+│   └── get-me.ts          # Current user profile
+├── components/             # Feature-specific UI components
+│   ├── user-table.tsx      # Main data table with filtering/pagination
+│   ├── user-columns.tsx    # Table column definitions
+│   ├── user-table-toolbar.tsx     # Table filtering and bulk actions
+│   ├── user-table-row-actions.tsx # Context menu per row
+│   ├── user-dialogs.tsx    # Dialog orchestrator component
+│   ├── user-mutate-dialog.tsx     # Add/Edit dialog
+│   ├── user-delete-dialog.tsx     # Delete confirmation dialog
+│   ├── user-invite-dialog.tsx     # User invitation dialog
+│   └── user-primary-buttons.tsx   # Action buttons
+├── constants/              # Feature constants and configurations
+│   ├── user-constants.ts   # Type definitions and mappings
+│   └── user-options.ts     # Dropdown options with icons
+├── context/               # Feature-level state management
+│   └── user-context.tsx   # Dialog state and current row management
+└── index.tsx             # Main feature entry point
+```
 
-### Core Business Features
+### Other Implemented Features
+
+**Authentication** ([src/features/auth/](mdc:src/features/auth))
+- Multi-step authentication flows
+- Sign-in, sign-up, forgot password, OTP verification
+- Shared auth layout component
 
 **Dashboard** ([src/features/dashboard/](mdc:src/features/dashboard))
-- Main dashboard views and widgets
-- Analytics and overview components
+- Main dashboard with analytics widgets
 - Data visualization components
 
-**User Management** ([src/features/users/](mdc:src/features/users))
-- User listing and search
-- User profile management
-- User permissions and roles
-
-**Task Management** ([src/features/tasks/](mdc:src/features/tasks))
-- Task creation and editing
-- Task listing and filtering
-- Task status management
-
-**Chat System** ([src/features/chats/](mdc:src/features/chats))
-- Real-time messaging interface
-- Chat history and management
-- User presence and notifications
+**Organization** ([src/features/organization/](mdc:src/features/organization))  
+- Department and team management
+- Organizational hierarchy
 
 **Settings** ([src/features/settings/](mdc:src/features/settings))
 - Application configuration
-- User preferences
-- System settings
+- User preferences and account settings
 
-**App Management** ([src/features/apps/](mdc:src/features/apps))
-- Third-party app integrations
-- App marketplace and installation
-- App configuration management
+## Standard Feature Development Pattern
 
-**Error Handling** ([src/features/errors/](mdc:src/features/errors))
-- Error page components
-- Error boundary implementations
-- User-friendly error messages
+### 1. Feature Entry Point Pattern
+```typescript
+// Provider wrapper for feature-level state
+export default function FeatureName() {
+  return (
+    <FeatureProvider>
+      <FeatureContent />
+    </FeatureProvider>
+  )
+}
 
-## Feature Development Patterns
-
-### Standard Feature Structure
+function FeatureContent() {
+  const { t } = useTranslation()
+  return (
+    <Main>
+      <div className='mb-2 flex items-center justify-between'>
+        <div>
+          <h2 className='text-2xl font-bold tracking-tight'>
+            {t('page.title', { ns: 'feature-namespace' })}
+          </h2>
+        </div>
+        <FeaturePrimaryButtons />
+      </div>
+      <FeatureTable />
+      <FeatureDialogs />
+    </Main>
+  )
+}
 ```
-src/features/[feature-name]/
-├── components/          # Feature-specific components
-├── hooks/              # Feature-specific custom hooks
-├── types/              # TypeScript type definitions
-├── api/                # API calls and mutations
-├── utils/              # Feature utility functions
-├── stores/             # Feature-specific state (if needed)
-└── index.ts            # Feature barrel exports
+
+### 2. API Layer Pattern
+**Query Hooks**: Custom hooks wrapping TanStack Query
+```typescript
+export const useFeatureData = (props: Props) => {
+  return useQuery({
+    ...getFeatureQueryOptions(props.input),
+    ...props.queryConfig,
+  })
+}
 ```
 
-### Component Organization
-1. **Feature Components**: Business logic components
-2. **UI Components**: Reusable within the feature
-3. **Layout Components**: Feature-specific layouts
-4. **Form Components**: Feature-specific forms
+**Mutation Hooks**: CRUD operations with cache invalidation
+```typescript
+export const useCreateFeature = (config: MutationConfig) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createFeatureApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['features'] })
+      toast.success(t('message.success.created'))
+    },
+    ...config,
+  })
+}
+```
 
-### State Management per Feature
-1. **Local State**: Component-level useState
-2. **Feature State**: Zustand stores for feature-wide state
-3. **Server State**: TanStack Query for API data
-4. **Shared State**: Access global stores when needed
+### 3. Component Organization Pattern
+**Table System**:
+- Main table component with data integration
+- Separate column definitions file
+- Toolbar component for filtering/actions  
+- Row actions component for context menus
 
-### API Integration
-- **Query Hooks**: Custom hooks wrapping TanStack Query
-- **Mutation Hooks**: Form submission and data updates
-- **Error Handling**: Feature-specific error boundaries
-- **Loading States**: Consistent loading patterns
+**Dialog System**:
+- Dialog orchestrator managing all dialogs
+- Individual dialog components (CRUD, delete, etc.)
+- Context-based state coordination
 
-## Cross-Feature Communication
+**Action Components**:
+- Primary action buttons
+- Bulk operation handlers
+- Integration with feature context
 
-### Shared Resources
-- **Global Components**: [src/components/](mdc:src/components) for reusable UI
-- **Global Hooks**: [src/hooks/](mdc:src/hooks) for shared logic
-- **Global State**: [src/stores/](mdc:src/stores) for cross-feature state
-- **Utilities**: [src/utils/](mdc:src/utils) for shared functions
+### 4. State Management Pattern
+**Feature Context**:
+```typescript
+type FeatureDialogType = 'add' | 'edit' | 'delete' | 'custom'
 
-### Feature Boundaries
-1. **Loose Coupling**: Features should be independent
-2. **Shared Interfaces**: Use TypeScript interfaces for contracts
-3. **Event Communication**: Use global state or context for communication
-4. **Avoid Deep Imports**: Import from feature index files
+export default function FeatureProvider({ children }: Props) {
+  const [open, setOpen] = useDialogState<FeatureDialogType>(null)
+  const [currentRow, setCurrentRow] = useState<EntityType | null>(null)
+  
+  return (
+    <FeatureContext value={{ open, setOpen, currentRow, setCurrentRow }}>
+      {children}
+    </FeatureContext>
+  )
+}
+```
 
-### Integration Points
-- **Routes**: Feature routes in [src/routes/](mdc:src/routes)
-- **Navigation**: Feature links in sidebar and menus
-- **Global Search**: Feature content in command palette
-- **Notifications**: Feature events in global notification system
+**State Layers**:
+1. **Server State**: TanStack Query for all API data and caching
+2. **Feature State**: React Context for dialog state and current selections
+3. **Component State**: useState for local component interactions
+4. **URL State**: TanStack Router search params for filters and pagination
 
-## Development Workflow
+### 5. Constants & Configuration Pattern
+**Options Files**: Dropdown configurations with icons and i18n keys
+**Constants Files**: Type definitions, validation schemas, and style mappings
+**i18n Integration**: Feature-specific translation namespaces
+
+## Development Guidelines
 
 ### Adding New Features
-1. Create feature directory in `src/features/`
-2. Set up standard feature structure
-3. Add routes in appropriate route directory
-4. Update navigation and sidebar
-5. Add to global search if applicable
-6. Write feature-specific tests
+1. **Copy Structure**: Use user module as template
+2. **Replace Names**: Find/replace "user" with new feature name
+3. **API Layer**: Implement feature-specific query/mutation hooks
+4. **Context Setup**: Create feature context for state management
+5. **Components**: Build table, dialogs, and action components following patterns
+6. **Constants**: Define feature-specific constants and options
+7. **Routes**: Add routes in appropriate route groups
+8. **Navigation**: Update sidebar and navigation
+9. **i18n**: Create feature translation namespace
 
-### Feature Dependencies
-- **Minimize**: Keep features as independent as possible
-- **Document**: Clear documentation of dependencies
-- **Interfaces**: Use TypeScript for contracts
-- **Lazy Loading**: Implement code splitting for large features
-
-### Code Sharing
-- **Extract Common**: Move reusable code to shared directories
-- **Compose**: Build features from shared components
-- **Standardize**: Use consistent patterns across features
-- **Document**: Clear guidelines for shared resource usage
+### Code Quality Standards
+- **TypeScript**: Full type safety for all components and APIs
+- **Error Handling**: Comprehensive loading and error states
+- **Accessibility**: ARIA labels and semantic HTML
+- **Internationalization**: Proper i18n namespace usage
+- **Performance**: Memoization and query optimization
+- **Consistency**: Follow established component and naming patterns
 

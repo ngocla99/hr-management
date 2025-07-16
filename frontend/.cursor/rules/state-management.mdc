@@ -1,16 +1,11 @@
----
-description:
-globs:
-alwaysApply: true
----
 # State Management Strategy
 
-This project uses a focused state management approach with three primary tools, each optimized for specific use cases.
+This project uses a layered state management approach with four primary tools, each optimized for specific use cases. The [user module](mdc:src/features/user) demonstrates all patterns in practice.
 
 ## State Management Layers
 
-### 1. Server State - TanStack Query
-Primary tool for server state management and data fetching.
+### 1. Server State - TanStack Query (Primary Data Layer)
+Primary tool for all server state management and API communication.
 
 **Configuration**: [src/main.tsx](mdc:src/main.tsx)
 - Global query client with comprehensive error handling
@@ -18,45 +13,128 @@ Primary tool for server state management and data fetching.
 - Optimistic updates and mutations
 - Background refetching for data freshness
 
+**Implementation in User Module**:
+```typescript
+// Query Hook Pattern from user module
+export const useUsers = (props: Props) => {
+  return useQuery({
+    ...getUsersQueryOptions(props.input),
+    ...props.queryConfig,
+  })
+}
+
+// Mutation Hook Pattern with cache invalidation
+export const useCreateUser = (config: MutationConfig) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createUserApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      toast.success(t('message.success.created'))
+    },
+    ...config,
+  })
+}
+```
+
 **Key Features**:
 - Automatic 401 handling with auth store integration
-- Global error handling with toast notifications
-- Development-friendly retry logic (disabled in dev, max 3 in prod)
-- 10-second stale time for optimal caching performance
-- Automatic 500 error routing and 304 handling
+- Global error handling with toast notifications  
+- Intelligent retry logic (disabled in dev, max 3 in prod)
+- Optimized caching with query key invalidation
+- Background refetching for up-to-date data
 
-**Query Cache Configuration**:
-- Session expiry handling (401 → logout + redirect)
-- Internal server error routing (500 → error page)
-- Forbidden access handling (403)
+### 2. Feature-Level State - React Context
+Used for feature-specific state that needs to be shared across components within a feature.
 
-### 2. Global Application State - Zustand
+**User Module Pattern**: [src/features/user/context/user-context.tsx](mdc:src/features/user/context/user-context.tsx)
+```typescript
+type UserDialogType = 'invite' | 'add' | 'edit' | 'delete'
 
-**Auth Store**: [src/stores/authStore.ts](mdc:src/stores/authStore.ts)
-- User authentication state management
-- Session persistence and management
-- Login/logout action handlers
-- Token storage and validation
+interface UserContextType {
+  open: UserDialogType | null
+  setOpen: (open: UserDialogType | null) => void
+  currentRow: User | null
+  setCurrentRow: (row: User | null) => void
+}
+
+export default function UserProvider({ children }: Props) {
+  const [open, setOpen] = useDialogState<UserDialogType>(null)
+  const [currentRow, setCurrentRow] = useState<User | null>(null)
+  
+  return (
+    <UserContext value={{ open, setOpen, currentRow, setCurrentRow }}>
+      {children}
+    </UserContext>
+  )
+}
+```
+
+**Usage Pattern**:
+- Dialog state management (open/close, current operation)
+- Current row selection for table operations
+- Feature-specific UI state coordination
+- Clean context boundaries per feature
+
+### 3. Global Application State - Zustand
+Used for cross-feature application state that persists across routes.
+
+**Auth Store**: [src/stores/auth-store.ts](mdc:src/stores/auth-store.ts)
+```typescript
+interface AuthState {
+  user: User | null
+  isAuthenticated: boolean
+  login: (user: User) => void
+  logout: () => void
+}
+
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isAuthenticated: false,
+  login: (user) => set({ user, isAuthenticated: true }),
+  logout: () => set({ user: null, isAuthenticated: false }),
+}))
+```
 
 **Zustand Patterns**:
 - Simple, boilerplate-free state management
-- Direct state mutations with immer-like syntax
-- Subscription-based reactive updates
+- Direct state mutations with clean syntax
 - TypeScript-first approach with full type safety
-- Middleware support for persistence and devtools
+- Persistent state across route changes
 
-### 3. React Context Providers
+### 4. URL State - TanStack Router Search Params
+Used for shareable application state like filters, pagination, and search parameters.
 
-**Theme Context**: [src/context/theme-context](mdc:src/context)
-- Light/dark theme state management
-- Theme switching logic and transitions
-- Persistent theme storage with localStorage
-- System theme detection and preferences
+**Implementation in User Table**:
+```typescript
+const route = getRouteApi('/_authenticated/organization/user')
 
-**Font Context**: [src/context/font-context](mdc:src/context)
-- Font family preferences and management
-- Typography settings and customization
-- Font loading and fallback handling
+export function UserTable() {
+  const {
+    status,
+    role,
+    username,
+    page,
+    limit,
+    sort,
+    createdAtFrom,
+    createdAtTo,
+  } = route.useSearch()
+
+  const { data, isLoading } = useUsers({
+    input: {
+      q: username,
+      status: status as UserStatus,
+      role: role as UserRole[],
+      page,
+      limit,
+      sort,
+      createdAtFrom,
+      createdAtTo,
+    },
+  })
+}
+```
 
 ## State Management Guidelines
 
@@ -65,80 +143,101 @@ Primary tool for server state management and data fetching.
 **TanStack Query** - Use for:
 - All API data fetching and caching
 - Server state synchronization
-- Background data updates
-- Optimistic updates for mutations
+- CRUD operations with optimistic updates
 - Real-time data that needs periodic refresh
+- Background data updates
+
+**Feature Context** - Use for:
+- Dialog state management within features
+- Current selection state (table rows, forms)
+- Feature-specific UI coordination
+- State that doesn't need to persist across routes
+- Clean feature boundaries
 
 **Zustand** - Use for:
-- Global application state (auth, user preferences)
-- Cross-component shared state
-- Complex state that needs actions and computed values
+- Global authentication state
+- Cross-feature shared state
+- User preferences and settings
 - State that persists across route changes
 - Performance-critical global state
 
-**React Context** - Use for:
-- Theme and UI configuration
-- Dependency injection patterns
-- Cross-cutting concerns (fonts, locale)
-- Stable, infrequently changing configuration
-- Provider-based architecture needs
+**URL State (Search Params)** - Use for:
+- Filters and search parameters
+- Pagination state
+- Sortable table configurations
+- Shareable application state
+- Deep-linkable UI state
 
 **Local State (useState)** - Use for:
-- Component-specific state
-- Form inputs and UI interactions
-- Temporary state that doesn't need sharing
+- Component-specific interactions
+- Form inputs (with React Hook Form)
+- Temporary UI state
 - Simple boolean flags and counters
 
 ### State Flow Architecture
 
-1. **API Layer**: TanStack Query manages all server communication
-2. **Global State**: Zustand stores for application-wide state
-3. **Component State**: React useState for local interactions
-4. **Configuration**: React Context for theming and settings
-5. **URL State**: TanStack Router for navigation state
+1. **API Layer**: TanStack Query manages all server communication and caching
+2. **Feature State**: React Context for feature-specific dialog and selection state
+3. **Global State**: Zustand stores for cross-feature application state
+4. **URL State**: TanStack Router search params for shareable/persistent filters
+5. **Component State**: React useState for local component interactions
 
 ## Custom Hooks Pattern
 
-**Authentication Hook**: [src/hooks/useAuth.ts](mdc:src/hooks/useAuth.ts)
-- Centralized auth state access
-- Login/logout utility functions
-- User information and permission checking
-- Auth-dependent navigation logic
-
 **Dialog State Hook**: [src/hooks/use-dialog-state.tsx](mdc:src/hooks/use-dialog-state.tsx)
-- Reusable modal and dialog state management
-- Open/close state with controlled patterns
-- Multiple dialog coordination
+```typescript
+export default function useDialogState<T>(initialValue: T | null = null) {
+  const [open, setOpen] = useState<T | null>(initialValue)
+  
+  const handleSetOpen = (value: T | null) => {
+    setOpen(value)
+  }
+  
+  return [open, handleSetOpen] as const
+}
+```
 
-**Mobile Detection Hook**: [src/hooks/use-mobile.tsx](mdc:src/hooks/use-mobile.tsx)
-- Responsive behavior state management
-- Mobile/desktop detection logic
-- Breakpoint-based state updates
+**Data Table Hook**: [src/hooks/use-data-table.tsx](mdc:src/hooks/use-data-table.tsx)
+- Centralized table state management
+- URL state synchronization for filters/pagination
+- Reusable across all feature tables
 
 ## Error Handling Strategy
 
 ### Global Error Management
-- **Query Errors**: Centralized handling in TanStack Query configuration
+- **API Errors**: Centralized handling in TanStack Query configuration
 - **Auth Errors**: Automatic logout and redirect on 401
 - **Server Errors**: Automatic routing to error pages on 500
 - **User Feedback**: Toast notifications for all error states
+- **Form Errors**: React Hook Form with Zod validation
 
 ### Error State Patterns
-- **Server Errors**: Handled by TanStack Query error boundaries
-- **Form Errors**: Managed by React Hook Form with Zod validation
-- **Route Errors**: Error pages in dedicated error route groups
-- **Component Errors**: React error boundaries for component failures
+```typescript
+// Loading and error states in components
+if (isLoading) {
+  return <Skeleton className='h-8 w-full' />
+}
+
+if (error) {
+  return (
+    <div className='flex h-64 items-center justify-center'>
+      <div className='text-lg text-red-500'>Error: {error.message}</div>
+    </div>
+  )
+}
+```
 
 ## Performance Optimizations
 
 ### State Update Optimization
-- **Selective Subscriptions**: Zustand allows granular store subscriptions
 - **Query Deduplication**: TanStack Query prevents duplicate requests
+- **Selective Subscriptions**: Context and Zustand allow granular subscriptions
 - **Background Updates**: Efficient data synchronization patterns
-- **Memoization**: Strategic use of useMemo and useCallback
+- **Memoization**: Strategic use of React.memo and useMemo
 
 ### Memory Management
 - **Query Garbage Collection**: Automatic cleanup of unused queries
-- **Store Cleanup**: Proper subscription cleanup in useEffect
-- **Context Optimization**: Minimal context re-renders with split providers
+- **Context Scope**: Feature contexts limited to feature boundaries
+- **Store Cleanup**: Proper subscription cleanup in useEffect hooks
+- **URL State**: Automatic cleanup when navigating away
 

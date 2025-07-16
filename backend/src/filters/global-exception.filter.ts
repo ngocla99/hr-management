@@ -135,7 +135,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       errorCode: "N001",
       message:
         (this.i18n.t(r.message as unknown as keyof I18nTranslations) as string) ||
-        this.i18n.t("common.error.entity_not_found")!,
+        this.i18n.t("common.error.entity_not_found" as unknown as keyof I18nTranslations)!,
     };
 
     this.logger.debug(exception);

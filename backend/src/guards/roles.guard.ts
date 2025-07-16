@@ -38,9 +38,6 @@ export class RolesGuard implements CanActivate {
     if (!user || !user.role) {
       throw new ForbiddenException("User role not found");
     }
-    console.log("🚀 ~ file: roles.guard.ts:19 ~ requiredRoles:", requiredRoles);
-    console.log("🚀 ~ file: roles.guard.ts:19 ~ requiredPermissions:", user.role);
-    console.log("🚀 ~ file: roles.guard.ts:43 ~ user:", user);
 
     // Check role requirements
     if (requiredRoles) {

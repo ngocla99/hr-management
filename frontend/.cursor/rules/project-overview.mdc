@@ -1,41 +1,61 @@
----
-description:
-globs:
-alwaysApply: true
----
-# Project Overview - Tutti Dashboard
+# HR Management Dashboard - Frontend Project
 
-This is a React-based admin dashboard UI built with modern web technologies, focusing on responsiveness and accessibility.
+This is a React-based HR management dashboard UI built with modern web technologies, focusing on responsiveness, accessibility, and comprehensive user management.
 
 ## Project Purpose
-- Tutti Dashboard UI crafted with ShadcnUI and Vite
-- Built with responsiveness and accessibility in mind
-- Reusable collection of dashboard UI components for future projects
-- Features 10+ pages with custom components
+- HR Management System with complete user lifecycle management
+- Organization structure management with departments and teams
+- Role-based access control and permissions
+- Built with enterprise-grade scalability and accessibility in mind
+- Reusable component library for HR-related features
 
 ## Tech Stack
-- **Framework**: React 19 with TypeScript
-- **Build Tool**: [Vite](mdc:vite.config.ts) with SWC
-- **UI Library**: ShadcnUI (TailwindCSS + RadixUI)
-- **Routing**: TanStack Router with [routeTree.gen.ts](mdc:src/routeTree.gen.ts)
-- **State Management**: Zustand stores + TanStack Query
-- **Styling**: TailwindCSS v4
-- **Icons**: Tabler Icons + Lucide React
-- **Forms**: React Hook Form with Zod validation
-- **Testing/Quality**: ESLint, Prettier, TypeScript, Knip
+- **Framework**: React 19.1.0 with TypeScript ~5.8.3
+- **Build Tool**: [Vite](mdc:vite.config.ts) 6.3.5 with SWC for fast builds
+- **UI Library**: ShadcnUI (TailwindCSS v4.1.11 + RadixUI)
+- **Routing**: TanStack Router 1.124.0 with [routeTree.gen.ts](mdc:src/routeTree.gen.ts)
+- **State Management**: Zustand 5.0.6 + TanStack Query 5.81.5
+- **Styling**: TailwindCSS v4 with utility-first approach
+- **Icons**: Tabler Icons 3.34.0 + Lucide React 0.514.0
+- **Forms**: React Hook Form 7.59.0 with Zod 3.25.73 validation
+- **Data Tables**: TanStack Table 8.21.3 for advanced table features
+- **HTTP Client**: Axios 1.10.0 for API communication
+- **Internationalization**: i18next 25.3.0 + react-i18next 15.6.0
+- **Quality Tools**: ESLint 9.30.1, Prettier 3.6.2, TypeScript, Knip 5.61.3
 
 ## Key Features
-- Light/dark theme switching
-- Responsive design
-- Accessibility focused
-- Built-in Sidebar component
-- Global Search Command
-- Authentication system
-- Form handling with validation
+- 🌙 **Theme System**: Light/dark theme with persistent storage
+- 📱 **Responsive Design**: Mobile-first responsive approach
+- ♿ **Accessibility**: WCAG compliant with ARIA support
+- 🔐 **Authentication**: Complete auth system with role-based access
+- 👥 **User Management**: Full CRUD operations with advanced filtering
+- 🏢 **Organization Structure**: Department and team management
+- 🌐 **Internationalization**: Multi-language support (EN/VI)
+- 📊 **Data Tables**: Advanced filtering, sorting, and pagination
+- 🎨 **Design System**: Consistent component library
+- 🔍 **Global Search**: Command palette and search functionality
+- 📋 **Form Handling**: Comprehensive form validation and error handling
 
 ## Main Entry Points
-- Application entry: [src/main.tsx](mdc:src/main.tsx)
-- Root route: [src/routes/__root.tsx](mdc:src/routes/__root.tsx)
-- Main HTML: [index.html](mdc:index.html)
-- Package config: [package.json](mdc:package.json)
+- **Application Entry**: [src/main.tsx](mdc:src/main.tsx) - React app bootstrap
+- **Root Route**: [src/routes/__root.tsx](mdc:src/routes/__root.tsx) - Root layout and providers
+- **Main HTML**: [index.html](mdc:index.html) - Application shell
+- **Build Config**: [vite.config.ts](mdc:vite.config.ts) - Vite configuration
+- **Package Config**: [package.json](mdc:package.json) - Dependencies and scripts
+
+## Project Structure
+```
+frontend/
+├── src/
+│   ├── features/           # Feature-based modules (user, auth, organization)
+│   ├── components/         # Reusable UI components
+│   ├── routes/            # TanStack Router route definitions
+│   ├── stores/            # Zustand global state stores
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility libraries and API client
+│   ├── types/             # TypeScript type definitions
+│   └── config/            # Application configuration
+├── public/                # Static assets and translation files
+└── .cursor/               # Cursor IDE rules and documentation
+```
 

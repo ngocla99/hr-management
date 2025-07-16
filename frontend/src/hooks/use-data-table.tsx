@@ -203,10 +203,6 @@ export function useDataTable<TData, TValue>({
       500
     )
   ) as ColumnFiltersState
-  console.log(
-    '🚀 ~ debouncedSearchableColumnFilters:',
-    debouncedSearchableColumnFilters
-  )
 
   const filterableColumnFilters = columnFilters.filter((filter) => {
     return filterableColumns.find((column) => {
