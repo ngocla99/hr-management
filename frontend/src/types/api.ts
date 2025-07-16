@@ -9,6 +9,13 @@ export type Entity<T> = {
   [K in keyof T]: T[K]
 } & BaseEntity
 
+export type Auth = {
+  userId: string
+  accessToken: string
+  refreshToken: string
+  tokenExpires: number
+}
+
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',

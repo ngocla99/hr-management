@@ -114,7 +114,9 @@ export class AuthService {
     //   token,
     //   ms(tokenExpiresIn),
     // );
-    await this.emailQueue.add(
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.emailQueue.add(
       JobName.EMAIL_VERIFICATION,
       {
         email: dto.email,

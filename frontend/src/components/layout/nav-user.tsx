@@ -1,8 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { logoutApi } from '@/api/services/auth'
 import { useAuth } from '@/stores/auth-store'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -20,30 +18,18 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { useSignOut } from '@/features/auth/api/sign-out'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { t } = useTranslation(['glossary', 'common'])
-  const router = useRouter()
-  const { user, reset } = useAuth()
+  const { user } = useAuth()
 
-  const logoutMutation = useMutation({
-    mutationFn: logoutApi,
-    onSuccess: () => {
-      reset()
-      router.navigate({ to: '/sign-in' })
-    },
-    onError: (error) => {
-      // TODO: Remove this after testing
-      console.log(error)
-      reset()
-      router.navigate({ to: '/sign-in' })
-    },
-  })
+  const signOutMutation = useSignOut()
 
   const handleLogout = () => {
-    if (logoutMutation.isPending) return
-    logoutMutation.mutate()
+    if (signOutMutation.isPending) return
+    signOutMutation.mutate(undefined)
   }
 
   return (
@@ -56,13 +42,13 @@ export function NavUser() {
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage src={'/avatars/01.png'} alt={user?.name} />
+                <AvatarImage src={'/avatars/01.png'} alt={user?.username} />
                 <AvatarFallback className='rounded-lg'>
-                  {user?.name?.charAt(0)}
+                  {user?.username?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{user?.name}</span>
+                <span className='truncate font-semibold'>{user?.username}</span>
                 <span className='truncate text-xs'>{user?.email}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
@@ -77,13 +63,15 @@ export function NavUser() {
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={'/avatars/01.png'} alt={user?.name} />
+                  <AvatarImage src={'/avatars/01.png'} alt={user?.username} />
                   <AvatarFallback className='rounded-lg'>
-                    {user?.name?.charAt(0)}
+                    {user?.username?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{user?.name}</span>
+                  <span className='truncate font-semibold'>
+                    {user?.username}
+                  </span>
                   <span className='truncate text-xs'>{user?.email}</span>
                 </div>
               </div>

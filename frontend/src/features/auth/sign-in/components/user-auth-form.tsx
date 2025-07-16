@@ -1,6 +1,10 @@
-import { logInApi } from '@/api/services/auth'
-import { FormInput } from '@/components/form-field/form-input'
-import { PasswordInput } from '@/components/password-input'
+import { HTMLAttributes } from 'react'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -10,61 +14,30 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { cn } from '@/lib/utils'
-import { useAuth } from '@/stores/auth-store'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Link, useRouter } from '@tanstack/react-router'
-import { HTMLAttributes } from 'react'
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import { z } from 'zod'
+import { FormInput } from '@/components/form-field/form-input'
+import { PasswordInput } from '@/components/password-input'
+import { signInSchema, useSignIn } from '../../api/sign-in'
 import { FacebookSignIn } from './facebook-sign-in'
 import { TwitterSignIn } from './twitter-sign-in'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
-const formSchema = z.object({
-  email: z.string().min(1, { message: 'Please enter your email' }),
-  password: z
-    .string()
-    .min(1, {
-      message: 'Please enter your password',
-    })
-    .min(7, {
-      message: 'Password must be at least 7 characters long',
-    }),
-})
-
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { t } = useTranslation()
-  const { setAccessToken } = useAuth()
-  const router = useRouter()
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  const logInMutation = useMutation({
-    mutationFn: logInApi,
-    onSuccess: (data) => {
-      setAccessToken(data.accessToken)
-      toast.success(t('loginSuccess', { ns: 'auth' }))
-      router.navigate({ to: '/' })
-    },
-    onError: () => {
-      toast.error(t('loginFailed', { ns: 'auth' }))
-    },
-  })
+  const signInMutation = useSignIn()
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    if (logInMutation.isPending) return
-    logInMutation.mutate(data)
+  async function onSubmit(data: z.infer<typeof signInSchema>) {
+    if (signInMutation.isPending) return
+    signInMutation.mutate(data)
   }
 
   return (
@@ -101,8 +74,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={logInMutation.isPending}>
-          {logInMutation.isPending
+        <Button className='mt-2' disabled={signInMutation.isPending}>
+          {signInMutation.isPending
             ? t('loggingIn', { ns: 'auth' })
             : t('login', { ns: 'auth' })}
         </Button>
@@ -131,8 +104,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <FacebookSignIn disabled={logInMutation.isPending} />
-          <TwitterSignIn disabled={logInMutation.isPending} />
+          <FacebookSignIn disabled={signInMutation.isPending} />
+          <TwitterSignIn disabled={signInMutation.isPending} />
         </div>
       </form>
     </Form>

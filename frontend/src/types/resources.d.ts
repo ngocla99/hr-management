@@ -55,7 +55,9 @@ interface Resources {
     "signUpSubtitle": "Enter your email and password to create an account.",
     "usernamePlaceholder": "Enter your username",
     "signUpSuccess": "Sign up successful!",
-    "signUpFailed": "Sign up failed"
+    "signUpFailed": "Sign up failed",
+    "signOutSuccess": "Sign out successful!",
+    "signOutFailed": "Sign out failed"
   },
   "common": {
     "save": "Save",

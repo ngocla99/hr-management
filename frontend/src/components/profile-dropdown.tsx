@@ -1,7 +1,5 @@
-import { useMutation } from '@tanstack/react-query'
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { logoutApi } from '@/api/services/auth'
 import { useAuth } from '@/stores/auth-store'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -15,23 +13,17 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useSignOut } from '@/features/auth/api/sign-out'
 
 export function ProfileDropdown() {
   const { t } = useTranslation(['glossary', 'common'])
-  const { user, reset } = useAuth()
-  const router = useRouter()
+  const { user } = useAuth()
 
-  const logoutMutation = useMutation({
-    mutationFn: logoutApi,
-    onSuccess: () => {
-      reset()
-      router.navigate({ to: '/sign-in' })
-    },
-  })
+  const signOutMutation = useSignOut()
 
   const handleLogout = () => {
-    if (logoutMutation.isPending) return
-    logoutMutation.mutate()
+    if (signOutMutation.isPending) return
+    signOutMutation.mutate(undefined)
   }
 
   return (
@@ -40,14 +32,14 @@ export function ProfileDropdown() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@admin' />
-            <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+            <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm leading-none font-medium'>{user?.name}</p>
+            <p className='text-sm leading-none font-medium'>{user?.username}</p>
             <p className='text-muted-foreground text-xs leading-none'>
               {user?.email}
             </p>
