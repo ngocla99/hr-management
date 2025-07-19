@@ -34,11 +34,19 @@ export function AuthenticatedLayout({ children }: Props) {
     <SearchProvider>
       <SidebarProvider defaultOpen={defaultOpen}>
         <SkipToMain />
-        <AppSidebar />
+        <Header fixed>
+          <Search />
+          <div className='ml-auto flex items-center space-x-4'>
+            <LanguageSwitch />
+            <ThemeSwitch />
+            <ProfileDropdown />
+          </div>
+        </Header>
+        <AppSidebar className='pt-16 group-data-[side=left]:border-r-0 shadow-sm' />
         <div
           id='content'
           className={cn(
-            'ml-auto w-full max-w-full',
+            'ml-auto w-full max-w-full pt-16',
             'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
             'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
             'sm:transition-[width] sm:duration-200 sm:ease-linear',
@@ -47,14 +55,6 @@ export function AuthenticatedLayout({ children }: Props) {
             'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh'
           )}
         >
-          <Header fixed>
-            <Search />
-            <div className='ml-auto flex items-center space-x-4'>
-              <LanguageSwitch />
-              <ThemeSwitch />
-              <ProfileDropdown />
-            </div>
-          </Header>
           {children ? children : <Outlet />}
         </div>
       </SidebarProvider>

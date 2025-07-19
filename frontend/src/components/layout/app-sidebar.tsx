@@ -12,8 +12,8 @@ import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible='icon' variant='floating' {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible='icon' variant='sidebar' {...props}>
+      <SidebarHeader className='p-4'>
         <TeamSwitcher teams={sidebarData.teams} />
       </SidebarHeader>
       <SidebarContent>

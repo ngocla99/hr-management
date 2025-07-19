@@ -34,8 +34,8 @@ export function NavGroup({ title, items }: NavGroup) {
   const href = useLocation({ select: (location) => location.href })
   const { t } = useTranslation(['glossary'])
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel className='uppercase text-muted-foreground text-[11px]'>
+    <SidebarGroup className='p-4'>
+      <SidebarGroupLabel className='text-muted-foreground text-[11px] uppercase'>
         {t(title as any)}
       </SidebarGroupLabel>
       <SidebarMenu>
