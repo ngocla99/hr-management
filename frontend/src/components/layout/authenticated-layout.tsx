@@ -1,6 +1,7 @@
 import React from 'react'
 import Cookies from 'js-cookie'
 import { Outlet } from '@tanstack/react-router'
+import { IconPlus } from '@tabler/icons-react'
 import { useAuth } from '@/stores/auth-store'
 import { cn } from '@/lib/utils'
 import { SearchProvider } from '@/context/search-context'
@@ -12,7 +13,10 @@ import { LanguageSwitch } from '../language-switch'
 import { ProfileDropdown } from '../profile-dropdown'
 import { Search } from '../search'
 import { ThemeSwitch } from '../theme-switch'
+import { Button } from '../ui/button'
+import { Separator } from '../ui/separator'
 import { Header } from './header'
+import { NavBreadcrumb } from './nav-breadcrumb'
 
 interface Props {
   children?: React.ReactNode
@@ -35,14 +39,22 @@ export function AuthenticatedLayout({ children }: Props) {
       <SidebarProvider defaultOpen={defaultOpen}>
         <SkipToMain />
         <Header fixed>
-          <Search />
-          <div className='ml-auto flex items-center space-x-4'>
+          <NavBreadcrumb />
+          <div className='ml-auto flex h-full items-center space-x-2'>
+            <Button variant='secondary' size='icon'>
+              <IconPlus />
+            </Button>
+            <Separator
+              orientation='vertical'
+              className='bg-sidebar-border mr-4 ml-2 h-5!'
+            />
+            <Search />
             <LanguageSwitch />
             <ThemeSwitch />
-            <ProfileDropdown />
+            <ProfileDropdown className='ml-2' />
           </div>
         </Header>
-        <AppSidebar className='pt-16 group-data-[side=left]:border-r-0 shadow-sm' />
+        <AppSidebar className='pt-16 shadow-sm group-data-[side=left]:border-r-0' />
         <div
           id='content'
           className={cn(

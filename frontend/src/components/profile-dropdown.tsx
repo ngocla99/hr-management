@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/stores/auth-store'
+import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useSignOut } from '@/features/auth/api/sign-out'
 
-export function ProfileDropdown() {
+export function ProfileDropdown({ className }: { className?: string }) {
   const { t } = useTranslation(['glossary', 'common'])
   const { user } = useAuth()
 
@@ -29,8 +30,11 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-          <Avatar className='h-8 w-8'>
+        <Button
+          variant='ghost'
+          className={cn('relative size-9 rounded-full', className)}
+        >
+          <Avatar className='size-9'>
             <AvatarImage src='/avatars/01.png' alt='@admin' />
             <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
           </Avatar>

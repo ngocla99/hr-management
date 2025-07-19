@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { IconCheck, IconMoon, IconSun } from '@tabler/icons-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/context/theme-context'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useTranslation } from 'react-i18next'
 
 export function ThemeSwitch() {
   const { t } = useTranslation('common')
@@ -26,7 +26,10 @@ export function ThemeSwitch() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='icon' className='scale-95 rounded-full'>
+        <Button
+          size='icon'
+          className='bg-sidebar-border hover:bg-sidebar-border/80'
+        >
           <IconSun className='size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
           <IconMoon className='absolute size-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
           <span className='sr-only'>{t('toggleTheme')}</span>
