@@ -1,13 +1,16 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { RowData } from '@tanstack/react-table'
-import { User, UserRole, UserStatus } from '@/types/api'
+import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { useDataTable } from '@/hooks/use-data-table'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
-import { useUsers } from '../api/get-users'
-import { userRoleOptions, userStatusOptions } from '../constants/user-options'
+import { UsersInput, useUsers } from '../api/get-users'
+import {
+  userRoleOptionsFn,
+  userStatusOptionsFn,
+} from '../constants/user-options'
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
 
@@ -23,27 +26,11 @@ const route = getRouteApi('/_authenticated/organization/user')
 export function UserTable() {
   const { t } = useTranslation()
   const columns = useUserColumns()
-  const {
-    status,
-    role,
-    username,
-    page,
-    limit,
-    sort,
-    createdAtFrom,
-    createdAtTo,
-  } = route.useSearch()
+  const searchParams = route.useSearch() as UsersInput
 
   const { data, isLoading, error } = useUsers({
     input: {
-      q: username,
-      status: status as UserStatus,
-      role: role as UserRole[],
-      page,
-      limit,
-      sort,
-      createdAtFrom,
-      createdAtTo,
+      ...searchParams,
     },
   })
 
@@ -59,12 +46,12 @@ export function UserTable() {
     {
       label: t('role', { ns: 'glossary' }),
       value: 'role',
-      options: userRoleOptions,
+      options: userRoleOptionsFn(t),
     },
     {
       label: t('status', { ns: 'glossary' }),
       value: 'status',
-      options: userStatusOptions,
+      options: userStatusOptionsFn(t),
       multiple: false,
     },
   ]

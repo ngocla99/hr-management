@@ -15,8 +15,15 @@
   "dialog.delete.title": "Xóa người dùng",
   "dialog.delete.description": "Bạn có chắc chắn muốn xóa <strong>{{name}}</strong>?<br/> Hành động này sẽ xóa người dùng khỏi hệ thống. Không thể hoàn tác.",
   "dialog.delete.confirm": "Bạn có chắc chắn muốn xóa <strong>{{count}}</strong> người dùng?<br/> Hành động này sẽ xóa người dùng khỏi hệ thống. Không thể hoàn tác.",
-  "form.name.placeholder": "Nhập tên người dùng",
-  "form.enterDescriptionPlaceholder": "Thêm ghi chú cá nhân cho mời (tùy chọn)",
+  "form": {
+    "enterFirstName": "Nhập tên",
+    "enterLastName": "Nhập họ",
+    "enterEmail": "Nhập email",
+    "selectRole": "Chọn vai trò",
+    "enterPassword": "Nhập mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "enterDescriptionPlaceholder": "Thêm ghi chú cá nhân cho lời mời (tùy chọn)"
+  },
   "message.success.created": "Người dùng đã được tạo thành công",
   "message.success.updated": "Người dùng đã được cập nhật thành công",
   "message.success.deleted": "Người dùng đã được xóa thành công",
@@ -30,5 +37,19 @@
   "message.error.suspendFailed": "Không thể tạm dừng người dùng",
   "message.error.activateFailed": "Không thể kích hoạt người dùng",
   "message.error.deleteManyFailed": "Không thể xóa người dùng",
-  "message.error.createManyFailed": "Không thể tạo người dùng"
+  "message.error.createManyFailed": "Không thể tạo người dùng",
+  "role": {
+    "admin": "Quản trị viên",
+    "employee": "Nhân viên",
+    "recruiter": "Nhà tuyển dụng",
+    "hiringManager": "Quản lý tuyển dụng",
+    "hrManager": "Quản lý nhân sự",
+    "superAdmin": "Quản trị viên cao cấp"
+  },
+  "status": {
+    "active": "Đang hoạt động",
+    "inactive": "Không hoạt động",
+    "not_verified": "Chưa xác thực",
+    "suspended": "Tạm dừng"
+  }
 }

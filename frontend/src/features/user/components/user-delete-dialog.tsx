@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { useDeleteUser } from '../api/delete-user'
+import { UsersInput } from '../api/get-users'
 
 interface Props {
   open: boolean
@@ -19,20 +20,12 @@ const route = getRouteApi('/_authenticated/organization/user')
 export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState('')
   const { t } = useTranslation()
-  const searchParams = route.useSearch()
-  const inputQuery = {
-    q: searchParams.username,
-    status: searchParams.status as UserStatus,
-    role: searchParams.role as UserRole[],
-    page: searchParams.page,
-    limit: searchParams.limit,
-    sort: searchParams.sort,
-    createdAtFrom: searchParams.createdAtFrom,
-    createdAtTo: searchParams.createdAtTo,
-  }
+  const searchParams = route.useSearch() as UsersInput
 
   const deleteUserMutation = useDeleteUser({
-    inputQuery,
+    inputQuery: {
+      ...searchParams,
+    },
     mutationConfig: {
       onSuccess: () => {
         onOpenChange(false)

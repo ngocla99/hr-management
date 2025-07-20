@@ -42,6 +42,7 @@ export const useCreateUser = ({
       queryClient.invalidateQueries({
         queryKey: getUsersQueryOptions(inputQuery).queryKey,
       })
+      toast.success(t('message.success.created', { ns: 'users' }))
       onSuccess?.(...args)
     },
     onError: (error: Error, ...args) => {

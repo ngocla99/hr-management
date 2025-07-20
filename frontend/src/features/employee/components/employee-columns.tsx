@@ -64,7 +64,7 @@ export const useEmployeeColumns = () => {
         header: ({ column }) => (
           <DataTableColumnHeader
             column={column}
-            title={t('employeeName', { ns: 'glossary' })}
+            title={t('fullName', { ns: 'glossary' })}
           />
         ),
         cell: ({ row }) => {
@@ -134,7 +134,7 @@ export const useEmployeeColumns = () => {
         header: ({ column }) => (
           <DataTableColumnHeader
             column={column}
-            title={t('dateHired', { ns: 'glossary' })}
+            title={t('dateJoined', { ns: 'glossary' })}
           />
         ),
         cell: ({ row }) => (
@@ -157,8 +157,8 @@ export const useEmployeeColumns = () => {
           >['variant']
           return (
             <Badge variant={badgeVariant} className={cn('capitalize')}>
-              {t(('status.' + status.replace('_', '')) as any, {
-                ns: 'glossary',
+              {t(('status.' + status) as any, {
+                ns: 'users',
               })}
             </Badge>
           )

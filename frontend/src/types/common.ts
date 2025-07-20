@@ -23,7 +23,7 @@ export interface MutationOptions {
 }
 
 export interface DataTableOption {
-  labelKey: string
+  label: string
   value: string
   icon?: React.ComponentType<{ className?: string }>
   withCount?: boolean

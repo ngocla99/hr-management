@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import LongText from '@/components/long-text'
 import { userStatusStyles } from '../constants/user-helpers'
-import { userRoleOptions } from '../constants/user-options'
+import { userRoleOptionsFn } from '../constants/user-options'
 import { UsersTableRowActions } from './user-table-row-actions'
 
 export const useUserColumns = (): ColumnDef<User>[] => {
@@ -84,6 +84,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     },
     {
       accessorKey: 'status',
+      meta: { className: 'text-center' },
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -94,10 +95,10 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         const { status } = row.original
         const badgeVariant = userStatusStyles.get(status)
         return (
-          <div className='flex space-x-2'>
+          <div className='flex'>
             <Badge variant={badgeVariant as any} className={cn('capitalize')}>
               {t(('status.' + status) as any, {
-                ns: 'glossary',
+                ns: 'users',
               })}
             </Badge>
           </div>
@@ -119,7 +120,9 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       ),
       cell: ({ row }) => {
         const { role } = row.original
-        const userType = userRoleOptions.find(({ value }) => value === role)
+        const userType = userRoleOptionsFn(t).find(
+          ({ value }) => value === role
+        )
 
         if (!userType) {
           return null
@@ -130,9 +133,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
             {userType.icon && (
               <userType.icon size={16} className='text-muted-foreground' />
             )}
-            <span className='text-sm capitalize'>
-              {t(userType.labelKey as any, { ns: 'glossary' })}
-            </span>
+            <span className='text-sm capitalize'>{userType.label}</span>
           </div>
         )
       },

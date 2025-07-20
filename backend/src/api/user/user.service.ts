@@ -10,7 +10,7 @@ import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
 import { UserResDto } from "./dto/user.res.dto";
-import { UserDocument, UserStatus } from "./entities/user.entity";
+import { UserDocument } from "./entities/user.entity";
 import { UserRepository } from "./user.repository";
 import { generateBaseUsername, generateUniqueUsername } from "./utils/username.util";
 
@@ -67,11 +67,7 @@ export class UserService {
       filter.role = reqDto.role;
     }
     if (reqDto.status) {
-      if (reqDto.status === UserStatus.SUSPENDED) {
-        filter.deletedAt = { $ne: null };
-      } else if (reqDto.status === UserStatus.ACTIVE) {
-        filter.deletedAt = null;
-      }
+      filter.status = reqDto.status;
     }
 
     const createdAtFilter: Record<string, Date> = {};
@@ -85,8 +81,16 @@ export class UserService {
       filter.createdAt = createdAtFilter;
     }
 
-    if (reqDto.q) {
-      filter.username = { $regex: reqDto.q, $options: "i" };
+    if (reqDto.username) {
+      filter.username = { $regex: reqDto.username, $options: "i" };
+    }
+
+    if (reqDto.jobRole) {
+      filter.jobRole = reqDto.jobRole;
+    }
+
+    if (reqDto.employmentType) {
+      filter.employmentType = reqDto.employmentType;
     }
 
     const [users, metaDto] = await paginate<UserDocument>(this.userRepository.userModel, reqDto, {
@@ -165,7 +169,7 @@ export class UserService {
   }
 
   async suspend(id: string): Promise<UserResDto> {
-    const user = await this.userRepository.softDeleteUser(id);
+    const user = await this.userRepository.suspendUser(id);
     return plainToInstance(UserResDto, user);
   }
 

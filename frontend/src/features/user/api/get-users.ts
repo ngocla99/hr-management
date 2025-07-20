@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { User } from '@/types/api'
+import { EmploymentType, JobRole, User } from '@/types/api'
 import { UserRole } from '@/types/api'
 import { UserStatus } from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
@@ -9,6 +9,9 @@ import { PAGINATION } from '@/lib/constants/constant'
 import { QueryConfig } from '@/lib/react-query'
 
 export type UsersInput = PaginationInput & {
+  username?: string
+  jobRole?: JobRole
+  employmentType?: EmploymentType
   role?: UserRole[]
   status?: UserStatus
   createdAtFrom?: string

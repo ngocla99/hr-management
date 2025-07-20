@@ -76,7 +76,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                           key={option.value}
                           className='rounded-sm px-1 font-normal'
                         >
-                          {t(option.labelKey as any, { ns: 'glossary' })}
+                          {option.label}
                         </Badge>
                       ))
                   )
@@ -89,15 +89,15 @@ export function DataTableFacetedFilter<TData, TValue>({
                         key={option.value}
                         className='rounded-sm px-1 font-normal'
                       >
-                        {t(option.labelKey as any, { ns: 'glossary' })}
+                        {option.label}
                       </Badge>
                     ))
                 )}
               </div>
             </>
           )}
-          <div className='size-5 bg-white shadow-none grid place-items-center rounded'>
-            <IconChevronDown className='text-foreground opacity-50 size-4' />
+          <div className='grid size-5 place-items-center rounded bg-white shadow-none'>
+            <IconChevronDown className='text-foreground size-4 opacity-50' />
           </div>
         </Button>
       </PopoverTrigger>
@@ -147,7 +147,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         aria-hidden='true'
                       />
                     )}
-                    <span>{t(option.labelKey as any, { ns: 'glossary' })}</span>
+                    <span>{option.label}</span>
                     {option.withCount &&
                       column?.getFacetedUniqueValues()?.get(option.value) && (
                         <span className='ml-auto flex size-4 items-center justify-center font-mono text-xs'>

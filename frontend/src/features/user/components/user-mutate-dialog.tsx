@@ -27,7 +27,7 @@ import { SelectDropdown } from '@/components/select-dropdown'
 import { useCreateUser } from '../api/create-user'
 import { useUpdateUser } from '../api/update-user'
 import { USER_ROLES } from '../constants/user-constants'
-import { userRoleOptions } from '../constants/user-options'
+import { userRoleOptionsFn } from '../constants/user-options'
 
 const formSchema = z
   .object({
@@ -206,7 +206,6 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
               <FormField
                 control={form.control}
                 name='firstName'
-                disabled={isEdit}
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-right'>
@@ -214,7 +213,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t('form.name.placeholder', {
+                        placeholder={t('form.enterFirstName', {
                           ns: 'users',
                         })}
                         autoComplete='new-password'
@@ -231,7 +230,6 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
               <FormField
                 control={form.control}
                 name='lastName'
-                disabled={isEdit}
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-right'>
@@ -239,7 +237,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t('form.name.placeholder', {
+                        placeholder={t('form.enterLastName', {
                           ns: 'users',
                         })}
                         autoComplete='new-password'
@@ -265,7 +263,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormControl>
                       <Input
                         placeholder={t('form.enterEmail', {
-                          ns: 'glossary',
+                          ns: 'users',
                         })}
                         classes={{
                           root: 'col-span-4',
@@ -291,10 +289,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                       onValueChange={field.onChange}
                       placeholder={t('form.selectRole', { ns: 'glossary' })}
                       className='col-span-4'
-                      items={userRoleOptions.map(({ labelKey, value }) => ({
-                        label: t(labelKey as any, { ns: 'glossary' }),
-                        value,
-                      }))}
+                      items={userRoleOptionsFn(t)}
                     />
                     <FormMessage className='col-span-4 col-start-3' />
                   </FormItem>
@@ -311,7 +306,7 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormControl>
                       <PasswordInput
                         placeholder={t('form.enterPassword', {
-                          ns: 'glossary',
+                          ns: 'users',
                         })}
                         className='col-span-4'
                         autoComplete='new-password'
@@ -333,8 +328,8 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormControl>
                       <PasswordInput
                         disabled={!isPasswordTouched}
-                        placeholder={t('form.enterConfirmPassword', {
-                          ns: 'glossary',
+                        placeholder={t('form.confirmPassword', {
+                          ns: 'users',
                         })}
                         className='col-span-4'
                         {...field}

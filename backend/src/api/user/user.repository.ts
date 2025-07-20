@@ -5,7 +5,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { DeleteResult, Model, Types } from "mongoose";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserDocument } from "./entities/user.entity";
+import { UserDocument, UserStatus } from "./entities/user.entity";
 
 @Injectable()
 export class UserRepository {
@@ -63,7 +63,15 @@ export class UserRepository {
     return this.userModel.find({ role, deletedAt: null }).exec();
   }
 
+  async suspendUser(id: string): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(id, { status: UserStatus.SUSPENDED }, { new: true })
+      .exec();
+  }
+
   async activateUser(id: string): Promise<UserDocument | null> {
-    return this.userModel.findByIdAndUpdate(id, { deletedAt: null }, { new: true }).exec();
+    return this.userModel
+      .findByIdAndUpdate(id, { status: UserStatus.ACTIVE }, { new: true })
+      .exec();
   }
 }

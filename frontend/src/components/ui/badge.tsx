@@ -17,7 +17,7 @@ const badgeVariants = cva(
         outline:
           'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
         success: 'bg-[#9dc082] text-white [a&]:hover:bg-[#9dc082]/90',
-        warning: 'bg-[#9dc082] text-white [a&]:hover:bg-[#9dc082]/90',
+        warning: 'bg-[#f59e0b] text-white [a&]:hover:bg-[#f59e0b]/90',
         info: 'border-transparent bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 [a&]:hover:bg-blue-200 dark:[a&]:hover:bg-blue-900/30',
         dark: 'bg-[#1d212c] text-white [a&]:hover:bg-[#1d212c]/90',
       },
@@ -34,7 +34,7 @@ const badgeVariants = cva(
     defaultVariants: {
       variant: 'default',
       size: 'md',
-      withDot: true,
+      withDot: false,
     },
   }
 )
@@ -43,7 +43,7 @@ function Badge({
   className,
   variant,
   size,
-  withDot = true,
+  withDot,
   asChild = false,
   children,
   ...props

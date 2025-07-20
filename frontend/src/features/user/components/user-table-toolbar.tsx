@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { Table } from '@tanstack/react-table'
-import { User, UserRole, UserStatus } from '@/types/api'
+import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { TrashIcon } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -9,6 +9,7 @@ import { SingleDayPicker } from '@/components/ui/single-day-picker'
 import confirm from '@/components/confirm'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 import { useDeleteUsers } from '../api/delete-users'
+import { UsersInput } from '../api/get-users'
 
 interface UsersTableToolbarProps<TData> {
   table: Table<TData>
@@ -28,20 +29,11 @@ export function UsersTableToolbar({
     .getFilteredSelectedRowModel()
     .rows.map((row) => row.original.id)
 
-  const searchParams = route.useSearch()
-  const inputQuery = {
-    q: searchParams.username,
-    status: searchParams.status as UserStatus,
-    role: searchParams.role as UserRole[],
-    page: searchParams.page,
-    limit: searchParams.limit,
-    sort: searchParams.sort,
-    createdAtFrom: searchParams.createdAtFrom,
-    createdAtTo: searchParams.createdAtTo,
-  }
-
+  const searchParams = route.useSearch() as UsersInput
   const deleteUsersMutation = useDeleteUsers({
-    inputQuery,
+    inputQuery: {
+      ...searchParams,
+    },
     mutationConfig: {
       onSuccess: () => {
         table.resetRowSelection()
@@ -83,7 +75,7 @@ export function UsersTableToolbar({
           <SingleDayPicker
             value={searchParams.createdAtFrom}
             onChange={handleCreatedAtFromChange}
-            placeholder={t('selectCreatedAtFrom', { ns: 'glossary' })}
+            placeholder={t('form.selectCreatedAtFrom', { ns: 'glossary' })}
           />
         </div>
         {selectedRowIds.length > 0 && (

@@ -1,10 +1,12 @@
 import { UserRole } from "@/constants/roles.constant";
 import {
   EmailField,
+  EnumFieldOptional,
   PasswordField,
   StringField,
   StringFieldOptional,
 } from "@/decorators/field.decorators";
+import { UserStatus } from "../entities/user.entity";
 
 export class CreateUserReqDto {
   @StringField({
@@ -32,6 +34,12 @@ export class CreateUserReqDto {
     description: "Username will be auto-generated if not provided",
   })
   username?: string;
+
+  @EnumFieldOptional(() => UserStatus, {
+    description: "User status",
+    example: UserStatus.ACTIVE,
+  })
+  status?: string;
 
   @StringFieldOptional({
     example: "employee",

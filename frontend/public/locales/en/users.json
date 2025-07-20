@@ -15,8 +15,15 @@
   "dialog.delete.title": "Delete User",
   "dialog.delete.description": "Are you sure you want to delete <strong>{{name}}</strong>?<br/> This action will permanently remove the user from the system. This cannot be undone.",
   "dialog.delete.confirm": "Are you sure you want to delete <strong>{{count}}</strong> users?<br/> This action will permanently remove the users from the system. This cannot be undone.",
-  "form.name.placeholder": "Enter user name",
-  "form.enterDescriptionPlaceholder": "Add a personal note to your invitation (optional)",
+  "form": {
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "selectRole": "Select Role",
+    "enterPassword": "Enter Password",
+    "confirmPassword": "Confirm Password",
+    "enterDescriptionPlaceholder": "Add a personal note to your invitation (optional)"
+  },
   "message.success.created": "User created successfully",
   "message.success.updated": "User updated successfully",
   "message.success.deleted": "User deleted successfully",
@@ -30,5 +37,19 @@
   "message.error.suspendFailed": "Failed to suspend user",
   "message.error.activateFailed": "Failed to activate user",
   "message.error.deleteManyFailed": "Failed to delete users",
-  "message.error.createManyFailed": "Failed to create users"
+  "message.error.createManyFailed": "Failed to create users",
+  "role": {
+    "admin": "Admin",
+    "employee": "Employee",
+    "recruiter": "Recruiter",
+    "hiringManager": "Hiring Manager",
+    "hrManager": "HR Manager",
+    "superAdmin": "Super Admin"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "not_verified": "Not Verified",
+    "suspended": "Suspended"
+  }
 }
