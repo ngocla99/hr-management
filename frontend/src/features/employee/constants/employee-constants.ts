@@ -1,4 +1,9 @@
-import { EmployeeStatus, EmploymentType, MaritalStatus, Gender } from '../types/employee.types'
+import {
+  EmployeeStatus,
+  EmploymentType,
+  MaritalStatus,
+  Gender,
+} from '../types/employee.types'
 
 export const EMPLOYEE_TEAMS = [
   'Design Team',
@@ -12,7 +17,7 @@ export const EMPLOYEE_TEAMS = [
 
 export const EMPLOYEE_DEPARTMENTS = [
   'Engineering',
-  'Marketing', 
+  'Marketing',
   'Sales',
   'Human Resources',
   'Finance',
@@ -40,11 +45,7 @@ export const MARITAL_STATUSES = [
   MaritalStatus.WIDOWED,
 ] as const
 
-export const GENDERS = [
-  Gender.MALE,
-  Gender.FEMALE,
-  Gender.OTHER,
-] as const
+export const GENDERS = [Gender.MALE, Gender.FEMALE, Gender.OTHER] as const
 
 export const JOB_TITLES = [
   'Project Manager',
@@ -87,4 +88,6 @@ export const LANGUAGES = [
   'French',
   'German',
   'Spanish',
-] as const 
+] as const
+
+

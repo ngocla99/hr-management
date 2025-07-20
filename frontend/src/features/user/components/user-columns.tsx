@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import LongText from '@/components/long-text'
-import { userStatusStyles } from '../constants/user-constants'
+import { userStatusStyles } from '../constants/user-helpers'
 import { userRoleOptions } from '../constants/user-options'
 import { UsersTableRowActions } from './user-table-row-actions'
 
@@ -79,10 +79,10 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       ),
       cell: ({ row }) => {
         const { status } = row.original
-        const badgeColor = userStatusStyles.get(status)
+        const badgeVariant = userStatusStyles.get(status)
         return (
           <div className='flex space-x-2'>
-            <Badge variant='outline' className={cn('capitalize', badgeColor)}>
+            <Badge variant={badgeVariant as any} className={cn('capitalize')}>
               {t(('status.' + status) as any, {
                 ns: 'glossary',
               })}

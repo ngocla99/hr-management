@@ -1,14 +1,13 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
+import { type Table as TanstackTable } from '@tanstack/react-table'
 import {
   IconDotsVertical,
   IconEdit,
   IconEye,
   IconMail,
-  IconTrash,
   IconPhone,
-  IconMapPin,
+  IconTrash,
 } from '@tabler/icons-react'
-import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -23,13 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
-import {
-  employeeStatusStyles,
-  employeeStatusOptions,
-  employeeTeamOptions,
-} from '../constants/employee-options'
-import { mockEmployees } from '../data/mock-employees'
+import { employeeStatusStyles } from '../constants/employee-helpers'
 import { Employee } from '../types/employee.types'
 
 interface EmployeeCardViewProps {
@@ -152,37 +145,15 @@ function EmployeeCard({
   )
 }
 
-export function EmployeeCardView({
-  onEmployeeView,
-  onEmployeeEdit,
-  onEmployeeDelete,
-  onEmployeeInvite,
-}: EmployeeCardViewProps) {
+interface EmployeeCardViewProps {
+  table: TanstackTable<Employee>
+}
+
+export function EmployeeCardView({ table }: EmployeeCardViewProps) {
   const { t } = useTranslation()
   const [selectedEmployees, setSelectedEmployees] = useState<Set<string>>(
     new Set()
   )
-  const [searchQuery, setSearchQuery] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string[]>([])
-  const [teamFilter, setTeamFilter] = useState<string[]>([])
-
-  // Filter data based on search and filters
-  const filteredEmployees = useMemo(() => {
-    return mockEmployees.filter((employee) => {
-      const matchesSearch =
-        searchQuery === '' ||
-        employee.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        employee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        employee.jobTitle.toLowerCase().includes(searchQuery.toLowerCase())
-
-      const matchesStatus =
-        statusFilter.length === 0 || statusFilter.includes(employee.status)
-      const matchesTeam =
-        teamFilter.length === 0 || teamFilter.includes(employee.team)
-
-      return matchesSearch && matchesStatus && matchesTeam
-    })
-  }, [searchQuery, statusFilter, teamFilter])
 
   const handleSelectEmployee = (employeeId: string, selected: boolean) => {
     const newSelected = new Set(selectedEmployees)
@@ -194,90 +165,20 @@ export function EmployeeCardView({
     setSelectedEmployees(newSelected)
   }
 
-  const handleSelectAll = (selected: boolean) => {
-    if (selected) {
-      setSelectedEmployees(new Set(filteredEmployees.map((emp) => emp.id)))
-    } else {
-      setSelectedEmployees(new Set())
-    }
-  }
-
-  const filterFields: DataTableFilterField<Employee>[] = [
-    {
-      label: t('employeeName', { ns: 'glossary' }),
-      value: 'fullName',
-      placeholder: t('searchEmployees', { ns: 'common' }),
-    },
-    {
-      label: t('team', { ns: 'glossary' }),
-      value: 'team',
-      options: employeeTeamOptions,
-    },
-    {
-      label: t('status', { ns: 'glossary' }),
-      value: 'status',
-      options: employeeStatusOptions,
-    },
-  ]
-
-  // Mock table object for toolbar compatibility
-  const mockTable = {
-    getState: () => ({ columnFilters: [] }),
-    getColumn: (id: string) => ({
-      setFilterValue: (value: any) => {
-        if (id === 'fullName') setSearchQuery(value || '')
-        if (id === 'status')
-          setStatusFilter(Array.isArray(value) ? value : value ? [value] : [])
-        if (id === 'team')
-          setTeamFilter(Array.isArray(value) ? value : value ? [value] : [])
-      },
-      getFilterValue: () => {
-        if (id === 'fullName') return searchQuery
-        if (id === 'status') return statusFilter
-        if (id === 'team') return teamFilter
-        return undefined
-      },
-    }),
-    resetColumnFilters: () => {
-      setSearchQuery('')
-      setStatusFilter([])
-      setTeamFilter([])
-    },
-  } as any
-
   return (
     <div className='space-y-4'>
-      <DataTableToolbar table={mockTable} filterFields={filterFields}>
-        <div className='flex items-center space-x-2'>
-          <Checkbox
-            checked={
-              selectedEmployees.size === filteredEmployees.length &&
-              filteredEmployees.length > 0
-            }
-            onCheckedChange={handleSelectAll}
-          />
-          <span className='text-sm text-gray-600'>
-            {selectedEmployees.size} of {filteredEmployees.length} selected
-          </span>
-        </div>
-      </DataTableToolbar>
-
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {filteredEmployees.map((employee) => (
+        {table.getRowModel().rows.map((row) => (
           <EmployeeCard
-            key={employee.id}
-            employee={employee}
-            isSelected={selectedEmployees.has(employee.id)}
-            onSelect={(selected) => handleSelectEmployee(employee.id, selected)}
-            onView={() => onEmployeeView?.(employee)}
-            onEdit={() => onEmployeeEdit?.(employee)}
-            onDelete={() => onEmployeeDelete?.(employee)}
-            onInvite={() => onEmployeeInvite?.(employee)}
+            key={row.id}
+            employee={row.original}
+            isSelected={selectedEmployees.has(row.id)}
+            onSelect={(selected) => handleSelectEmployee(row.id, selected)}
           />
         ))}
       </div>
 
-      {filteredEmployees.length === 0 && (
+      {table.getRowModel().rows.length === 0 && (
         <div className='py-12 text-center'>
           <p className='text-gray-500'>
             No employees found matching your criteria.

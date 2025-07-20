@@ -39,7 +39,7 @@ export function UserPrimaryButtons() {
   return (
     <div className='flex gap-2'>
       <Button
-        variant='outline'
+        variant='light'
         className='space-x-1'
         disabled
         onClick={() => setOpen('invite')}
@@ -51,7 +51,7 @@ export function UserPrimaryButtons() {
         <span>{t('addUser', { ns: 'users' })}</span> <IconUserPlus size={18} />
       </Button>
       <Button
-        variant='outline'
+        variant='light'
         className='space-x-1'
         disabled={loading}
         onClick={handleCreateRandomUsers}

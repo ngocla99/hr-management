@@ -51,6 +51,7 @@ export const useUpdateUser = ({
         queryKey: getUsersQueryOptions(inputQuery).queryKey,
       })
       onSuccess?.(...args)
+      toast.success(t('message.success.updated', { ns: 'users' }))
     },
     onError: (error: Error, ...args) => {
       const errorMessage =

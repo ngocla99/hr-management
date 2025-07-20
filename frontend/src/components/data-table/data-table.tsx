@@ -40,11 +40,14 @@ export function DataTable<TData>({
 }: DataTableProps<TData>) {
   return (
     <div className='w-full space-y-2.5 overflow-auto'>
-      <div className='rounded-md border'>
+      <div className='overflow-hidden rounded-md border'>
         <Table>
-          <TableHeader>
+          <TableHeader className='bg-[#e9edf0]'>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className='[&_th]:border-r [&_th:last-child]:border-r-0'
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -66,6 +69,7 @@ export function DataTable<TData>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className='bg-white [&_td]:border-r [&_td:last-child]:border-r-0'
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -1,5 +1,6 @@
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
 import type { Column } from '@tanstack/react-table'
+import { IconChevronDown } from '@tabler/icons-react'
 import type { DataTableOption } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
@@ -45,8 +46,8 @@ export function DataTableFacetedFilter<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant='outline' size='sm' className='h-8 border-dashed'>
-          <PlusCircledIcon className='mr-2 size-4' />
+        <Button variant='ghost' size='sm' className='bg-accent h-8'>
+          <PlusCircledIcon className='size-4' />
           {title}
           {selectedValues?.size > 0 && (
             <>
@@ -95,6 +96,9 @@ export function DataTableFacetedFilter<TData, TValue>({
               </div>
             </>
           )}
+          <div className='size-5 bg-white shadow-none grid place-items-center rounded'>
+            <IconChevronDown className='text-foreground opacity-50 size-4' />
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-[12.5rem] p-0' align='start'>

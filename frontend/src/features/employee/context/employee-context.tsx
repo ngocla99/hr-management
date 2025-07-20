@@ -1,92 +1,47 @@
-import React, { useState, createContext, useContext } from 'react'
+import React, { useState } from 'react'
+import useDialogState from '@/hooks/use-dialog-state'
 import { Employee } from '../types/employee.types'
 
-type ViewMode = 'table' | 'card'
+type EmployeeDialogType = 'invite' | 'add' | 'edit' | 'delete' | 'view'
 
 interface EmployeeContextType {
-  // View mode
-  viewMode: ViewMode
-  setViewMode: (mode: ViewMode) => void
-
-  // Selected employee for details/actions
-  selectedEmployee: Employee | null
-  setSelectedEmployee: (employee: Employee | null) => void
-
-  // Detail view state
-  isDetailViewOpen: boolean
-  setIsDetailViewOpen: (open: boolean) => void
-
-  // Actions
-  handleEmployeeView: (employee: Employee) => void
-  handleEmployeeEdit: (employee: Employee) => void
-  handleEmployeeDelete: (employee: Employee) => void
-  handleEmployeeInvite: (employee: Employee) => void
+  open: EmployeeDialogType | null
+  setOpen: (str: EmployeeDialogType | null) => void
+  currentRow: Employee | null
+  setCurrentRow: React.Dispatch<React.SetStateAction<Employee | null>>
 }
 
-const EmployeeContext = createContext<EmployeeContextType | undefined>(
-  undefined
-)
+const EmployeeContext = React.createContext<EmployeeContextType | null>(null)
 
-interface EmployeeProviderProps {
+interface Props {
   children: React.ReactNode
 }
 
-export function EmployeeProvider({ children }: EmployeeProviderProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>('table')
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
-    null
-  )
-  const [isDetailViewOpen, setIsDetailViewOpen] = useState(false)
-
-  const handleEmployeeView = (employee: Employee) => {
-    setSelectedEmployee(employee)
-    setIsDetailViewOpen(true)
-  }
-
-  const handleEmployeeEdit = (employee: Employee) => {
-    setSelectedEmployee(employee)
-    // TODO: Open edit dialog
-    console.log('Edit employee:', employee)
-  }
-
-  const handleEmployeeDelete = (employee: Employee) => {
-    setSelectedEmployee(employee)
-    // TODO: Open delete confirmation dialog
-    console.log('Delete employee:', employee)
-  }
-
-  const handleEmployeeInvite = (employee: Employee) => {
-    setSelectedEmployee(employee)
-    // TODO: Open invite dialog
-    console.log('Invite employee:', employee)
-  }
-
-  const value: EmployeeContextType = {
-    viewMode,
-    setViewMode,
-    selectedEmployee,
-    setSelectedEmployee,
-    isDetailViewOpen,
-    setIsDetailViewOpen,
-    handleEmployeeView,
-    handleEmployeeEdit,
-    handleEmployeeDelete,
-    handleEmployeeInvite,
-  }
+export default function EmployeeProvider({ children }: Props) {
+  const [open, setOpen] = useDialogState<EmployeeDialogType>(null)
+  const [currentRow, setCurrentRow] = useState<Employee | null>(null)
 
   return (
-    <EmployeeContext.Provider value={value}>
+    <EmployeeContext.Provider
+      value={{
+        open,
+        setOpen,
+        currentRow,
+        setCurrentRow,
+      }}
+    >
       {children}
     </EmployeeContext.Provider>
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useEmployee = () => {
-  const context = useContext(EmployeeContext)
-  if (context === undefined) {
-    throw new Error('useEmployee must be used within an EmployeeProvider')
-  }
-  return context
-}
+  const employeeContext = React.useContext(EmployeeContext)
 
-export default EmployeeProvider
+  if (!employeeContext) {
+    throw new Error('useEmployee has to be used within <EmployeeContext>')
+  }
+
+  return employeeContext
+}

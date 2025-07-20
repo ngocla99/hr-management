@@ -1,16 +1,3 @@
-import {
-  IconMail,
-  IconPhone,
-  IconMapPin,
-  IconEdit,
-  IconTrash,
-  IconX,
-  IconCalendar,
-  IconUser,
-  IconBriefcase,
-} from '@tabler/icons-react'
-import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -22,32 +9,35 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { employeeStatusStyles } from '../constants/employee-options'
-import { Employee } from '../types/employee.types'
+import { cn } from '@/lib/utils'
+import {
+  IconBriefcase,
+  IconCalendar,
+  IconEdit,
+  IconMail,
+  IconMapPin,
+  IconPhone,
+  IconTrash,
+  IconUser,
+} from '@tabler/icons-react'
+import { useTranslation } from 'react-i18next'
+import { employeeStatusStyles } from '../constants/employee-helpers'
+import { useEmployee } from '../context/employee-context'
 
-interface EmployeeDetailViewProps {
-  employee: Employee | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onEdit?: (employee: Employee) => void
-  onDelete?: (employee: Employee) => void
-}
-
-export function EmployeeDetailView({
-  employee,
-  open,
-  onOpenChange,
-  onEdit,
-  onDelete,
-}: EmployeeDetailViewProps) {
+export function EmployeeDetailView() {
   const { t } = useTranslation()
+  const { open, setOpen } = useEmployee()
+  const { currentRow: employee } = useEmployee()
 
   if (!employee) return null
 
   const badgeColor = employeeStatusStyles.get(employee.status)
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet
+      open={open === 'view'}
+      onOpenChange={(open) => setOpen(open ? 'view' : null)}
+    >
       <SheetContent
         side='right'
         className='w-full sm:w-[480px] sm:max-w-[480px]'
@@ -61,7 +51,7 @@ export function EmployeeDetailView({
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => onEdit?.(employee)}
+                onClick={() => setOpen('edit')}
               >
                 <IconEdit className='mr-2 h-4 w-4' />
                 {t('edit', { ns: 'common' })}
@@ -69,7 +59,7 @@ export function EmployeeDetailView({
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => onDelete?.(employee)}
+                onClick={() => setOpen('delete')}
                 className='text-red-600 hover:text-red-700'
               >
                 <IconTrash className='mr-2 h-4 w-4' />

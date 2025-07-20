@@ -1,11 +1,11 @@
-import { 
-  IconUser, 
-  IconUserCheck, 
+import {
+  IconUser,
+  IconUserCheck,
   IconUserX,
   IconUsers,
   IconBriefcase,
   IconCalendar,
-  IconMapPin
+  IconMapPin,
 } from '@tabler/icons-react'
 import { EmployeeStatus, EmploymentType } from '../types/employee.types'
 import { EMPLOYEE_TEAMS, EMPLOYEE_DEPARTMENTS } from './employee-constants'
@@ -17,7 +17,7 @@ export const employeeStatusOptions = [
     icon: IconUserCheck,
   },
   {
-    labelKey: 'notActive', 
+    labelKey: 'notActive',
     value: EmployeeStatus.NOT_ACTIVE,
     icon: IconUserX,
   },
@@ -34,11 +34,13 @@ export const employeeTeamOptions = EMPLOYEE_TEAMS.map((team) => ({
   icon: IconUsers,
 }))
 
-export const employeeDepartmentOptions = EMPLOYEE_DEPARTMENTS.map((department) => ({
-  labelKey: department.toLowerCase().replace(' ', ''),
-  value: department,
-  icon: IconBriefcase,
-}))
+export const employeeDepartmentOptions = EMPLOYEE_DEPARTMENTS.map(
+  (department) => ({
+    labelKey: department.toLowerCase().replace(' ', ''),
+    value: department,
+    icon: IconBriefcase,
+  })
+)
 
 export const employmentTypeOptions = [
   {
@@ -48,7 +50,7 @@ export const employmentTypeOptions = [
   },
   {
     labelKey: 'parttime',
-    value: EmploymentType.PARTTIME, 
+    value: EmploymentType.PARTTIME,
     icon: IconCalendar,
   },
   {
@@ -63,9 +65,15 @@ export const employmentTypeOptions = [
   },
 ]
 
-// Status styling similar to user feature
-export const employeeStatusStyles = new Map([
-  [EmployeeStatus.ACTIVE, 'text-green-600 bg-green-50 border-green-200'],
-  [EmployeeStatus.NOT_ACTIVE, 'text-red-600 bg-red-50 border-red-200'], 
-  [EmployeeStatus.UNVERIFIED, 'text-yellow-600 bg-yellow-50 border-yellow-200'],
-]) 
+export const employeeRoleOptions = [
+  {
+    labelKey: 'admin',
+    value: 'admin',
+    icon: IconUser,
+  },
+  {
+    labelKey: 'user',
+    value: 'user',
+    icon: IconUser,
+  },
+]

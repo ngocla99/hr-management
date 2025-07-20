@@ -35,6 +35,8 @@ export type Employee = BaseEntity & {
   phone: string
   avatar: string
 
+  role: string
+
   // Professional Information
   jobTitle: string
   department: string

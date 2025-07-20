@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  #9dc082
+  #1d212c
+*/
+
 :root {
   --background: oklch(0.9713 0.0068 247.8953);
   --foreground: oklch(0.2488 0.0218 269.1951);
@@ -21,9 +26,9 @@
   --accent-foreground: oklch(0.2488 0.0218 269.1951);
   --destructive: oklch(0.6368 0.2078 25.3313);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.8699 0 0);
-  --input: oklch(0.8699 0 0);
-  --ring: oklch(0.6487 0.1538 150.3071);
+  --border: oklch(0.9067 0 0);
+  --input: oklch(0.8761 0 0);
+  --ring: oklch(0.7665 0.0929 132.1881);
   --chart-1: oklch(0.484 0.0561 190.5648);
   --chart-2: oklch(0.7665 0.0929 132.1881);
   --chart-3: oklch(0.8889 0.1498 95.2783);

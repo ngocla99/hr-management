@@ -2,7 +2,7 @@ import { BaseEntity } from "@/common/entities/base.entity";
 import { UserRole } from "@/constants/roles.constant";
 import { hashPassword } from "@/utils/password.util";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, UpdateQuery } from "mongoose";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -78,6 +78,14 @@ export const UserSchemaFactory = () => {
     if (!this.isModified("password")) return next();
 
     this.password = await hashPassword(this.password);
+    next();
+  });
+
+  userSchema.pre("findOneAndUpdate", async function (next) {
+    const update = this.getUpdate() as UpdateQuery<UserDocument>;
+    if (update?.password) {
+      update.password = await hashPassword(update.password);
+    }
     next();
   });
 

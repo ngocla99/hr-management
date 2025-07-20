@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import React from 'react'
 import {
   getCoreRowModel,
   getFacetedRowModel,
@@ -12,41 +12,30 @@ import {
   type VisibilityState,
 } from '@tanstack/react-table'
 import { DataTableFilterField } from '@/types/common'
-import { useTranslation } from 'react-i18next'
 import { DataTable } from '@/components/data-table/data-table'
-import { DataTablePagination } from '@/components/data-table/data-table-pagination'
-import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 import {
+  employeeRoleOptions,
   employeeStatusOptions,
   employeeTeamOptions,
+  employmentTypeOptions,
 } from '../constants/employee-options'
 import { mockEmployees } from '../data/mock-employees'
 import { Employee } from '../types/employee.types'
+import { EmployeeCardView } from './employee-card-view'
 import { useEmployeeColumns } from './employee-columns'
+import { EmployeeTableToolbar } from './employee-table-toolbar'
 
-interface EmployeeTableProps {
-  onEmployeeView?: (employee: Employee) => void
-  onEmployeeEdit?: (employee: Employee) => void
-  onEmployeeDelete?: (employee: Employee) => void
-  onEmployeeInvite?: (employee: Employee) => void
-}
+export function EmployeeTable() {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [viewMode, setViewMode] = React.useState<'table' | 'card'>('table')
 
-export function EmployeeTable({
-  onEmployeeView,
-  onEmployeeEdit,
-  onEmployeeDelete,
-  onEmployeeInvite,
-}: EmployeeTableProps) {
-  const { t } = useTranslation()
-
-  // Table states
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
-
-  // Filter data based on column filters
-  const filteredData = useMemo(() => {
+  const filteredData = React.useMemo(() => {
     if (columnFilters.length === 0) return mockEmployees
 
     return mockEmployees.filter((employee) => {
@@ -69,18 +58,18 @@ export function EmployeeTable({
     })
   }, [columnFilters])
 
-  const columns = useEmployeeColumns({
-    onView: onEmployeeView,
-    onEdit: onEmployeeEdit,
-    onDelete: onEmployeeDelete,
-    onInvite: onEmployeeInvite,
-  })
+  const columns = useEmployeeColumns()
 
   const filterFields: DataTableFilterField<Employee>[] = [
     {
       label: 'Employee Name',
       value: 'fullName',
       placeholder: 'Search employees...',
+    },
+    {
+      label: 'Employment Type',
+      value: 'employmentType',
+      options: employmentTypeOptions,
     },
     {
       label: 'Team',
@@ -92,6 +81,11 @@ export function EmployeeTable({
       value: 'status',
       options: employeeStatusOptions,
       multiple: false,
+    },
+    {
+      label: 'Role',
+      value: 'role',
+      options: employeeRoleOptions,
     },
   ]
 
@@ -119,10 +113,17 @@ export function EmployeeTable({
 
   return (
     <div className='space-y-4'>
-      <DataTableToolbar table={table} filterFields={filterFields} />
-      <div className='rounded-md border'>
+      <EmployeeTableToolbar
+        table={table}
+        filterFields={filterFields}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
+      {viewMode === 'table' ? (
         <DataTable table={table} />
-      </div>
+      ) : (
+        <EmployeeCardView table={table} />
+      )}
     </div>
   )
 }
