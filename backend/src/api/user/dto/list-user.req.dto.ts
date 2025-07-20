@@ -5,7 +5,7 @@ import {
   EnumFieldOptional,
   StringFieldOptional,
 } from "@/decorators/field.decorators";
-import { EmploymentType, JobRole, UserStatus } from "../entities/user.entity";
+import { Department, EmploymentType, JobRole, UserStatus } from "../entities/user.entity";
 
 export class ListUserReqDto extends PageOptionsDto {
   @StringFieldOptional({
@@ -14,11 +14,23 @@ export class ListUserReqDto extends PageOptionsDto {
   })
   readonly username?: string;
 
+  @StringFieldOptional({
+    description: "Filter users by full name",
+    example: "John Doe",
+  })
+  readonly fullName?: string;
+
   @EnumFieldOptional(() => JobRole, {
     description: "Filter users by job role",
     example: [JobRole.FE_DEVELOPER],
   })
   readonly jobRole?: JobRole[];
+
+  @EnumFieldOptional(() => Department, {
+    description: "Filter users by department",
+    example: [Department.IT],
+  })
+  readonly department?: Department[];
 
   @EnumFieldOptional(() => EmploymentType, {
     each: true,

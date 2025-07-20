@@ -89,6 +89,17 @@ export class UserService {
       filter.username = { $regex: reqDto.username, $options: "i" };
     }
 
+    if (reqDto.fullName) {
+      filter.$or = [
+        { firstName: { $regex: reqDto.fullName, $options: "i" } },
+        { lastName: { $regex: reqDto.fullName, $options: "i" } },
+      ];
+    }
+
+    if (reqDto.department) {
+      filter.department = reqDto.department;
+    }
+
     if (reqDto.jobRole) {
       filter.jobRole = reqDto.jobRole;
     }
