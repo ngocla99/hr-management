@@ -1,79 +1,93 @@
-import {
-  IconUser,
-  IconUserCheck,
-  IconUserX,
-  IconUsers,
-  IconBriefcase,
-  IconCalendar,
-  IconMapPin,
-} from '@tabler/icons-react'
-import { EmployeeStatus, EmploymentType } from '../types/employee.types'
-import { EMPLOYEE_TEAMS, EMPLOYEE_DEPARTMENTS } from './employee-constants'
+import { IconBriefcase, IconCalendar, IconUser } from '@tabler/icons-react'
+import { Department, JobRole } from '@/types/api'
+import { TFunction } from 'i18next'
+import { EmploymentType } from '../types/employee.types'
 
-export const employeeStatusOptions = [
+export const employeeDepartmentOptionsFn = (t: TFunction) => [
   {
-    labelKey: 'active',
-    value: EmployeeStatus.ACTIVE,
-    icon: IconUserCheck,
+    label: t('department.qa', { ns: 'employee' }),
+    value: Department.QA,
+    icon: IconBriefcase,
   },
   {
-    labelKey: 'notActive',
-    value: EmployeeStatus.NOT_ACTIVE,
-    icon: IconUserX,
+    label: t('department.it', { ns: 'employee' }),
+    value: Department.IT,
+    icon: IconBriefcase,
   },
   {
-    labelKey: 'unverified',
-    value: EmployeeStatus.UNVERIFIED,
-    icon: IconUser,
+    label: t('department.hr', { ns: 'employee' }),
+    value: Department.HR,
+    icon: IconBriefcase,
+  },
+  {
+    label: t('department.finance', { ns: 'employee' }),
+    value: Department.FINANCE,
+    icon: IconBriefcase,
+  },
+  {
+    label: t('department.marketing', { ns: 'employee' }),
+    value: Department.MARKETING,
+    icon: IconBriefcase,
   },
 ]
 
-export const employeeTeamOptions = EMPLOYEE_TEAMS.map((team) => ({
-  labelKey: team.toLowerCase().replace(' ', ''),
-  value: team,
-  icon: IconUsers,
-}))
-
-export const employeeDepartmentOptions = EMPLOYEE_DEPARTMENTS.map(
-  (department) => ({
-    labelKey: department.toLowerCase().replace(' ', ''),
-    value: department,
-    icon: IconBriefcase,
-  })
-)
-
-export const employmentTypeOptions = [
+export const employmentTypeOptionsFn = (t: TFunction) => [
   {
-    labelKey: 'fulltime',
+    label: t('employmentType.fulltime', { ns: 'employee' }),
     value: EmploymentType.FULLTIME,
     icon: IconCalendar,
   },
   {
-    labelKey: 'parttime',
+    label: t('employmentType.parttime', { ns: 'employee' }),
     value: EmploymentType.PARTTIME,
     icon: IconCalendar,
   },
   {
-    labelKey: 'contract',
+    label: t('employmentType.contract', { ns: 'employee' }),
     value: EmploymentType.CONTRACT,
     icon: IconCalendar,
   },
   {
-    labelKey: 'intern',
+    label: t('employmentType.intern', { ns: 'employee' }),
     value: EmploymentType.INTERN,
+    icon: IconCalendar,
+  },
+  {
+    label: t('employmentType.freelance', { ns: 'employee' }),
+    value: EmploymentType.FREELANCE,
     icon: IconCalendar,
   },
 ]
 
-export const employeeRoleOptions = [
+export const employeeRoleOptionsFn = (t: TFunction) => [
   {
-    labelKey: 'admin',
-    value: 'admin',
+    label: t('role.feDeveloper', { ns: 'employee' }),
+    value: JobRole.FE_DEVELOPER,
     icon: IconUser,
   },
   {
-    labelKey: 'user',
-    value: 'user',
+    label: t('role.beDeveloper', { ns: 'employee' }),
+    value: JobRole.BE_DEVELOPER,
+    icon: IconUser,
+  },
+  {
+    label: t('role.mobileDeveloper', { ns: 'employee' }),
+    value: JobRole.MOBILE_DEVELOPER,
+    icon: IconUser,
+  },
+  {
+    label: t('role.qa', { ns: 'employee' }),
+    value: JobRole.QA,
+    icon: IconUser,
+  },
+  {
+    label: t('role.hr', { ns: 'employee' }),
+    value: JobRole.HR,
+    icon: IconUser,
+  },
+  {
+    label: t('role.designer', { ns: 'employee' }),
+    value: JobRole.DESIGNER,
     icon: IconUser,
   },
 ]

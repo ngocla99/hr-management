@@ -49,7 +49,7 @@
   "status": {
     "active": "Active",
     "inactive": "Inactive",
-    "not_verified": "Not Verified",
+    "notVerified": "Not Verified",
     "suspended": "Suspended"
   }
 }

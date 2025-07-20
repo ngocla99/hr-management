@@ -140,87 +140,32 @@ interface Resources {
       "description": "Manage your company employees"
     },
     "actions": {
-      "addEmployee": "Add Employee",
-      "editEmployee": "Edit Employee",
-      "deleteEmployee": "Delete Employee",
-      "inviteEmployee": "Invite Employee",
-      "exportEmployees": "Export Employees",
-      "importEmployees": "Import Employees",
-      "viewEmployee": "View Employee",
-      "searchEmployees": "Search employees..."
-    },
-    "fields": {
-      "employeeName": "Employee Name",
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "fullName": "Full Name",
-      "employeeId": "Employee ID",
-      "email": "Email",
-      "phone": "Phone",
-      "jobTitle": "Job Title",
-      "department": "Department",
-      "team": "Team",
-      "employmentType": "Employment Type",
-      "dateJoined": "Date Joined",
-      "dateHired": "Date Hired",
-      "status": "Status",
-      "contact": "Contact",
-      "gender": "Gender",
-      "education": "Education",
-      "maritalStatus": "Marital Status",
-      "address": "Address",
-      "emergencyContact": "Emergency Contact",
-      "skills": "Skills",
-      "languages": "Languages Spoken"
-    },
-    "status": {
-      "active": "Active",
-      "notActive": "Not Active",
-      "unverified": "Unverified"
+      "addEmployee": "Add Employee"
     },
     "employmentType": {
       "fulltime": "Full Time",
       "parttime": "Part Time",
       "contract": "Contract",
-      "intern": "Intern"
+      "intern": "Intern",
+      "freelance": "Freelance"
     },
-    "maritalStatus": {
-      "single": "Single",
-      "married": "Married",
-      "divorced": "Divorced",
-      "widowed": "Widowed"
+    "role": {
+      "feDeveloper": "Frontend Developer",
+      "beDeveloper": "Backend Developer",
+      "mobileDeveloper": "Mobile Developer",
+      "qa": "QA",
+      "hr": "HR",
+      "designer": "Designer"
     },
-    "gender": {
-      "male": "Male",
-      "female": "Female",
-      "other": "Other"
-    },
-    "teams": {
-      "designteam": "Design Team",
-      "marketing": "Marketing",
-      "development": "Development",
-      "sales": "Sales",
+    "department": {
+      "qa": "QA",
+      "it": "IT",
       "hr": "HR",
       "finance": "Finance",
-      "operations": "Operations"
+      "marketing": "Marketing"
     },
-    "departments": {
-      "engineering": "Engineering",
-      "marketing": "Marketing",
-      "sales": "Sales",
-      "humanresources": "Human Resources",
-      "finance": "Finance",
-      "operations": "Operations",
-      "design": "Design"
-    },
-    "tabs": {
-      "details": "Details",
-      "payroll": "Payroll"
-    },
-    "sections": {
-      "personalInformation": "Personal Information",
-      "professionalInformation": "Professional Information",
-      "contactInformation": "Contact Information"
+    "form": {
+      "searchEmployees": "Search employees..."
     },
     "messages": {
       "noEmployeesFound": "No employees found matching your criteria.",
@@ -229,12 +174,6 @@ interface Resources {
       "employeeCreated": "Employee created successfully",
       "deleteConfirmation": "Are you sure you want to delete this employee?",
       "payrollNotAvailable": "Payroll information is not available in this demo."
-    },
-    "placeholders": {
-      "searchByName": "Search by name, email, or job title...",
-      "filterByTeam": "Filter by team",
-      "filterByStatus": "Filter by status",
-      "filterByDepartment": "Filter by department"
     }
   },
   "glossary": {
@@ -298,6 +237,9 @@ interface Resources {
     "display": "Display",
     "createdAtFrom": "Created At From",
     "createdAtTo": "Created At To",
+    "employeeName": "Employee Name",
+    "employmentType": "Employment Type",
+    "department": "Department",
     "form": {
       "enterDescription": "Enter description",
       "enterEmail": "Enter email",
@@ -359,7 +301,7 @@ interface Resources {
     "status": {
       "active": "Active",
       "inactive": "Inactive",
-      "not_verified": "Not Verified",
+      "notVerified": "Not Verified",
       "suspended": "Suspended"
     }
   },

@@ -59,6 +59,9 @@
   "display": "Display",
   "createdAtFrom": "Created At From",
   "createdAtTo": "Created At To",
+  "employeeName": "Employee Name",
+  "employmentType": "Employment Type",
+  "department": "Department",
   "form": {
     "enterDescription": "Enter description",
     "enterEmail": "Enter email",

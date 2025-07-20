@@ -13,10 +13,9 @@ i18n
       'glossary',
       'validation',
       'dashboard',
-      'tasks',
-      'projects',
       'users',
       'auth',
+      'employee',
     ],
     defaultNS: 'common',
     interpolation: {

@@ -49,7 +49,7 @@
   "status": {
     "active": "Đang hoạt động",
     "inactive": "Không hoạt động",
-    "not_verified": "Chưa xác thực",
+    "notVerified": "Chưa xác thực",
     "suspended": "Tạm dừng"
   }
 }

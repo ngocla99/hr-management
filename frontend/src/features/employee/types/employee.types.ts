@@ -18,6 +18,7 @@ export enum EmploymentType {
   PARTTIME = 'parttime',
   CONTRACT = 'contract',
   INTERN = 'intern',
+  FREELANCE = 'freelance',
 }
 
 export enum Gender {

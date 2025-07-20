@@ -12,12 +12,13 @@ import {
   type VisibilityState,
 } from '@tanstack/react-table'
 import { DataTableFilterField } from '@/types/common'
+import { useTranslation } from 'react-i18next'
 import { DataTable } from '@/components/data-table/data-table'
+import { userStatusOptionsFn } from '@/features/user/constants/user-options'
 import {
-  employeeRoleOptions,
-  employeeStatusOptions,
-  employeeTeamOptions,
-  employmentTypeOptions,
+  employeeDepartmentOptionsFn,
+  employeeRoleOptionsFn,
+  employmentTypeOptionsFn,
 } from '../constants/employee-options'
 import { mockEmployees } from '../data/mock-employees'
 import { Employee } from '../types/employee.types'
@@ -26,6 +27,7 @@ import { useEmployeeColumns } from './employee-columns'
 import { EmployeeTableToolbar } from './employee-table-toolbar'
 
 export function EmployeeTable() {
+  const { t } = useTranslation()
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -62,30 +64,30 @@ export function EmployeeTable() {
 
   const filterFields: DataTableFilterField<Employee>[] = [
     {
-      label: 'Employee Name',
+      label: t('employeeName', { ns: 'glossary' }),
       value: 'fullName',
-      placeholder: 'Search employees...',
+      placeholder: t('form.searchEmployees', { ns: 'employee' }),
     },
     {
-      label: 'Employment Type',
+      label: t('employmentType', { ns: 'glossary' }),
       value: 'employmentType',
-      options: employmentTypeOptions,
+      options: employmentTypeOptionsFn(t),
     },
     {
-      label: 'Team',
-      value: 'team',
-      options: employeeTeamOptions,
+      label: t('department', { ns: 'glossary' }),
+      value: 'department',
+      options: employeeDepartmentOptionsFn(t),
     },
     {
-      label: 'Status',
+      label: t('status', { ns: 'glossary' }),
       value: 'status',
-      options: employeeStatusOptions,
+      options: userStatusOptionsFn(t),
       multiple: false,
     },
     {
-      label: 'Role',
+      label: t('role', { ns: 'glossary' }),
       value: 'role',
-      options: employeeRoleOptions,
+      options: employeeRoleOptionsFn(t),
     },
   ]
 

@@ -1,103 +1,42 @@
 {
   "page": {
     "title": "Nhân viên",
-    "description": "Quản lý nhân viên trong công ty"
+    "description": "Quản lý nhân viên của bạn"
   },
   "actions": {
-    "addEmployee": "Thêm nhân viên",
-    "editEmployee": "Sửa nhân viên",
-    "deleteEmployee": "Xóa nhân viên",
-    "inviteEmployee": "Mời nhân viên",
-    "exportEmployees": "Xuất danh sách nhân viên",
-    "importEmployees": "Nhập danh sách nhân viên",
-    "viewEmployee": "Xem nhân viên",
-    "searchEmployees": "Tìm kiếm nhân viên..."
-  },
-  "fields": {
-    "employeeName": "Tên nhân viên",
-    "firstName": "Tên",
-    "lastName": "Họ",
-    "fullName": "Họ và tên",
-    "employeeId": "Mã nhân viên",
-    "email": "Email",
-    "phone": "Số điện thoại",
-    "jobTitle": "Chức vụ",
-    "department": "Phòng ban",
-    "team": "Nhóm",
-    "employmentType": "Loại hợp đồng",
-    "dateJoined": "Ngày vào làm",
-    "dateHired": "Ngày được tuyển",
-    "status": "Trạng thái",
-    "contact": "Liên hệ",
-    "gender": "Giới tính",
-    "education": "Học vấn",
-    "maritalStatus": "Tình trạng hôn nhân",
-    "address": "Địa chỉ",
-    "emergencyContact": "Liên hệ khẩn cấp",
-    "skills": "Kỹ năng",
-    "languages": "Ngôn ngữ"
-  },
-  "status": {
-    "active": "Đang hoạt động",
-    "notActive": "Không hoạt động",
-    "unverified": "Chưa xác minh"
+    "addEmployee": "Thêm nhân viên"
   },
   "employmentType": {
     "fulltime": "Toàn thời gian",
     "parttime": "Bán thời gian",
     "contract": "Hợp đồng",
-    "intern": "Thực tập"
+    "intern": "Thực tập",
+    "freelance": "Freelance"
   },
-  "maritalStatus": {
-    "single": "Độc thân",
-    "married": "Đã kết hôn",
-    "divorced": "Đã ly hôn",
-    "widowed": "Góa"
+  "role": {
+    "feDeveloper": "Frontend Developer",
+    "beDeveloper": "Backend Developer",
+    "mobileDeveloper": "Mobile Developer",
+    "qa": "QA",
+    "hr": "HR",
+    "designer": "Designer"
   },
-  "gender": {
-    "male": "Nam",
-    "female": "Nữ",
-    "other": "Khác"
+  "department": {
+    "qa": "QA",
+    "it": "IT",
+    "hr": "HR",
+    "finance": "Finance",
+    "marketing": "Marketing"
   },
-  "teams": {
-    "designteam": "Nhóm thiết kế",
-    "marketing": "Marketing",
-    "development": "Phát triển",
-    "sales": "Bán hàng",
-    "hr": "Nhân sự",
-    "finance": "Tài chính",
-    "operations": "Vận hành"
-  },
-  "departments": {
-    "engineering": "Kỹ thuật",
-    "marketing": "Marketing",
-    "sales": "Bán hàng",
-    "humanresources": "Nhân sự",
-    "finance": "Tài chính",
-    "operations": "Vận hành",
-    "design": "Thiết kế"
-  },
-  "tabs": {
-    "details": "Chi tiết",
-    "payroll": "Bảng lương"
-  },
-  "sections": {
-    "personalInformation": "Thông tin cá nhân",
-    "professionalInformation": "Thông tin nghề nghiệp",
-    "contactInformation": "Thông tin liên hệ"
+  "form": {
+    "searchEmployees": "Tìm kiếm nhân viên"
   },
   "messages": {
-    "noEmployeesFound": "Không tìm thấy nhân viên nào phù hợp với tiêu chí.",
-    "employeeDeleted": "Xóa nhân viên thành công",
-    "employeeUpdated": "Cập nhật nhân viên thành công",
-    "employeeCreated": "Tạo nhân viên thành công",
-    "deleteConfirmation": "Bạn có chắc chắn muốn xóa nhân viên này?",
-    "payrollNotAvailable": "Thông tin bảng lương không khả dụng trong bản demo này."
-  },
-  "placeholders": {
-    "searchByName": "Tìm kiếm theo tên, email, hoặc chức vụ...",
-    "filterByTeam": "Lọc theo nhóm",
-    "filterByStatus": "Lọc theo trạng thái",
-    "filterByDepartment": "Lọc theo phòng ban"
+    "noEmployeesFound": "Không tìm thấy nhân viên phù hợp.",
+    "employeeDeleted": "Nhân viên đã được xóa thành công",
+    "employeeUpdated": "Nhân viên đã được cập nhật thành công",
+    "employeeCreated": "Nhân viên đã được tạo thành công",
+    "deleteConfirmation": "Bạn có chắc chắn muốn xóa nhân viên này không?",
+    "payrollNotAvailable": "Thông tin lương không khả dụng trong demo này."
   }
-} 
+}

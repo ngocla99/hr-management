@@ -59,6 +59,9 @@
   "display": "Hiển thị",
   "createdAtFrom": "Ngày tạo từ",
   "createdAtTo": "Ngày tạo đến",
+  "employeeName": "Tên nhân viên",
+  "employmentType": "Loại hình làm việc",
+  "department": "Phòng ban",
   "form": {
     "enterDescription": "Nhập mô tả",
     "enterEmail": "Nhập email",
