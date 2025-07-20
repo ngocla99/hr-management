@@ -1,11 +1,11 @@
-import { z } from 'zod'
-import { AxiosError } from 'axios'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
-import { getUsersQueryOptions } from './get-users'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const deleteUsersSchema = z.object({
   ids: z.array(z.string()),
@@ -18,10 +18,12 @@ export const deleteUsersApi = (input: DeleteUsersInput): Promise<void> => {
 }
 
 type UseDeleteUsersOptions = {
+  inputQuery?: UsersInput
   mutationConfig?: MutationConfig<typeof deleteUsersApi>
 }
 
 export const useDeleteUsers = ({
+  inputQuery,
   mutationConfig,
 }: UseDeleteUsersOptions = {}) => {
   const { t } = useTranslation()
@@ -32,7 +34,7 @@ export const useDeleteUsers = ({
   return useMutation({
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryOptions().queryKey,
+        queryKey: getUsersQueryOptions(inputQuery).queryKey,
       })
       toast.success(t('message.success.deletedMany', { ns: 'users' }))
       onSuccess?.(...args)

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
-import { getUsersQueryOptions } from './get-users'
+import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const deleteUserSchema = z.object({
   id: z.string(),
@@ -18,10 +18,12 @@ export const deleteUserApi = (input: DeleteUserInput): Promise<void> => {
 }
 
 type UseDeleteUserOptions = {
+  inputQuery?: UsersInput
   mutationConfig?: MutationConfig<typeof deleteUserApi>
 }
 
 export const useDeleteUser = ({
+  inputQuery,
   mutationConfig,
 }: UseDeleteUserOptions = {}) => {
   const { t } = useTranslation()
@@ -32,7 +34,7 @@ export const useDeleteUser = ({
   return useMutation({
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryOptions().queryKey,
+        queryKey: getUsersQueryOptions(inputQuery).queryKey,
       })
       toast.success(t('message.success.deleted', { ns: 'users' }))
       onSuccess?.(...args)

@@ -9,9 +9,10 @@ import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserResDto, UserStatus } from "./dto/user.res.dto";
-import { UserDocument } from "./entities/user.entity";
+import { UserResDto } from "./dto/user.res.dto";
+import { UserDocument, UserStatus } from "./entities/user.entity";
 import { UserRepository } from "./user.repository";
+import { generateBaseUsername, generateUniqueUsername } from "./utils/username.util";
 
 @Injectable()
 export class UserService {
@@ -20,20 +21,39 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(dto: CreateUserReqDto): Promise<UserResDto> {
-    const { username, email, password, role } = dto;
+    const { firstName, lastName, email, password, role, username: providedUsername } = dto;
 
-    // check uniqueness of username/email
-    const user = await this.userRepository.findByUsername(username);
+    // check uniqueness of email
+    const user = await this.userRepository.findByEmail(email);
 
     if (user) {
       throw new ValidationException(ErrorCode.U001);
     }
 
+    // Handle username generation
+    let username: string;
+    if (providedUsername) {
+      // Check if provided username is unique
+      const usernameExists = await this.userRepository.isUsernameExists(providedUsername);
+      if (usernameExists) {
+        throw new ValidationException(ErrorCode.U004);
+      }
+      username = providedUsername;
+    } else {
+      // Generate unique username
+      const baseUsername = generateBaseUsername(firstName, lastName);
+      username = await generateUniqueUsername(baseUsername, (username) =>
+        this.userRepository.isUsernameExists(username),
+      );
+    }
+
     const newUser = await this.userRepository.createUser({
-      username,
+      firstName,
+      lastName,
       email,
       password,
       role,
+      username,
     });
 
     this.logger.debug(newUser);

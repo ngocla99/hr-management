@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { Table } from '@tanstack/react-table'
-import { User } from '@/types/api'
+import { User, UserRole, UserStatus } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { TrashIcon } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -21,7 +21,6 @@ export function UsersTableToolbar({
   table,
   filterFields,
 }: UsersTableToolbarProps<User>) {
-  const { createdAtFrom } = route.useSearch()
   const navigate = route.useNavigate()
 
   const { t } = useTranslation()
@@ -29,7 +28,20 @@ export function UsersTableToolbar({
     .getFilteredSelectedRowModel()
     .rows.map((row) => row.original.id)
 
+  const searchParams = route.useSearch()
+  const inputQuery = {
+    q: searchParams.username,
+    status: searchParams.status as UserStatus,
+    role: searchParams.role as UserRole[],
+    page: searchParams.page,
+    limit: searchParams.limit,
+    sort: searchParams.sort,
+    createdAtFrom: searchParams.createdAtFrom,
+    createdAtTo: searchParams.createdAtTo,
+  }
+
   const deleteUsersMutation = useDeleteUsers({
+    inputQuery,
     mutationConfig: {
       onSuccess: () => {
         table.resetRowSelection()
@@ -69,7 +81,7 @@ export function UsersTableToolbar({
       <div className='flex flex-wrap items-center gap-2'>
         <div className='flex items-center gap-2'>
           <SingleDayPicker
-            value={createdAtFrom}
+            value={searchParams.createdAtFrom}
             onChange={handleCreatedAtFromChange}
             placeholder={t('selectCreatedAtFrom', { ns: 'glossary' })}
           />

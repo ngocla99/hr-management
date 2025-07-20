@@ -24,6 +24,11 @@ export class UserRepository {
     return this.userModel.findOne({ username, deletedAt: null }).exec();
   }
 
+  async isUsernameExists(username: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ username, deletedAt: null }).exec();
+    return !!user;
+  }
+
   async createUser(data: CreateUserReqDto): Promise<UserDocument> {
     const user = new this.userModel(data);
     await user.save();

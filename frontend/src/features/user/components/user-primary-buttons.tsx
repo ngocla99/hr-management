@@ -19,11 +19,16 @@ export function UserPrimaryButtons() {
     const promises = Array.from({ length: 5 }).map(() => {
       const firstName = faker.person.firstName().toLowerCase()
       const lastName = faker.person.lastName().toLowerCase()
-      const username = `${firstName}.${lastName}${faker.string.alphanumeric(4)}`
       const email = faker.internet.email({ firstName, lastName })
       const password = 'Qwe123!@#'
       const role = faker.helpers.arrayElement(USER_ROLES)
-      return createUserMutation.mutateAsync({ email, username, password, role })
+      return createUserMutation.mutateAsync({
+        email,
+        firstName,
+        lastName,
+        password,
+        role,
+      })
     })
     try {
       await Promise.all(promises)

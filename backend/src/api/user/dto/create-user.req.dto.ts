@@ -5,15 +5,17 @@ import {
   StringField,
   StringFieldOptional,
 } from "@/decorators/field.decorators";
-import { lowerCaseTransformer } from "@/utils/transformers/lower-case.transformer";
-import { Transform } from "class-transformer";
 
 export class CreateUserReqDto {
   @StringField({
-    example: "emp-nemo",
+    example: "John",
   })
-  @Transform(lowerCaseTransformer)
-  username: string;
+  firstName: string;
+
+  @StringField({
+    example: "Doe",
+  })
+  lastName: string;
 
   @EmailField({
     example: "emp-nemo@gmail.com",
@@ -24,6 +26,12 @@ export class CreateUserReqDto {
     example: "Qwe123!@#",
   })
   password: string;
+
+  @StringFieldOptional({
+    example: "john.doe",
+    description: "Username will be auto-generated if not provided",
+  })
+  username?: string;
 
   @StringFieldOptional({
     example: "employee",

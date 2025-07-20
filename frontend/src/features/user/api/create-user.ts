@@ -2,31 +2,29 @@ import { z } from 'zod'
 import { AxiosError } from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { User } from '@/types/api'
-import { PaginationInput } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
 import { USER_ROLES } from '@/features/user/constants/user-constants'
-import { getUsersQueryOptions } from './get-users'
+import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const createUserSchema = z.object({
   email: z.string().email(),
-  username: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   password: z.string(),
   role: z.enum(USER_ROLES),
 })
 
 export type CreateUserInput = z.infer<typeof createUserSchema>
 
-export const createUserApi = (
-  input: CreateUserInput
-): Promise<Pick<User, 'id' | 'email' | 'username'>> => {
+export const createUserApi = (input: CreateUserInput): Promise<User> => {
   return apiClient.post('/users', input)
 }
 
 type UseCreateUserOptions = {
-  inputQuery?: PaginationInput
+  inputQuery?: UsersInput
   mutationConfig?: MutationConfig<typeof createUserApi>
 }
 

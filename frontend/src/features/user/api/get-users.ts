@@ -8,7 +8,7 @@ import apiClient from '@/lib/api-client'
 import { PAGINATION } from '@/lib/constants/constant'
 import { QueryConfig } from '@/lib/react-query'
 
-type UsersInput = PaginationInput & {
+export type UsersInput = PaginationInput & {
   role?: UserRole[]
   status?: UserStatus
   createdAtFrom?: string

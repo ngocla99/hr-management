@@ -8,6 +8,7 @@ export enum ErrorCode {
   U001 = "user.error.username_or_email_exists",
   U002 = "user.error.not_found",
   U003 = "user.error.email_exists",
+  U004 = "user.error.username_exists",
 
   // Department
   D001 = "department.error.name_exists",

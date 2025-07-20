@@ -2,6 +2,7 @@
   "error": {
     "username_or_email_exists": "Username or email already exists",
     "email_exists": "Account with this email already exists",
+    "username_exists": "Username already exists",
     "not_found": "User not found",
     "invalid_password": "Invalid password",
     "invalid_token": "Invalid token",

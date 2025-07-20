@@ -1,7 +1,7 @@
 import { PageOptionsDto } from "@/common/dto/offset-pagination/page-options.dto";
 import { UserRole } from "@/constants/roles.constant";
 import { DateFieldOptional, EnumFieldOptional } from "@/decorators/field.decorators";
-import { UserStatus } from "./user.res.dto";
+import { UserStatus } from "../entities/user.entity";
 
 export class ListUserReqDto extends PageOptionsDto {
   @EnumFieldOptional(() => UserRole, { each: true })

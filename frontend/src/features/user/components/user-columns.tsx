@@ -58,6 +58,19 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       meta: { className: 'w-36' },
     },
     {
+      accessorKey: 'fullName',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t('fullName', { ns: 'glossary' })}
+        />
+      ),
+      cell: ({ row }) => (
+        <LongText className='max-w-36'>{row.getValue('fullName')}</LongText>
+      ),
+      meta: { className: 'w-36' },
+    },
+    {
       accessorKey: 'email',
       header: ({ column }) => (
         <DataTableColumnHeader

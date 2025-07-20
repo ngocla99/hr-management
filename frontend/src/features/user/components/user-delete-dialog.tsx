@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { User } from '@/types/api'
+import { getRouteApi } from '@tanstack/react-router'
+import { User, UserStatus, UserRole } from '@/types/api'
 import { Trans, useTranslation } from 'react-i18next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
@@ -13,11 +14,25 @@ interface Props {
   currentRow: User
 }
 
+const route = getRouteApi('/_authenticated/organization/user')
+
 export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState('')
   const { t } = useTranslation()
+  const searchParams = route.useSearch()
+  const inputQuery = {
+    q: searchParams.username,
+    status: searchParams.status as UserStatus,
+    role: searchParams.role as UserRole[],
+    page: searchParams.page,
+    limit: searchParams.limit,
+    sort: searchParams.sort,
+    createdAtFrom: searchParams.createdAtFrom,
+    createdAtTo: searchParams.createdAtTo,
+  }
 
   const deleteUserMutation = useDeleteUser({
+    inputQuery,
     mutationConfig: {
       onSuccess: () => {
         onOpenChange(false)

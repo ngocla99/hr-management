@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { User } from '@/types/api'
+import { getRouteApi } from '@tanstack/react-router'
+import { User, UserRole, UserStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import {
@@ -30,7 +31,8 @@ import { userRoleOptions } from '../constants/user-options'
 
 const formSchema = z
   .object({
-    username: z.string().min(1, { message: 'required' }),
+    firstName: z.string().min(1, { message: 'required' }),
+    lastName: z.string().min(1, { message: 'required' }),
     email: z
       .string()
       .min(1, { message: 'required' })
@@ -94,15 +96,29 @@ interface Props {
   onOpenChange: (open: boolean) => void
 }
 
+const route = getRouteApi('/_authenticated/organization/user')
 export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
   const { t } = useTranslation()
+  const searchParams = route.useSearch()
+  const inputQuery = {
+    q: searchParams.username,
+    status: searchParams.status as UserStatus,
+    role: searchParams.role as UserRole[],
+    page: searchParams.page,
+    limit: searchParams.limit,
+    sort: searchParams.sort,
+    createdAtFrom: searchParams.createdAtFrom,
+    createdAtTo: searchParams.createdAtTo,
+  }
   const isEdit = !!currentRow
   const createUserMutation = useCreateUser({
+    inputQuery,
     mutationConfig: {
       onSuccess: handleResetForm,
     },
   })
   const updateUserMutation = useUpdateUser({
+    inputQuery,
     mutationConfig: {
       onSuccess: handleResetForm,
     },
@@ -112,7 +128,8 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
-          username: currentRow?.username,
+          firstName: currentRow?.firstName,
+          lastName: currentRow?.lastName,
           email: currentRow?.email,
           role: currentRow?.role,
           password: '',
@@ -120,7 +137,8 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
           isEdit,
         }
       : {
-          username: '',
+          firstName: '',
+          lastName: '',
           email: '',
           role: 'employee',
           password: '',
@@ -134,14 +152,16 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
       updateUserMutation.mutate({
         id: currentRow.id!,
         email: values.email,
-        username: values.username,
+        firstName: values.firstName,
+        lastName: values.lastName,
         password: values.password,
         role: values.role,
       })
     } else {
       createUserMutation.mutate({
         email: values.email,
-        username: values.username,
+        firstName: values.firstName,
+        lastName: values.lastName,
         password: values.password,
         role: values.role,
       })
@@ -185,12 +205,37 @@ export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
             >
               <FormField
                 control={form.control}
-                name='username'
+                name='firstName'
                 disabled={isEdit}
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-right'>
-                      {t('name', { ns: 'glossary' })}
+                      {t('firstName', { ns: 'glossary' })}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('form.name.placeholder', {
+                          ns: 'users',
+                        })}
+                        autoComplete='new-password'
+                        classes={{
+                          root: 'col-span-4',
+                        }}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className='col-span-4 col-start-3' />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='lastName'
+                disabled={isEdit}
+                render={({ field }) => (
+                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
+                    <FormLabel className='col-span-2 text-right'>
+                      {t('lastName', { ns: 'glossary' })}
                     </FormLabel>
                     <FormControl>
                       <Input

@@ -1,38 +1,37 @@
-import { z } from 'zod'
-import { AxiosError } from 'axios'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { User } from '@/types/api'
-import { PaginationInput } from '@/types/common'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
+import { USER_ROLES } from '@/features/user/constants/user-constants'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
-import { USER_ROLES } from '@/features/user/constants/user-constants'
-import { getUsersQueryOptions } from './get-users'
+import { User } from '@/types/api'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const updateUserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
-  username: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   password: z.string(),
   role: z.enum(USER_ROLES),
 })
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>
 
-export const updateUserApi = (
-  input: UpdateUserInput
-): Promise<Pick<User, 'id' | 'email' | 'username'>> => {
+export const updateUserApi = (input: UpdateUserInput): Promise<User> => {
   return apiClient.patch(`/users/${input.id}`, {
     email: input.email,
-    username: input.username,
+    firstName: input.firstName,
+    lastName: input.lastName,
     password: input.password,
     role: input.role,
   })
 }
 
 type UseUpdateUserOptions = {
-  inputQuery?: PaginationInput
+  inputQuery?: UsersInput
   mutationConfig?: MutationConfig<typeof updateUserApi>
 }
 
