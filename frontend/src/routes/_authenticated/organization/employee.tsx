@@ -2,20 +2,21 @@ import { z } from 'zod'
 import { createFileRoute } from '@tanstack/react-router'
 import { PAGINATION } from '@/lib/constants/constant'
 import Employee from '@/features/employee'
-import { EMPLOYMENT_TYPES } from '@/features/employee/constants/employee-constants'
 import {
-  USER_ROLES,
-  USER_STATUSES,
-} from '@/features/user/constants/user-constants'
+  DEPARTMENTS,
+  EMPLOYMENT_TYPES,
+  JOB_ROLES,
+} from '@/features/employee/constants/employee-constants'
+import { USER_STATUSES } from '@/features/user/constants/user-constants'
 
 const employeeSearchSchema = z.object({
   page: z.number().optional().default(PAGINATION.DEFAULT_PAGE),
   limit: z.number().optional().default(PAGINATION.DEFAULT_LIMIT),
   sort: z.string().optional().default('createdAt.desc'),
   status: z.enum(USER_STATUSES).optional(),
-  role: z.array(z.enum(USER_ROLES)).optional(),
-  jobRole: z.string().optional(),
-  employmentType: z.enum(EMPLOYMENT_TYPES).optional(),
+  jobRole: z.array(z.enum(JOB_ROLES)).optional(),
+  department: z.array(z.enum(DEPARTMENTS)).optional(),
+  employmentType: z.array(z.enum(EMPLOYMENT_TYPES)).optional(),
   username: z.string().optional(),
 })
 

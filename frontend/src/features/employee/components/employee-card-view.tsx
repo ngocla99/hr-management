@@ -10,6 +10,7 @@ import {
 } from '@tabler/icons-react'
 import { User, UserStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
+import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -104,7 +105,7 @@ function EmployeeCard({
         <div className='space-y-3'>
           <div>
             <h3 className='text-lg font-semibold'>{employee.fullName}</h3>
-            <p className='text-sm text-gray-600'>{employee.jobTitle}</p>
+            <p className='text-sm text-gray-600'>{employee.jobRole}</p>
           </div>
 
           <div className='space-y-2'>
@@ -114,7 +115,7 @@ function EmployeeCard({
             </div>
             <div className='flex items-center space-x-2 text-sm'>
               <IconPhone className='h-4 w-4 text-gray-400' />
-              <span className='text-gray-600'>{employee.phone}</span>
+              <span className='text-gray-600'>{employee.phoneNumber}</span>
             </div>
           </div>
 
@@ -125,14 +126,14 @@ function EmployeeCard({
             </div>
             <div className='space-y-1'>
               <div className='text-xs text-gray-500'>Date Hired</div>
-              <div className='text-sm'>{employee.dateJoined}</div>
+              <div className='text-sm'>{formatDate(employee.dateStarted)}</div>
             </div>
           </div>
 
           <div className='flex items-center justify-between'>
             <div className='space-y-1'>
               <div className='text-xs text-gray-500'>Team</div>
-              <div className='text-sm font-medium'>{employee.team}</div>
+              <div className='text-sm font-medium'>{employee.department}</div>
             </div>
             <Badge variant='outline' className={cn('capitalize', badgeColor)}>
               {t(('status.' + employee.status.replace('_', '')) as any, {

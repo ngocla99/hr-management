@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
+import { User } from '@/types/api'
 import useDialogState from '@/hooks/use-dialog-state'
-import { Employee } from '../types/employee.types'
 
 type EmployeeDialogType = 'invite' | 'add' | 'edit' | 'delete' | 'view'
 
 interface EmployeeContextType {
   open: EmployeeDialogType | null
   setOpen: (str: EmployeeDialogType | null) => void
-  currentRow: Employee | null
-  setCurrentRow: React.Dispatch<React.SetStateAction<Employee | null>>
+  currentRow: User | null
+  setCurrentRow: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 const EmployeeContext = React.createContext<EmployeeContextType | null>(null)
@@ -19,7 +19,7 @@ interface Props {
 
 export default function EmployeeProvider({ children }: Props) {
   const [open, setOpen] = useDialogState<EmployeeDialogType>(null)
-  const [currentRow, setCurrentRow] = useState<Employee | null>(null)
+  const [currentRow, setCurrentRow] = useState<User | null>(null)
 
   return (
     <EmployeeContext.Provider

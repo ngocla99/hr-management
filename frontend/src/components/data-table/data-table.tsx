@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
+import {
+  ColumnMeta,
+  flexRender,
+  RowData,
+  type Table as TanstackTable,
+} from '@tanstack/react-table'
+import { cn } from '@/lib/utils'
 import {
   Table,
   TableBody,
@@ -33,6 +39,14 @@ interface DataTableProps<TData> {
   enablePagination?: boolean
 }
 
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    className?: string
+    align?: 'left' | 'center' | 'right'
+  }
+}
+
 export function DataTable<TData>({
   table,
   floatingBar = null,
@@ -49,8 +63,19 @@ export function DataTable<TData>({
                 className='[&_th]:border-r [&_th:last-child]:border-r-0'
               >
                 {headerGroup.headers.map((header) => {
+                  const meta = header.column.columnDef.meta as ColumnMeta<
+                    TData,
+                    any
+                  >
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className={cn(
+                        meta?.className,
+                        meta?.align === 'center' && 'text-center',
+                        meta?.align === 'right' && 'text-right'
+                      )}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -71,14 +96,27 @@ export function DataTable<TData>({
                   data-state={row.getIsSelected() && 'selected'}
                   className='bg-white [&_td]:border-r [&_td:last-child]:border-r-0'
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const meta = cell.column.columnDef.meta as ColumnMeta<
+                      TData,
+                      any
+                    >
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          meta?.className,
+                          meta?.align === 'center' && 'text-center',
+                          meta?.align === 'right' && 'text-right'
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    )
+                  })}
                 </TableRow>
               ))
             ) : (

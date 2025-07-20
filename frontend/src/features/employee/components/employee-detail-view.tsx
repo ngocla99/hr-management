@@ -1,15 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { cn } from '@/lib/utils'
 import {
   IconBriefcase,
   IconCalendar,
@@ -20,8 +8,23 @@ import {
   IconTrash,
   IconUser,
 } from '@tabler/icons-react'
+import { VariantProps } from 'class-variance-authority'
 import { useTranslation } from 'react-i18next'
+import { formatDate } from '@/lib/date'
+import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge, badgeVariants } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { employeeStatusStyles } from '../constants/employee-helpers'
+import { employeeDepartmentOptionsFn } from '../constants/employee-options'
 import { useEmployee } from '../context/employee-context'
 
 export function EmployeeDetailView() {
@@ -31,7 +34,9 @@ export function EmployeeDetailView() {
 
   if (!employee) return null
 
-  const badgeColor = employeeStatusStyles.get(employee.status)
+  const badgeVariant = employeeStatusStyles.get(
+    employee.status
+  ) as VariantProps<typeof badgeVariants>['variant']
 
   return (
     <Sheet
@@ -81,19 +86,20 @@ export function EmployeeDetailView() {
               <h2 className='text-xl font-semibold text-gray-900'>
                 {employee.fullName}
               </h2>
-              <p className='text-sm text-gray-600'>{employee.jobTitle}</p>
+              <p className='text-sm text-gray-600'>{employee.jobRole}</p>
               <div className='mt-2 flex items-center space-x-2'>
-                <Badge
-                  variant='outline'
-                  className={cn('capitalize', badgeColor)}
-                >
+                <Badge variant={badgeVariant} className={cn('capitalize')}>
                   {t(('status.' + employee.status.replace('_', '')) as any, {
                     ns: 'glossary',
                   })}
                 </Badge>
                 <span className='text-xs text-gray-500'>•</span>
                 <span className='text-sm text-gray-600'>
-                  {employee.department}
+                  {
+                    employeeDepartmentOptionsFn(t).find(
+                      (option) => option.value === employee.department
+                    )?.label
+                  }
                 </span>
               </div>
             </div>
@@ -138,14 +144,6 @@ export function EmployeeDetailView() {
                 <div className='grid grid-cols-2 gap-4'>
                   <div>
                     <label className='text-sm font-medium text-gray-700'>
-                      Education
-                    </label>
-                    <p className='mt-1 text-sm text-gray-900'>
-                      {employee.education}
-                    </p>
-                  </div>
-                  <div>
-                    <label className='text-sm font-medium text-gray-700'>
                       Marital Status
                     </label>
                     <p className='mt-1 text-sm text-gray-900 capitalize'>
@@ -160,7 +158,7 @@ export function EmployeeDetailView() {
                     Address
                   </label>
                   <p className='mt-1 text-sm text-gray-900'>
-                    {employee.address}
+                    {employee.residentialAddress}
                   </p>
                 </div>
 
@@ -170,25 +168,8 @@ export function EmployeeDetailView() {
                     Emergency Contact
                   </label>
                   <p className='mt-1 text-sm text-gray-900'>
-                    {employee.emergencyContact}
+                    {employee.emergencyContactName}
                   </p>
-                </div>
-
-                <div>
-                  <label className='text-sm font-medium text-gray-700'>
-                    Languages Spoken
-                  </label>
-                  <div className='mt-2 flex flex-wrap gap-2'>
-                    {employee.languages.map((language) => (
-                      <Badge
-                        key={language}
-                        variant='secondary'
-                        className='text-xs'
-                      >
-                        {language}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
@@ -216,7 +197,7 @@ export function EmployeeDetailView() {
                       Job Title
                     </label>
                     <p className='mt-1 text-sm text-gray-900'>
-                      {employee.jobTitle}
+                      {employee.jobRole}
                     </p>
                   </div>
                 </div>
@@ -246,7 +227,11 @@ export function EmployeeDetailView() {
                       Team
                     </label>
                     <p className='mt-1 text-sm text-gray-900'>
-                      {employee.team}
+                      {
+                        employeeDepartmentOptionsFn(t).find(
+                          (option) => option.value === employee.department
+                        )?.label
+                      }
                     </p>
                   </div>
                   <div>
@@ -255,7 +240,7 @@ export function EmployeeDetailView() {
                       Date Joined
                     </label>
                     <p className='mt-1 text-sm text-gray-900'>
-                      {employee.dateJoined}
+                      {formatDate(employee.dateStarted)}
                     </p>
                   </div>
                 </div>
@@ -265,10 +250,7 @@ export function EmployeeDetailView() {
                     Status
                   </label>
                   <div className='mt-2'>
-                    <Badge
-                      variant='outline'
-                      className={cn('capitalize', badgeColor)}
-                    >
+                    <Badge variant={badgeVariant} className={cn('capitalize')}>
                       {t(
                         ('status.' + employee.status.replace('_', '')) as any,
                         {
@@ -276,23 +258,6 @@ export function EmployeeDetailView() {
                         }
                       )}
                     </Badge>
-                  </div>
-                </div>
-
-                <div>
-                  <label className='text-sm font-medium text-gray-700'>
-                    Skills
-                  </label>
-                  <div className='mt-2 flex flex-wrap gap-2'>
-                    {employee.skills.map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant='secondary'
-                        className='text-xs'
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
                   </div>
                 </div>
               </div>
@@ -314,7 +279,9 @@ export function EmployeeDetailView() {
                 <div className='flex items-center space-x-3'>
                   <IconPhone className='h-5 w-5 text-gray-400' />
                   <div>
-                    <p className='text-sm text-gray-900'>{employee.phone}</p>
+                    <p className='text-sm text-gray-900'>
+                      {employee.phoneNumber}
+                    </p>
                     <p className='text-xs text-gray-500'>Work Phone</p>
                   </div>
                 </div>

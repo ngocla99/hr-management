@@ -60,8 +60,9 @@
   "createdAtFrom": "Ngày tạo từ",
   "createdAtTo": "Ngày tạo đến",
   "employeeName": "Tên nhân viên",
-  "employmentType": "Loại hình làm việc",
+  "type": "Loại",
   "department": "Phòng ban",
+  "jobRole": "Chức vụ",
   "form": {
     "enterDescription": "Nhập mô tả",
     "enterEmail": "Nhập email",

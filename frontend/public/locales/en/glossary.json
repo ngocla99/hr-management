@@ -60,8 +60,9 @@
   "createdAtFrom": "Created At From",
   "createdAtTo": "Created At To",
   "employeeName": "Employee Name",
-  "employmentType": "Employment Type",
+  "type": "Type",
   "department": "Department",
+  "jobRole": "Job Role",
   "form": {
     "enterDescription": "Enter description",
     "enterEmail": "Enter email",

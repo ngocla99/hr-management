@@ -34,25 +34,25 @@ export function EmployeeTable({ users, total }: EmployeeTableProps) {
       placeholder: t('form.searchEmployees', { ns: 'employee' }),
     },
     {
-      label: t('employmentType', { ns: 'glossary' }),
+      label: t('type', { ns: 'glossary' }),
       value: 'employmentType',
       options: employmentTypeOptionsFn(t),
     },
     {
-      label: t('department', { ns: 'glossary' }),
+      label: t('team', { ns: 'glossary' }),
       value: 'department',
       options: employeeDepartmentOptionsFn(t),
+    },
+    {
+      label: t('role', { ns: 'glossary' }),
+      value: 'jobRole',
+      options: employeeRoleOptionsFn(t),
     },
     {
       label: t('status', { ns: 'glossary' }),
       value: 'status',
       options: userStatusOptionsFn(t),
       multiple: false,
-    },
-    {
-      label: t('role', { ns: 'glossary' }),
-      value: 'role',
-      options: employeeRoleOptionsFn(t),
     },
   ]
 

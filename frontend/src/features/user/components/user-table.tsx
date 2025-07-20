@@ -1,5 +1,4 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { RowData } from '@tanstack/react-table'
 import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
@@ -13,13 +12,6 @@ import {
 } from '../constants/user-options'
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
-
-declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
-    className: string
-  }
-}
 
 const route = getRouteApi('/_authenticated/organization/user')
 

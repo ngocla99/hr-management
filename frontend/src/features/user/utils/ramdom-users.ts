@@ -7,8 +7,8 @@ import {
   JOB_LEVELS,
   JOB_ROLES,
   MARITAL_STATUSES,
-  USER_ROLES,
-} from '../constants/user-constants'
+} from '@/features/employee/constants/employee-constants'
+import { USER_ROLES } from '../constants/user-constants'
 
 /**
  * Generate a phone number matching regex: /^([+]\d{2})?\d{10}$/

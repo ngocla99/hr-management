@@ -1,4 +1,17 @@
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
+import { useMemo } from 'react'
+import { ColumnDef } from '@tanstack/react-table'
+import {
+  IconDots,
+  IconEdit,
+  IconEye,
+  IconMail,
+  IconTrash,
+} from '@tabler/icons-react'
+import { User, UserStatus } from '@/types/api'
+import { VariantProps } from 'class-variance-authority'
+import { useTranslation } from 'react-i18next'
+import { formatDate } from '@/lib/date'
+import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge, badgeVariants } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -10,20 +23,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { cn } from '@/lib/utils'
-import { User } from '@/types/api'
-import {
-  IconDots,
-  IconEdit,
-  IconEye,
-  IconMail,
-  IconTrash,
-} from '@tabler/icons-react'
-import { ColumnDef } from '@tanstack/react-table'
-import { VariantProps } from 'class-variance-authority'
-import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
+import { checkboxClass } from '@/features/user/components/user-columns'
 import { employeeStatusStyles } from '../constants/employee-helpers'
+import {
+  employeeDepartmentOptionsFn,
+  employeeRoleOptionsFn,
+  employmentTypeOptionsFn,
+} from '../constants/employee-options'
 import { useEmployee } from '../context/employee-context'
 
 export const useEmployeeColumns = () => {
@@ -57,7 +64,7 @@ export const useEmployeeColumns = () => {
         ),
         enableSorting: false,
         enableHiding: false,
-        meta: { className: 'w-12' },
+        meta: { className: checkboxClass },
       },
       {
         accessorKey: 'fullName',
@@ -69,6 +76,9 @@ export const useEmployeeColumns = () => {
         ),
         cell: ({ row }) => {
           const employee = row.original
+          const jobRole = employeeRoleOptionsFn(t).find(
+            (option) => option.value === employee.jobRole
+          )
           return (
             <div className='flex items-center space-x-3'>
               <Avatar className='h-8 w-8'>
@@ -82,7 +92,7 @@ export const useEmployeeColumns = () => {
                 <div className='font-medium text-gray-900'>
                   {employee.fullName}
                 </div>
-                <div className='text-sm text-gray-500'>{employee.jobRole}</div>
+                <div className='text-sm text-gray-500'>{jobRole?.label}</div>
               </div>
             </div>
           )
@@ -106,41 +116,14 @@ export const useEmployeeColumns = () => {
                 <IconMail className='h-4 w-4 text-gray-400' />
                 <span>{employee.email}</span>
               </div>
-              <div className='text-sm text-gray-500'>{employee.phoneNumber}</div>
+              <div className='text-sm text-gray-500'>
+                {employee.phoneNumber}
+              </div>
             </div>
           )
         },
         enableSorting: false,
         meta: { className: 'min-w-[200px]' },
-      },
-      {
-        accessorKey: 'team',
-        header: ({ column }) => (
-          <DataTableColumnHeader
-            column={column}
-            title={t('team', { ns: 'glossary' })}
-          />
-        ),
-        cell: ({ row }) => (
-          <div className='font-medium'>{row.getValue('team')}</div>
-        ),
-        filterFn: (row, id, value) => {
-          return value.includes(row.getValue(id))
-        },
-        meta: { className: 'w-32' },
-      },
-      {
-        accessorKey: 'dateJoined',
-        header: ({ column }) => (
-          <DataTableColumnHeader
-            column={column}
-            title={t('dateJoined', { ns: 'glossary' })}
-          />
-        ),
-        cell: ({ row }) => (
-          <div className='text-sm'>{row.getValue('dateJoined')}</div>
-        ),
-        meta: { className: 'w-32' },
       },
       {
         accessorKey: 'status',
@@ -150,8 +133,8 @@ export const useEmployeeColumns = () => {
             title={t('status', { ns: 'glossary' })}
           />
         ),
-        cell: ({ row }) => {
-          const { status } = row.original
+        cell: ({ cell }) => {
+          const status = cell.getValue() as UserStatus
           const badgeVariant = employeeStatusStyles.get(status) as VariantProps<
             typeof badgeVariants
           >['variant']
@@ -168,6 +151,78 @@ export const useEmployeeColumns = () => {
         },
         enableSorting: false,
         meta: { className: 'w-28' },
+      },
+      {
+        accessorKey: 'department',
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t('team', { ns: 'glossary' })}
+          />
+        ),
+        cell: ({ cell }) => (
+          <div className='font-medium'>
+            {
+              employeeDepartmentOptionsFn(t).find(
+                (option) => option.value === cell.getValue()
+              )?.label
+            }
+          </div>
+        ),
+        filterFn: (row, id, value) => {
+          return value.includes(row.getValue(id))
+        },
+        meta: { className: 'w-32' },
+      },
+      {
+        accessorKey: 'jobRole',
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t('jobRole', { ns: 'glossary' })}
+          />
+        ),
+        cell: ({ cell }) => (
+          <div className='text-sm'>
+            {
+              employeeRoleOptionsFn(t).find(
+                (option) => option.value === cell.getValue()
+              )?.label
+            }
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'employmentType',
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t('type', { ns: 'glossary' })}
+          />
+        ),
+        cell: ({ cell }) => (
+          <div className='text-sm'>
+            {
+              employmentTypeOptionsFn(t).find(
+                (option) => option.value === cell.getValue()
+              )?.label
+            }
+          </div>
+        ),
+        meta: { className: 'w-32' },
+      },
+      {
+        accessorKey: 'dateStarted',
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t('dateJoined', { ns: 'glossary' })}
+          />
+        ),
+        cell: ({ cell }) => (
+          <div className='text-sm'>{formatDate(cell.getValue() as Date)}</div>
+        ),
+        meta: { className: 'w-32' },
       },
       {
         id: 'actions',

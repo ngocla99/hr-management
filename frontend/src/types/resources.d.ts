@@ -152,10 +152,12 @@ interface Resources {
     "role": {
       "feDeveloper": "Frontend Developer",
       "beDeveloper": "Backend Developer",
+      "fullstackDeveloper": "Full Stack Developer",
       "mobileDeveloper": "Mobile Developer",
       "qa": "QA",
       "hr": "HR",
-      "designer": "Designer"
+      "designer": "Designer",
+      "accountant": "Accountant"
     },
     "department": {
       "qa": "QA",
@@ -165,7 +167,7 @@ interface Resources {
       "marketing": "Marketing"
     },
     "form": {
-      "searchEmployees": "Search employees..."
+      "searchEmployees": "Search employees"
     },
     "messages": {
       "noEmployeesFound": "No employees found matching your criteria.",
@@ -238,8 +240,9 @@ interface Resources {
     "createdAtFrom": "Created At From",
     "createdAtTo": "Created At To",
     "employeeName": "Employee Name",
-    "employmentType": "Employment Type",
+    "type": "Type",
     "department": "Department",
+    "jobRole": "Job Role",
     "form": {
       "enterDescription": "Enter description",
       "enterEmail": "Enter email",

@@ -16,10 +16,12 @@
   "role": {
     "feDeveloper": "Frontend Developer",
     "beDeveloper": "Backend Developer",
+    "fullstackDeveloper": "Full Stack Developer",
     "mobileDeveloper": "Mobile Developer",
     "qa": "QA",
     "hr": "HR",
-    "designer": "Designer"
+    "designer": "Designer",
+    "accountant": "Accountant"
   },
   "department": {
     "qa": "QA",

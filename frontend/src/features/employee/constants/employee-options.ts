@@ -71,6 +71,11 @@ export const employeeRoleOptionsFn = (t: TFunction) => [
     icon: IconUser,
   },
   {
+    label: t('role.fullstackDeveloper', { ns: 'employee' }),
+    value: JobRole.FULLSTACK_DEVELOPER,
+    icon: IconUser,
+  },
+  {
     label: t('role.mobileDeveloper', { ns: 'employee' }),
     value: JobRole.MOBILE_DEVELOPER,
     icon: IconUser,
@@ -88,6 +93,11 @@ export const employeeRoleOptionsFn = (t: TFunction) => [
   {
     label: t('role.designer', { ns: 'employee' }),
     value: JobRole.DESIGNER,
+    icon: IconUser,
+  },
+  {
+    label: t('role.accountant', { ns: 'employee' }),
+    value: JobRole.ACCOUNTANT,
     icon: IconUser,
   },
 ]

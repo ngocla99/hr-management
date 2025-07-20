@@ -11,6 +11,9 @@ import { userStatusStyles } from '../constants/user-helpers'
 import { userRoleOptionsFn } from '../constants/user-options'
 import { UsersTableRowActions } from './user-table-row-actions'
 
+export const checkboxClass =
+  'sticky md:table-cell left-0 z-10 rounded-tl bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted w-12'
+
 export const useUserColumns = (): ColumnDef<User>[] => {
   const { t } = useTranslation()
   return [
@@ -27,12 +30,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
           className='translate-y-[2px]'
         />
       ),
-      meta: {
-        className: cn(
-          'sticky md:table-cell left-0 z-10 rounded-tl',
-          'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted'
-        ),
-      },
+      meta: { className: checkboxClass },
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
@@ -84,7 +82,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     },
     {
       accessorKey: 'status',
-      meta: { className: 'text-center' },
+      meta: { align: 'center' },
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -95,13 +93,11 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         const { status } = row.original
         const badgeVariant = userStatusStyles.get(status)
         return (
-          <div className='flex'>
-            <Badge variant={badgeVariant as any} className={cn('capitalize')}>
-              {t(('status.' + status) as any, {
-                ns: 'users',
-              })}
-            </Badge>
-          </div>
+          <Badge variant={badgeVariant as any} className={cn('capitalize')}>
+            {t(('status.' + status) as any, {
+              ns: 'users',
+            })}
+          </Badge>
         )
       },
       filterFn: (row, id, value) => {
@@ -165,6 +161,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     },
     {
       id: 'actions',
+      meta: { className: 'w-12' },
       cell: UsersTableRowActions,
     },
   ]
