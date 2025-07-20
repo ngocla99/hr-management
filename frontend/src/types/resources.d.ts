@@ -243,6 +243,8 @@ interface Resources {
     "type": "Type",
     "department": "Department",
     "jobRole": "Job Role",
+    "dateStarted": "Date Joined",
+    "employmentType": "Type",
     "form": {
       "enterDescription": "Enter description",
       "enterEmail": "Enter email",

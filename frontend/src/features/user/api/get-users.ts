@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { EmploymentType, JobRole, User } from '@/types/api'
+import { EmploymentType, JobRole, User, UserStats } from '@/types/api'
 import { UserRole } from '@/types/api'
 import { UserStatus } from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
@@ -23,6 +23,7 @@ export const getUsersApi = (
 ): Promise<{
   data: User[]
   pagination: Pagination
+  stats: UserStats
 }> => {
   return apiClient.get('/users', {
     params: input,

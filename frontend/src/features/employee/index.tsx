@@ -6,14 +6,10 @@ import { EmployeeDetailView } from './components/employee-detail-view'
 import { EmployeePrimaryButtons } from './components/employee-primary-buttons'
 import { EmployeeTable } from './components/employee-table'
 import EmployeeProvider from './context/employee-context'
-import { mockEmployees } from './data/mock-employees'
 
 const route = getRouteApi('/_authenticated/organization/employee')
 function EmployeeContent() {
   const { t } = useTranslation()
-  const totalEmployees = mockEmployees.length
-  const activeEmployees = 28 // This would come from selection state in a real app
-  const inactiveEmployees = 12 // This would come from selection state in a real app
   const searchParams = route.useSearch() as UsersInput
 
   const { data } = useUsers({
@@ -24,6 +20,10 @@ function EmployeeContent() {
 
   const users = data?.data ?? []
   const total = data?.pagination?.totalRecords ?? 0
+  const stats = data?.stats ?? {
+    totalActive: 0,
+    totalInactive: 0,
+  }
 
   return (
     <>
@@ -41,13 +41,14 @@ function EmployeeContent() {
                 <div className='flex items-center space-x-1.5 text-xs'>
                   <div className='size-1.5 rounded-full bg-[#9dc082]' />
                   <span>
-                    {t('status.active', { ns: 'users' })} {activeEmployees}
+                    {t('status.active', { ns: 'users' })} {stats.totalActive}
                   </span>
                 </div>
                 <div className='flex items-center space-x-1.5 text-xs'>
                   <div className='size-1.5 rounded-full bg-[#1d212c]' />
                   <span>
-                    {t('status.inactive', { ns: 'users' })} {inactiveEmployees}
+                    {t('status.inactive', { ns: 'users' })}{' '}
+                    {stats.totalInactive}
                   </span>
                 </div>
               </div>

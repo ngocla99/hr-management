@@ -1,17 +1,17 @@
-import React from 'react'
-import { getRouteApi } from '@tanstack/react-router'
-import { User } from '@/types/api'
-import { DataTableFilterField } from '@/types/common'
-import { useTranslation } from 'react-i18next'
-import { useDataTable } from '@/hooks/use-data-table'
 import { DataTable } from '@/components/data-table/data-table'
-import { userStatusOptionsFn } from '@/features/user/constants/user-options'
+import { EmployeeCardView } from '@/features/employee/components/employee-card-view'
 import {
   employeeDepartmentOptionsFn,
   employeeRoleOptionsFn,
   employmentTypeOptionsFn,
-} from '../constants/employee-options'
-import { EmployeeCardView } from './employee-card-view'
+} from '@/features/employee/constants/employee-options'
+import { userStatusOptionsFn } from '@/features/user/constants/user-options'
+import { useDataTable } from '@/hooks/use-data-table'
+import { User } from '@/types/api'
+import { DataTableFilterField } from '@/types/common'
+import { getRouteApi } from '@tanstack/react-router'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useEmployeeColumns } from './employee-columns'
 import { EmployeeTableToolbar } from './employee-table-toolbar'
 

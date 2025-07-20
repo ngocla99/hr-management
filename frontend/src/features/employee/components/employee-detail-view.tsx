@@ -8,12 +8,11 @@ import {
   IconTrash,
   IconUser,
 } from '@tabler/icons-react'
-import { VariantProps } from 'class-variance-authority'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge, badgeVariants } from '@/components/ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -33,10 +32,6 @@ export function EmployeeDetailView() {
   const { currentRow: employee } = useEmployee()
 
   if (!employee) return null
-
-  const badgeVariant = employeeStatusStyles.get(
-    employee.status
-  ) as VariantProps<typeof badgeVariants>['variant']
 
   return (
     <Sheet
@@ -88,7 +83,10 @@ export function EmployeeDetailView() {
               </h2>
               <p className='text-sm text-gray-600'>{employee.jobRole}</p>
               <div className='mt-2 flex items-center space-x-2'>
-                <Badge variant={badgeVariant} className={cn('capitalize')}>
+                <Badge
+                  variant={employeeStatusStyles.get(employee.status)}
+                  className={cn('capitalize')}
+                >
                   {t(('status.' + employee.status.replace('_', '')) as any, {
                     ns: 'glossary',
                   })}
@@ -250,7 +248,10 @@ export function EmployeeDetailView() {
                     Status
                   </label>
                   <div className='mt-2'>
-                    <Badge variant={badgeVariant} className={cn('capitalize')}>
+                    <Badge
+                      variant={employeeStatusStyles.get(employee.status)}
+                      className={cn('capitalize')}
+                    >
                       {t(
                         ('status.' + employee.status.replace('_', '')) as any,
                         {

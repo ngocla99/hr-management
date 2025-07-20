@@ -19,7 +19,7 @@ export function EmployeeTableToolbar({
   setViewMode,
 }: EmployeeTableToolbarProps<User>) {
   return (
-    <div className='flex items-center justify-between'>
+    <div className='flex items-center justify-between gap-1.5'>
       <DataTableToolbar table={table} filterFields={filterFields} />
       <div className='bg-accent flex items-center rounded-lg border p-1'>
         <Button

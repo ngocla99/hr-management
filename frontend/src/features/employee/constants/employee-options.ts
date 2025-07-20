@@ -1,7 +1,6 @@
 import { IconBriefcase, IconCalendar, IconUser } from '@tabler/icons-react'
-import { Department, JobRole } from '@/types/api'
+import { Department, EmploymentType, JobRole } from '@/types/api'
 import { TFunction } from 'i18next'
-import { EmploymentType } from '../types/employee.types'
 
 export const employeeDepartmentOptionsFn = (t: TFunction) => [
   {

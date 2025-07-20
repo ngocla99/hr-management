@@ -8,12 +8,11 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { User, UserStatus } from '@/types/api'
-import { VariantProps } from 'class-variance-authority'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge, badgeVariants } from '@/components/ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -24,14 +23,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
-import { checkboxClass } from '@/features/user/components/user-columns'
-import { employeeStatusStyles } from '../constants/employee-helpers'
+import { employeeStatusStyles } from '@/features/employee/constants/employee-helpers'
 import {
   employeeDepartmentOptionsFn,
   employeeRoleOptionsFn,
   employmentTypeOptionsFn,
-} from '../constants/employee-options'
-import { useEmployee } from '../context/employee-context'
+} from '@/features/employee/constants/employee-options'
+import { useEmployee } from '@/features/employee/context/employee-context'
+import { checkboxClass } from '@/features/user/components/user-columns'
 
 export const useEmployeeColumns = () => {
   const { t } = useTranslation()
@@ -122,11 +121,12 @@ export const useEmployeeColumns = () => {
             </div>
           )
         },
-        enableSorting: false,
         meta: { className: 'min-w-[200px]' },
+        enableSorting: false,
       },
       {
         accessorKey: 'status',
+        meta: { className: 'w-28', align: 'center' },
         header: ({ column }) => (
           <DataTableColumnHeader
             column={column}
@@ -135,9 +135,7 @@ export const useEmployeeColumns = () => {
         ),
         cell: ({ cell }) => {
           const status = cell.getValue() as UserStatus
-          const badgeVariant = employeeStatusStyles.get(status) as VariantProps<
-            typeof badgeVariants
-          >['variant']
+          const badgeVariant = employeeStatusStyles.get(status)
           return (
             <Badge variant={badgeVariant} className={cn('capitalize')}>
               {t(('status.' + status) as any, {
@@ -150,7 +148,7 @@ export const useEmployeeColumns = () => {
           return value.includes(row.getValue(id))
         },
         enableSorting: false,
-        meta: { className: 'w-28' },
+        enableHiding: false,
       },
       {
         accessorKey: 'department',
@@ -173,6 +171,7 @@ export const useEmployeeColumns = () => {
           return value.includes(row.getValue(id))
         },
         meta: { className: 'w-32' },
+        enableSorting: false,
       },
       {
         accessorKey: 'jobRole',
@@ -191,13 +190,14 @@ export const useEmployeeColumns = () => {
             }
           </div>
         ),
+        enableSorting: false,
       },
       {
         accessorKey: 'employmentType',
         header: ({ column }) => (
           <DataTableColumnHeader
             column={column}
-            title={t('type', { ns: 'glossary' })}
+            title={t('employmentType', { ns: 'glossary' })}
           />
         ),
         cell: ({ cell }) => (
@@ -216,7 +216,7 @@ export const useEmployeeColumns = () => {
         header: ({ column }) => (
           <DataTableColumnHeader
             column={column}
-            title={t('dateJoined', { ns: 'glossary' })}
+            title={t('dateStarted', { ns: 'glossary' })}
           />
         ),
         cell: ({ cell }) => (

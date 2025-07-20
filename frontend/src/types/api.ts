@@ -88,6 +88,13 @@ export enum UserStatus {
   NOT_VERIFIED = 'not_verified',
 }
 
+export type UserStats = {
+  totalActive: number
+  totalInactive: number
+  totalSuspended: number
+  totalUnverified: number
+}
+
 export type User = Entity<{
   username: string
   firstName: string

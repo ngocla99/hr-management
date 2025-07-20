@@ -1,4 +1,3 @@
-import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { MessageResponse, Uuid } from "@/common/types/common.type";
 import { UserRole } from "@/constants/roles.constant";
 import { CurrentUser } from "@/decorators/current-user.decorator";
@@ -23,6 +22,7 @@ import { CreateUsersReqDto } from "./dto/create-users.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
+import { UserListResDto } from "./dto/user-list.res.dto";
 import { UserResDto } from "./dto/user.res.dto";
 import { UserService } from "./user.service";
 
@@ -68,11 +68,11 @@ export class UserController {
 
   @Get()
   @ApiAuth({
-    type: UserResDto,
-    summary: "List users",
+    type: UserListResDto,
+    summary: "List users with statistics",
     isPaginated: true,
   })
-  async findAllUsers(@Query() reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
+  async findAllUsers(@Query() reqDto: ListUserReqDto): Promise<UserListResDto> {
     return await this.userService.findAll(reqDto);
   }
 

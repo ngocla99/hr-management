@@ -74,4 +74,25 @@ export class UserRepository {
       .findByIdAndUpdate(id, { status: UserStatus.ACTIVE }, { new: true })
       .exec();
   }
+
+  async getUserStats(): Promise<{
+    totalActive: number;
+    totalInactive: number;
+    totalSuspended: number;
+    totalUnverified: number;
+  }> {
+    const [totalActive, totalInactive, totalSuspended, totalUnverified] = await Promise.all([
+      this.userModel.countDocuments({ status: UserStatus.ACTIVE, deletedAt: null }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.INACTIVE, deletedAt: null }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.SUSPENDED, deletedAt: null }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.NOT_VERIFIED, deletedAt: null }).exec(),
+    ]);
+
+    return {
+      totalActive,
+      totalInactive,
+      totalSuspended,
+      totalUnverified,
+    };
+  }
 }

@@ -63,6 +63,8 @@
   "type": "Loại",
   "department": "Phòng ban",
   "jobRole": "Chức vụ",
+  "dateStarted": "Ngày tham gia",
+  "employmentType": "Loại",
   "form": {
     "enterDescription": "Nhập mô tả",
     "enterEmail": "Nhập email",
