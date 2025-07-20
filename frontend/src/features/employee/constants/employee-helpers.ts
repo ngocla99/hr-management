@@ -1,8 +1,9 @@
-import { EmployeeStatus } from '../types/employee.types'
+import { UserStatus } from '@/types/api'
 
 // Status styling similar to user feature
 export const employeeStatusStyles = new Map([
-  [EmployeeStatus.UNVERIFIED, 'warning'],
-  [EmployeeStatus.ACTIVE, 'success'],
-  [EmployeeStatus.NOT_ACTIVE, 'dark'],
+  [UserStatus.NOT_VERIFIED, ''],
+  [UserStatus.ACTIVE, 'success'],
+  [UserStatus.INACTIVE, 'dark'],
+  [UserStatus.SUSPENDED, 'destructive'],
 ])

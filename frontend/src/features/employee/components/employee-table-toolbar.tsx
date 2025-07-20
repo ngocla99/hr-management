@@ -1,9 +1,9 @@
 import { Table } from '@tanstack/react-table'
 import { IconLayoutGrid, IconList } from '@tabler/icons-react'
+import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { Button } from '@/components/ui/button'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
-import { Employee } from '../types/employee.types'
 
 interface EmployeeTableToolbarProps<TData> {
   table: Table<TData>
@@ -17,7 +17,7 @@ export function EmployeeTableToolbar({
   filterFields,
   viewMode,
   setViewMode,
-}: EmployeeTableToolbarProps<Employee>) {
+}: EmployeeTableToolbarProps<User>) {
   return (
     <div className='flex items-center justify-between'>
       <DataTableToolbar table={table} filterFields={filterFields} />

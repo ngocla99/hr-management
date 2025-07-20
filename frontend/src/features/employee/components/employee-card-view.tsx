@@ -8,6 +8,7 @@ import {
   IconPhone,
   IconTrash,
 } from '@tabler/icons-react'
+import { User, UserStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -33,7 +34,7 @@ interface EmployeeCardViewProps {
 }
 
 interface EmployeeCardProps {
-  employee: Employee
+  employee: User
   isSelected?: boolean
   onSelect?: (selected: boolean) => void
   onView?: () => void
@@ -146,7 +147,7 @@ function EmployeeCard({
 }
 
 interface EmployeeCardViewProps {
-  table: TanstackTable<Employee>
+  table: TanstackTable<User>
 }
 
 export function EmployeeCardView({ table }: EmployeeCardViewProps) {

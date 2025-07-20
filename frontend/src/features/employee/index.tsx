@@ -16,12 +16,14 @@ function EmployeeContent() {
   const inactiveEmployees = 12 // This would come from selection state in a real app
   const searchParams = route.useSearch() as UsersInput
 
-  const { data: users } = useUsers({
+  const { data } = useUsers({
     input: {
       ...searchParams,
     },
   })
-  console.log('🚀 ~ EmployeeContent ~ users:', users)
+
+  const users = data?.data ?? []
+  const total = data?.pagination?.totalRecords ?? 0
 
   return (
     <>
@@ -54,7 +56,7 @@ function EmployeeContent() {
             <EmployeePrimaryButtons />
           </div>
           <div className='-mx-4 flex-1 overflow-auto px-4 py-1'>
-            <EmployeeTable />
+            <EmployeeTable users={users} total={total} />
           </div>
         </div>
       </Main>

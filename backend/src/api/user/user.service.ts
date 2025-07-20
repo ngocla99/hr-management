@@ -21,7 +21,7 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(dto: CreateUserReqDto): Promise<UserResDto> {
-    const { firstName, lastName, email, password, role, username: providedUsername } = dto;
+    const { firstName, lastName, email, username: providedUsername, ...rest } = dto;
 
     // check uniqueness of email
     const user = await this.userRepository.findByEmail(email);
@@ -41,7 +41,7 @@ export class UserService {
       username = providedUsername;
     } else {
       // Generate unique username
-      const baseUsername = generateBaseUsername(firstName, lastName);
+      const baseUsername = generateBaseUsername(firstName ?? "", lastName ?? "");
       username = await generateUniqueUsername(baseUsername, (username) =>
         this.userRepository.isUsernameExists(username),
       );
@@ -51,14 +51,18 @@ export class UserService {
       firstName,
       lastName,
       email,
-      password,
-      role,
       username,
+      ...rest,
     });
 
     this.logger.debug(newUser);
 
     return plainToInstance(UserResDto, newUser);
+  }
+
+  async createMany(dto: CreateUserReqDto[]): Promise<UserResDto[]> {
+    const users = await Promise.all(dto.map((user) => this.create(user)));
+    return plainToInstance(UserResDto, users);
   }
 
   async findAll(reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {

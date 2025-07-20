@@ -1,15 +1,4 @@
-import { useMemo } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
-import {
-  IconDots,
-  IconEdit,
-  IconEye,
-  IconMail,
-  IconTrash,
-} from '@tabler/icons-react'
-import { VariantProps } from 'class-variance-authority'
-import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge, badgeVariants } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -21,16 +10,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
+import { cn } from '@/lib/utils'
+import { User } from '@/types/api'
+import {
+  IconDots,
+  IconEdit,
+  IconEye,
+  IconMail,
+  IconTrash,
+} from '@tabler/icons-react'
+import { ColumnDef } from '@tanstack/react-table'
+import { VariantProps } from 'class-variance-authority'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { employeeStatusStyles } from '../constants/employee-helpers'
 import { useEmployee } from '../context/employee-context'
-import { Employee } from '../types/employee.types'
 
 export const useEmployeeColumns = () => {
   const { t } = useTranslation()
   const { setOpen } = useEmployee()
 
-  const columns = useMemo<ColumnDef<Employee>[]>(
+  const columns = useMemo<ColumnDef<User>[]>(
     () => [
       {
         id: 'select',
@@ -82,7 +82,7 @@ export const useEmployeeColumns = () => {
                 <div className='font-medium text-gray-900'>
                   {employee.fullName}
                 </div>
-                <div className='text-sm text-gray-500'>{employee.jobTitle}</div>
+                <div className='text-sm text-gray-500'>{employee.jobRole}</div>
               </div>
             </div>
           )
@@ -106,7 +106,7 @@ export const useEmployeeColumns = () => {
                 <IconMail className='h-4 w-4 text-gray-400' />
                 <span>{employee.email}</span>
               </div>
-              <div className='text-sm text-gray-500'>{employee.phone}</div>
+              <div className='text-sm text-gray-500'>{employee.phoneNumber}</div>
             </div>
           )
         },

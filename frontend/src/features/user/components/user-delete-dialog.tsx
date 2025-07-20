@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { getRouteApi } from '@tanstack/react-router'
-import { User, UserStatus, UserRole } from '@/types/api'
+import { User } from '@/types/api'
 import { Trans, useTranslation } from 'react-i18next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
@@ -65,7 +65,7 @@ export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
         <Input
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder={t('form.name.placeholder', { ns: 'users' })}
+          placeholder={t('username', { ns: 'glossary' })}
         />
       </Label>
       <Alert variant='destructive'>

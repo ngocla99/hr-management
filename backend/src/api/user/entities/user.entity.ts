@@ -48,8 +48,8 @@ export enum JobRole {
   BE_DEVELOPER = "be_developer",
   FULLSTACK_DEVELOPER = "fullstack_developer",
   MOBILE_DEVELOPER = "mobile_developer",
+  DESIGNER = "designer",
   QA = "qa",
-  PROJECT_MANAGER = "project_manager",
   HR = "hr",
   ACCOUNTANT = "accountant",
 }

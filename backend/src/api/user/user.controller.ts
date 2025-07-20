@@ -19,6 +19,7 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
+import { CreateUsersReqDto } from "./dto/create-users.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
@@ -52,6 +53,17 @@ export class UserController {
   @RequireRole(UserRole.ADMIN)
   async createUser(@Body() createUserDto: CreateUserReqDto): Promise<UserResDto> {
     return await this.userService.create(createUserDto);
+  }
+
+  @Post("create-many")
+  @ApiAuth({
+    type: UserResDto,
+    summary: "Create many users",
+    statusCode: HttpStatus.CREATED,
+  })
+  @RequireRole(UserRole.ADMIN)
+  async createManyUsers(@Body() createUsersDto: CreateUsersReqDto): Promise<UserResDto[]> {
+    return await this.userService.createMany(createUsersDto.users);
   }
 
   @Get()

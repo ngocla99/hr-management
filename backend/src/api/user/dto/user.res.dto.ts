@@ -202,7 +202,7 @@ export class UserResDto {
 
   @EnumField(() => JobRole, {
     description: "Job role",
-    example: JobRole.PROJECT_MANAGER,
+    example: JobRole.FE_DEVELOPER,
   })
   @Expose()
   jobRole: string;

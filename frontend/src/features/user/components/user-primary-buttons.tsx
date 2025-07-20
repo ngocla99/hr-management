@@ -1,44 +1,19 @@
-import { useState } from 'react'
 import { IconMailPlus, IconUserPlus } from '@tabler/icons-react'
-import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { useCreateUser } from '../api/create-user'
-import { USER_ROLES } from '../constants/user-constants'
+import { useCreateUsers } from '../api/create-users'
 import { useUser } from '../context/user-context'
+import { generateRandomUsers } from '../utils/ramdom-users'
 
 export function UserPrimaryButtons() {
   const { setOpen } = useUser()
   const { t } = useTranslation()
-  const createUserMutation = useCreateUser()
-  const [loading, setLoading] = useState(false)
+  const createUsersMutation = useCreateUsers()
 
   const handleCreateRandomUsers = async () => {
-    setLoading(true)
-    const promises = Array.from({ length: 5 }).map(() => {
-      const firstName = faker.person.firstName().toLowerCase()
-      const lastName = faker.person.lastName().toLowerCase()
-      const email = faker.internet.email({ firstName, lastName })
-      const password = 'Qwe123!@#'
-      const role = faker.helpers.arrayElement(USER_ROLES)
-      return createUserMutation.mutateAsync({
-        email,
-        firstName,
-        lastName,
-        password,
-        role,
-      })
-    })
-    try {
-      await Promise.all(promises)
-      toast.success(t('message.success.createdMany', { ns: 'users' }))
-    } catch (error) {
-      console.error(error)
-      toast.error(t('message.error.createManyFailed', { ns: 'users' }))
-    } finally {
-      setLoading(false)
-    }
+    if (createUsersMutation.isPending) return
+    const users = generateRandomUsers(5)
+    await createUsersMutation.mutateAsync({ users })
   }
 
   return (
@@ -58,7 +33,7 @@ export function UserPrimaryButtons() {
       <Button
         variant='light'
         className='space-x-1'
-        disabled={loading}
+        disabled={createUsersMutation.isPending}
         onClick={handleCreateRandomUsers}
       >
         <span>{t('createRandomUsers', { ns: 'users' })}</span>
