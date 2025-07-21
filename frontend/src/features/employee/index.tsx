@@ -1,6 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Main } from '@/components/layout/main'
+import { useUserStats } from '../user/api/get-user-stats'
 import { UsersInput, useUsers } from '../user/api/get-users'
 import { EmployeeDetailView } from './components/employee-detail-view'
 import { EmployeePrimaryButtons } from './components/employee-primary-buttons'
@@ -12,18 +13,20 @@ function EmployeeContent() {
   const { t } = useTranslation()
   const searchParams = route.useSearch() as UsersInput
 
-  const { data } = useUsers({
+  const { data: usersData } = useUsers({
     input: {
       ...searchParams,
     },
   })
 
-  const users = data?.data ?? []
-  const total = data?.pagination?.totalRecords ?? 0
-  const stats = data?.stats ?? {
-    totalActive: 0,
-    totalInactive: 0,
-  }
+  const { data: statsData } = useUserStats({
+    input: {
+      ...searchParams,
+    },
+  })
+
+  const users = usersData?.data ?? []
+  const total = usersData?.pagination?.totalRecords ?? 0
 
   return (
     <>
@@ -41,14 +44,15 @@ function EmployeeContent() {
                 <div className='flex items-center space-x-1.5 text-xs'>
                   <div className='size-1.5 rounded-full bg-[#9dc082]' />
                   <span>
-                    {t('status.active', { ns: 'users' })} {stats.totalActive}
+                    {t('status.active', { ns: 'users' })}{' '}
+                    {statsData?.totalActive ?? 0}
                   </span>
                 </div>
                 <div className='flex items-center space-x-1.5 text-xs'>
                   <div className='size-1.5 rounded-full bg-[#1d212c]' />
                   <span>
                     {t('status.inactive', { ns: 'users' })}{' '}
-                    {stats.totalInactive}
+                    {statsData?.totalInactive ?? 0}
                   </span>
                 </div>
               </div>

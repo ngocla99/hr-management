@@ -1,3 +1,4 @@
+import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { ErrorCode } from "@/constants/error-code.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
@@ -6,13 +7,14 @@ import assert from "assert";
 import { plainToInstance } from "class-transformer";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
+import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserListResDto } from "./dto/user-list.res.dto";
 import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
 import { UserDocument } from "./entities/user.entity";
 import { UserRepository } from "./user.repository";
+import { getUserFilter } from "./utils/user.util";
 import { generateBaseUsername, generateUniqueUsername } from "./utils/username.util";
 
 @Injectable()
@@ -66,67 +68,26 @@ export class UserService {
     return plainToInstance(UserResDto, users);
   }
 
-  async findAll(reqDto: ListUserReqDto): Promise<UserListResDto> {
-    const filter: Record<string, any> = {};
-    if (reqDto.role) {
-      filter.role = reqDto.role;
-    }
-    if (reqDto.status) {
-      filter.status = reqDto.status;
-    }
-
-    const createdAtFilter: Record<string, Date> = {};
-    if (reqDto.createdAtFrom) {
-      createdAtFilter.$gte = reqDto.createdAtFrom;
-    }
-    if (reqDto.createdAtTo) {
-      createdAtFilter.$lte = reqDto.createdAtTo;
-    }
-    if (Object.keys(createdAtFilter).length > 0) {
-      filter.createdAt = createdAtFilter;
-    }
-
-    if (reqDto.username) {
-      filter.username = { $regex: reqDto.username, $options: "i" };
-    }
-
-    if (reqDto.fullName) {
-      filter.$or = [
-        { firstName: { $regex: reqDto.fullName, $options: "i" } },
-        { lastName: { $regex: reqDto.fullName, $options: "i" } },
-      ];
-    }
-
-    if (reqDto.department) {
-      filter.department = reqDto.department;
-    }
-
-    if (reqDto.jobRole) {
-      filter.jobRole = reqDto.jobRole;
-    }
-
-    if (reqDto.employmentType) {
-      filter.employmentType = reqDto.employmentType;
-    }
-
-    const [userList, paginationMeta] = await paginate<UserDocument>(
-      this.userRepository.userModel,
-      reqDto,
-      {
-        skipCount: false,
-        takeAll: false,
-        filter,
-      },
+  async getUserStats(reqDto: ListUserStatsReqDto): Promise<UserStatsDto> {
+    const filter = getUserFilter(reqDto as ListUserReqDto);
+    const stats = await this.userRepository.getUserStats(filter);
+    return new UserStatsDto(
+      stats.totalActive,
+      stats.totalInactive,
+      stats.totalSuspended,
+      stats.totalUnverified,
     );
+  }
 
-    const stats = new UserStatsDto(
-      userList.filter((user) => user.status === "active").length,
-      userList.filter((user) => user.status === "inactive").length,
-      userList.filter((user) => user.status === "suspended").length,
-      userList.filter((user) => user.status === "not_verified").length,
-    );
+  async findAll(reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
+    const filter = getUserFilter(reqDto);
+    const [users, metaDto] = await paginate<UserDocument>(this.userRepository.userModel, reqDto, {
+      skipCount: false,
+      takeAll: false,
+      filter,
+    });
 
-    return new UserListResDto(plainToInstance(UserResDto, userList), paginationMeta, stats);
+    return new OffsetPaginatedDto(plainToInstance(UserResDto, users), metaDto);
   }
 
   // async loadMoreUsers(reqDto: LoadMoreUsersReqDto): Promise<CursorPaginatedDto<UserResDto>> {

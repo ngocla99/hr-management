@@ -1,3 +1,4 @@
+import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { MessageResponse, Uuid } from "@/common/types/common.type";
 import { UserRole } from "@/constants/roles.constant";
 import { CurrentUser } from "@/decorators/current-user.decorator";
@@ -20,9 +21,10 @@ import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { CreateUsersReqDto } from "./dto/create-users.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
+import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserListResDto } from "./dto/user-list.res.dto";
+import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
 import { UserService } from "./user.service";
 
@@ -66,13 +68,22 @@ export class UserController {
     return await this.userService.createMany(createUsersDto.users);
   }
 
+  @Get("stats")
+  @ApiAuth({
+    type: UserStatsDto,
+    summary: "Get user stats",
+  })
+  async getUserStats(@Query() reqDto: ListUserStatsReqDto): Promise<UserStatsDto> {
+    return await this.userService.getUserStats(reqDto);
+  }
+
   @Get()
   @ApiAuth({
-    type: UserListResDto,
+    type: OffsetPaginatedDto<UserResDto>,
     summary: "List users with statistics",
     isPaginated: true,
   })
-  async findAllUsers(@Query() reqDto: ListUserReqDto): Promise<UserListResDto> {
+  async findAllUsers(@Query() reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
     return await this.userService.findAll(reqDto);
   }
 

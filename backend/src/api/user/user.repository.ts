@@ -75,17 +75,13 @@ export class UserRepository {
       .exec();
   }
 
-  async getUserStats(): Promise<{
-    totalActive: number;
-    totalInactive: number;
-    totalSuspended: number;
-    totalUnverified: number;
-  }> {
+  async getUserStats(filter: Record<string, any>) {
+    const query = { deletedAt: null, ...filter };
     const [totalActive, totalInactive, totalSuspended, totalUnverified] = await Promise.all([
-      this.userModel.countDocuments({ status: UserStatus.ACTIVE, deletedAt: null }).exec(),
-      this.userModel.countDocuments({ status: UserStatus.INACTIVE, deletedAt: null }).exec(),
-      this.userModel.countDocuments({ status: UserStatus.SUSPENDED, deletedAt: null }).exec(),
-      this.userModel.countDocuments({ status: UserStatus.NOT_VERIFIED, deletedAt: null }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.ACTIVE, ...query }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.INACTIVE, ...query }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.SUSPENDED, ...query }).exec(),
+      this.userModel.countDocuments({ status: UserStatus.NOT_VERIFIED, ...query }).exec(),
     ]);
 
     return {
