@@ -1,29 +1,45 @@
 /* eslint-disable */
-import { Document, Model, Query } from "mongoose";
+import { Document, FilterQuery, Model, SortOrder } from "mongoose";
 
-export function buildPaginator<T extends Document>(
-  model: Model<T>,
-  options: PaginationOptions<T> = {},
-): Paginator<T> {
-  const paginator = new Paginator(model, options);
+export function buildPaginator<Entity extends Document>(
+  model: Model<Entity>,
+  options: PaginationOptions<Entity> = {},
+): Paginator<Entity> {
+  const { paginationKeys = ["_id" as keyof Entity], query = {} } = options;
+
+  const paginator = new Paginator(model, paginationKeys);
+
+  if (query.afterCursor) {
+    paginator.setAfterCursor(query.afterCursor);
+  }
+
+  if (query.beforeCursor) {
+    paginator.setBeforeCursor(query.beforeCursor);
+  }
+
+  if (query.limit) {
+    paginator.setLimit(query.limit);
+  }
+
+  if (query.order) {
+    paginator.setOrder(query.order as Order);
+  }
+
   return paginator;
 }
 
-export default class Paginator<T extends Document> {
+export default class Paginator<Entity extends Document> {
   private afterCursor: string | null = null;
   private beforeCursor: string | null = null;
   private nextAfterCursor: string | null = null;
   private nextBeforeCursor: string | null = null;
   private limit = 100;
   private order: Order = Order.DESC;
-  private paginationKeys: string[];
 
   public constructor(
-    private model: Model<T>,
-    private options: PaginationOptions<T> = {},
-  ) {
-    this.paginationKeys = options.paginationKeys || ["_id"];
-  }
+    private model: Model<Entity>,
+    private paginationKeys: (keyof Entity)[],
+  ) {}
 
   public setAfterCursor(cursor: string): void {
     this.afterCursor = cursor;
@@ -41,23 +57,39 @@ export default class Paginator<T extends Document> {
     this.order = order;
   }
 
-  public async paginate(query: any = {}): Promise<PagingResult<T>> {
-    const mongoQuery = this.buildQuery(query);
-    const entities = await mongoQuery.exec();
+  public async paginate(filter: FilterQuery<Entity> = {}): Promise<PagingResult<Entity>> {
+    const query = this.model.find(filter);
+
+    // Apply cursor conditions
+    const cursorFilter = this.buildCursorFilter();
+    if (Object.keys(cursorFilter).length > 0) {
+      query.where(cursorFilter);
+    }
+
+    // Apply sorting
+    const sortOptions = this.buildSortOptions();
+    query.sort(sortOptions);
+
+    // Apply limit (+1 to check if there are more results)
+    query.limit(this.limit + 1);
+
+    const entities = await query.exec();
     const hasMore = entities.length > this.limit;
 
     if (hasMore) {
-      entities.pop();
+      entities.splice(entities.length - 1, 1);
     }
 
     if (entities.length === 0) {
       return this.toPagingResult(entities);
     }
 
+    // Handle reverse order for beforeCursor
     if (!this.hasAfterCursor() && this.hasBeforeCursor()) {
       entities.reverse();
     }
 
+    // Set next cursors
     if (this.hasBeforeCursor() || hasMore) {
       this.nextAfterCursor = this.encode(entities[entities.length - 1]);
     }
@@ -69,54 +101,63 @@ export default class Paginator<T extends Document> {
     return this.toPagingResult(entities);
   }
 
-  private getCursor(): Cursor {
-    return {
-      afterCursor: this.nextAfterCursor,
-      beforeCursor: this.nextBeforeCursor,
-    };
-  }
+  private buildCursorFilter(): FilterQuery<Entity> {
+    const filter: FilterQuery<Entity> = {};
 
-  private buildQuery(baseQuery: any = {}): Query<T[], T> {
-    let query = this.model.find(baseQuery);
-    const cursors: CursorParam = {};
-
-    if (this.hasAfterCursor()) {
-      Object.assign(cursors, this.decode(this.afterCursor as string));
-    } else if (this.hasBeforeCursor()) {
-      Object.assign(cursors, this.decode(this.beforeCursor as string));
+    if (!this.hasAfterCursor() && !this.hasBeforeCursor()) {
+      return filter;
     }
 
-    if (Object.keys(cursors).length > 0) {
-      query = query.where(this.buildCursorQuery(cursors));
-    }
-
-    query = query.limit(this.limit + 1);
-
-    const sortOrder = this.buildSortOrder();
-    query = query.sort(sortOrder);
-
-    return query;
-  }
-
-  private buildCursorQuery(cursors: CursorParam): any {
+    const cursor = this.hasAfterCursor() ? this.afterCursor : this.beforeCursor;
+    const decodedCursor = this.decode(cursor!);
     const operator = this.getOperator();
-    const conditions: any[] = [];
+
+    // Build cursor filter conditions
+    const orConditions: FilterQuery<Entity>[] = [];
 
     for (let i = 0; i < this.paginationKeys.length; i++) {
-      const key = this.paginationKeys[i];
-      const condition: any = {};
+      const andConditions: FilterQuery<any> = {};
 
-      // Build condition for this level
+      // Add equality conditions for all previous keys
       for (let j = 0; j < i; j++) {
-        const prevKey = this.paginationKeys[j];
-        condition[prevKey] = cursors[prevKey];
+        const key = this.paginationKeys[j];
+
+        andConditions[key as string] = decodedCursor[key as string];
       }
 
-      condition[key] = { [operator]: cursors[key] };
-      conditions.push(condition);
+      // Add comparison condition for current key
+      const currentKey = this.paginationKeys[i];
+      andConditions[currentKey as string] = {
+        [operator]: decodedCursor[currentKey as string],
+      };
+
+      orConditions.push(andConditions);
     }
 
-    return conditions.length > 1 ? { $or: conditions } : conditions[0];
+    if (orConditions.length === 1) {
+      Object.assign(filter, orConditions[0]);
+    } else if (orConditions.length > 1) {
+      filter.$or = orConditions;
+    }
+
+    return filter;
+  }
+
+  private buildSortOptions(): Record<string, SortOrder> {
+    let { order } = this;
+
+    // Flip order for beforeCursor
+    if (!this.hasAfterCursor() && this.hasBeforeCursor()) {
+      order = this.flipOrder(order);
+    }
+
+    const sortOptions: Record<string, SortOrder> = {};
+
+    for (const key of this.paginationKeys) {
+      sortOptions[key as string] = order === Order.ASC ? 1 : -1;
+    }
+
+    return sortOptions;
   }
 
   private getOperator(): string {
@@ -131,21 +172,6 @@ export default class Paginator<T extends Document> {
     return "$eq";
   }
 
-  private buildSortOrder(): any {
-    let order = this.order;
-
-    if (!this.hasAfterCursor() && this.hasBeforeCursor()) {
-      order = this.flipOrder(order);
-    }
-
-    const sortOrder: any = {};
-    this.paginationKeys.forEach((key) => {
-      sortOrder[key] = order === Order.ASC ? 1 : -1;
-    });
-
-    return sortOrder;
-  }
-
   private hasAfterCursor(): boolean {
     return this.afterCursor !== null;
   }
@@ -154,65 +180,114 @@ export default class Paginator<T extends Document> {
     return this.beforeCursor !== null;
   }
 
-  private encode(entity: T): string {
+  private encode(entity: Entity): string {
     const payload = this.paginationKeys
       .map((key) => {
-        const value = (entity as any)[key];
+        const value = entity[key];
         const encodedValue = this.encodeValue(value);
-        return `${key}:${encodedValue}`;
+        return `${String(key)}:${encodedValue}`;
       })
       .join(",");
 
     return btoa(payload);
   }
 
-  private decode(cursor: string): CursorParam {
-    const cursors: CursorParam = {};
+  private decode(cursor: string): Record<string, any> {
+    const cursors: Record<string, any> = {};
     const columns = atob(cursor).split(",");
 
-    columns.forEach((column) => {
-      const [key, raw] = column.split(":");
-      cursors[key] = this.decodeValue(raw);
-    });
+    for (const column of columns) {
+      const [key, encodedValue] = column.split(":");
+      const value = this.decodeValue(encodedValue);
+      cursors[key] = value;
+    }
 
     return cursors;
   }
 
   private encodeValue(value: any): string {
-    if (value === null || value === undefined) return "null";
+    if (value === null || value === undefined) {
+      return "null";
+    }
 
     if (value instanceof Date) {
-      return value.getTime().toString();
+      return `date:${value.getTime()}`;
     }
 
-    if (typeof value === "object") {
-      return encodeURIComponent(value.toString());
+    if (typeof value === "object" && value.toString) {
+      // Handle MongoDB ObjectId and other objects with toString method
+      return `object:${encodeURIComponent(value.toString())}`;
     }
 
-    return encodeURIComponent(value.toString());
+    if (typeof value === "string") {
+      return `string:${encodeURIComponent(value)}`;
+    }
+
+    if (typeof value === "number") {
+      return `number:${value}`;
+    }
+
+    if (typeof value === "boolean") {
+      return `boolean:${value}`;
+    }
+
+    throw new Error(`Unsupported cursor value type: ${typeof value}`);
   }
 
-  private decodeValue(value: string): any {
-    if (value === "null") return null;
-
-    // Try to parse as number (timestamp)
-    const num = parseInt(value, 10);
-    if (!isNaN(num) && num.toString() === value) {
-      // Check if it's a timestamp (reasonable range)
-      if (num > 1000000000000) {
-        return new Date(num);
-      }
-      return num;
+  private decodeValue(encodedValue: string): any {
+    if (encodedValue === "null") {
+      return null;
     }
 
-    return decodeURIComponent(value);
+    const [type, value] = encodedValue.split(":", 2);
+
+    switch (type) {
+      case "date": {
+        const timestamp = parseInt(value, 10);
+        if (Number.isNaN(timestamp)) {
+          throw new Error("Invalid date timestamp in cursor");
+        }
+        return new Date(timestamp);
+      }
+
+      case "object": {
+        return decodeURIComponent(value);
+      }
+
+      case "string": {
+        return decodeURIComponent(value);
+      }
+
+      case "number": {
+        const num = parseFloat(value);
+        if (Number.isNaN(num)) {
+          throw new Error("Invalid number in cursor");
+        }
+        return num;
+      }
+
+      case "boolean": {
+        return value === "true";
+      }
+
+      default: {
+        throw new Error(`Unknown cursor value type: ${type}`);
+      }
+    }
   }
 
   private flipOrder(order: Order): Order {
     return order === Order.ASC ? Order.DESC : Order.ASC;
   }
 
-  private toPagingResult(entities: T[]): PagingResult<T> {
+  private getCursor(): Cursor {
+    return {
+      afterCursor: this.nextAfterCursor,
+      beforeCursor: this.nextBeforeCursor,
+    };
+  }
+
+  private toPagingResult(entities: Entity[]): PagingResult<Entity> {
     return {
       data: entities,
       cursor: this.getCursor(),
@@ -227,8 +302,8 @@ export interface PagingQuery {
   order?: Order | "ASC" | "DESC";
 }
 
-export interface PaginationOptions<T> {
-  paginationKeys?: string[];
+export interface PaginationOptions<Entity> {
+  paginationKeys?: (keyof Entity)[];
   query?: PagingQuery;
 }
 
@@ -241,8 +316,8 @@ export interface Cursor {
   afterCursor: string | null;
 }
 
-export interface PagingResult<T> {
-  data: T[];
+export interface PagingResult<Entity> {
+  data: Entity[];
   cursor: Cursor;
 }
 

@@ -25,9 +25,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { employeeStatusStyles } from '../constants/employee-helpers'
-import { employeeRoleOptionsFn } from '../constants/employee-options'
-import { useEmployee } from '../context/employee-context'
+import { employeeStatusStyles } from '@/features/employee/constants/employee-helpers'
+import { employeeRoleOptionsFn } from '@/features/employee/constants/employee-options'
+import { useEmployee } from '@/features/employee/context/employee-context'
 
 interface EmployeeCardProps {
   employee: User

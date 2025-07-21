@@ -1,3 +1,4 @@
+import { CursorPaginatedDto } from "@/common/dto/cursor-pagination/paginated.dto";
 import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { MessageResponse, Uuid } from "@/common/types/common.type";
 import { UserRole } from "@/constants/roles.constant";
@@ -23,6 +24,7 @@ import { CreateUsersReqDto } from "./dto/create-users.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
+import { LoadMoreUsersReqDto } from "./dto/load-more-users.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
 import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
@@ -87,18 +89,18 @@ export class UserController {
     return await this.userService.findAll(reqDto);
   }
 
-  // @Get("/load-more")
-  // @ApiAuth({
-  //   type: UserResDto,
-  //   summary: "Load more users",
-  //   isPaginated: true,
-  //   paginationType: "cursor",
-  // })
-  // async loadMoreUsers(
-  //   @Query() reqDto: LoadMoreUsersReqDto,
-  // ): Promise<CursorPaginatedDto<UserResDto>> {
-  //   return await this.userService.loadMoreUsers(reqDto);
-  // }
+  @Get("/load-more")
+  @ApiAuth({
+    type: UserResDto,
+    summary: "Load more users",
+    isPaginated: true,
+    paginationType: "cursor",
+  })
+  async loadMoreUsers(
+    @Query() reqDto: LoadMoreUsersReqDto,
+  ): Promise<CursorPaginatedDto<UserResDto>> {
+    return await this.userService.loadMoreUsers(reqDto);
+  }
 
   @Get(":id")
   @ApiAuth({ type: UserResDto, summary: "Find user by id" })

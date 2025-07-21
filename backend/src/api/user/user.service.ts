@@ -1,6 +1,8 @@
+import { CursorPaginatedDto } from "@/common/dto/cursor-pagination/paginated.dto";
 import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { ErrorCode } from "@/constants/error-code.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
+import { buildPaginator } from "@/utils/cursor-pagination";
 import { paginate } from "@/utils/offset-pagination";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import assert from "assert";
@@ -9,6 +11,7 @@ import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
+import { LoadMoreUsersReqDto } from "./dto/load-more-users.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
 import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
@@ -90,30 +93,25 @@ export class UserService {
     return new OffsetPaginatedDto(plainToInstance(UserResDto, users), metaDto);
   }
 
-  // async loadMoreUsers(reqDto: LoadMoreUsersReqDto): Promise<CursorPaginatedDto<UserResDto>> {
-  //   const paginator = buildPaginator<UserDocument>({
-  //     entity: this.userRepository.userModel,
-  //     alias: "user",
-  //     paginationKeys: ["createdAt"],
-  //     query: {
-  //       limit: reqDto.limit,
-  //       order: "DESC",
-  //       afterCursor: reqDto.afterCursor,
-  //       beforeCursor: reqDto.beforeCursor,
-  //     },
-  //   });
+  async loadMoreUsers(reqDto: LoadMoreUsersReqDto): Promise<CursorPaginatedDto<UserResDto>> {
+    const paginator = buildPaginator<UserDocument>(this.userRepository.userModel, {
+      query: reqDto,
+    });
 
-  //   const { data, cursor } = await paginator.paginate(queryBuilder);
+    const { data, cursor } = await paginator.paginate({
+      limit: reqDto.limit,
+      order: "DESC",
+      afterCursor: reqDto.afterCursor,
+      beforeCursor: reqDto.beforeCursor,
+    });
 
-  //   const metaDto = new CursorPaginationDto(
-  //     data.length,
-  //     cursor.afterCursor,
-  //     cursor.beforeCursor,
-  //     reqDto,
-  //   );
-
-  //   return new CursorPaginatedDto(plainToInstance(UserResDto, data), metaDto);
-  // }
+    return new CursorPaginatedDto(plainToInstance(UserResDto, data), {
+      limit: reqDto.limit ?? 10,
+      totalRecords: data.length,
+      afterCursor: cursor.afterCursor ?? undefined,
+      beforeCursor: cursor.beforeCursor ?? undefined,
+    });
+  }
 
   async findOne(id: string): Promise<UserResDto> {
     assert(id, "id is required");

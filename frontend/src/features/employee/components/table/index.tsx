@@ -5,7 +5,7 @@ import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { useDataTable } from '@/hooks/use-data-table'
 import { DataTable } from '@/components/data-table/data-table'
-import { EmployeeCardView } from '@/features/employee/components/employee-card-view'
+import { EmployeeCardView } from '@/features/employee/components/table/employee-card-view'
 import {
   employeeDepartmentOptionsFn,
   employeeRoleOptionsFn,
