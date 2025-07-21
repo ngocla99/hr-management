@@ -6,8 +6,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { useDeleteUser } from '../api/delete-user'
-import { UsersInput } from '../api/get-users'
+import { useDeleteUser } from '@/features/user/api/delete-user'
+import { UsersInput } from '@/features/user/api/get-users'
 
 interface Props {
   open: boolean

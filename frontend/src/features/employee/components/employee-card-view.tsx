@@ -1,20 +1,21 @@
 import { type Table as TanstackTable } from '@tanstack/react-table'
 import {
-  IconCheck,
-  IconDotsVertical,
+  IconBriefcase,
+  IconClock,
+  IconDots,
   IconEdit,
   IconEye,
+  IconId,
   IconMail,
   IconPhone,
   IconTrash,
 } from '@tabler/icons-react'
-import { User, UserStatus } from '@/types/api'
-import { VariantProps } from 'class-variance-authority'
+import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge, badgeVariants } from '@/components/ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -25,45 +26,27 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { employeeStatusStyles } from '../constants/employee-helpers'
+import { employeeRoleOptionsFn } from '../constants/employee-options'
 import { useEmployee } from '../context/employee-context'
 
 interface EmployeeCardProps {
   employee: User
+  index: number
 }
 
-function EmployeeCard({ employee }: EmployeeCardProps) {
+function EmployeeCard({ employee, index }: EmployeeCardProps) {
   const { t } = useTranslation()
   const { setOpen } = useEmployee()
-  const badgeColor = employeeStatusStyles.get(employee.status)
-
-  const getStatusIcon = (status: UserStatus) => {
-    switch (status) {
-      case UserStatus.ACTIVE:
-        return <div className='h-2 w-2 rounded-full bg-green-500' />
-      case UserStatus.NOT_VERIFIED:
-        return <IconCheck className='h-4 w-4 text-green-500' />
-      case UserStatus.INACTIVE:
-        return (
-          <div className='flex h-4 w-4 items-center justify-center'>
-            <div className='h-3 w-0.5 bg-gray-400' />
-            <div className='ml-0.5 h-3 w-0.5 bg-gray-400' />
-          </div>
-        )
-      case UserStatus.SUSPENDED:
-        return <div className='h-2 w-2 rounded-full bg-red-500' />
-      default:
-        return null
-    }
-  }
 
   return (
-    <Card className='relative transition-shadow hover:shadow-md'>
-      <CardContent className='p-6'>
-        {/* Header with status and options */}
+    <Card className='relative shadow transition-shadow hover:shadow-2xl'>
+      <CardContent className='px-6'>
         <div className='mb-4 flex items-start justify-between'>
           <Badge
             variant={employeeStatusStyles.get(employee.status)}
             className={cn('capitalize')}
+            withDot
+            size='lg'
           >
             {t(('status.' + employee.status) as any, {
               ns: 'users',
@@ -72,28 +55,28 @@ function EmployeeCard({ employee }: EmployeeCardProps) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
-                <IconDotsVertical className='h-4 w-4' />
+                <IconDots className='size-5' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               <DropdownMenuItem onClick={() => setOpen('view')}>
-                <IconEye className='mr-2 h-4 w-4' />
+                <IconEye className='mr-2 size-4' />
                 {t('view', { ns: 'common' })}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setOpen('edit')}>
-                <IconEdit className='mr-2 h-4 w-4' />
+                <IconEdit className='mr-2 size-4' />
                 {t('edit', { ns: 'common' })}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setOpen('invite')}>
-                <IconMail className='mr-2 h-4 w-4' />
+                <IconMail className='mr-2 size-4' />
                 {t('inviteEmail', { ns: 'common' })}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => setOpen('delete')}
-                className='text-red-600'
+                className='text-destructive'
               >
-                <IconTrash className='mr-2 h-4 w-4' />
+                <IconTrash className='mr-2 size-4' />
                 {t('delete', { ns: 'common' })}
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -101,69 +84,80 @@ function EmployeeCard({ employee }: EmployeeCardProps) {
         </div>
 
         {/* Profile section */}
-        <div className='mb-4 flex items-center space-x-3'>
-          <Avatar className='h-16 w-16'>
+        <div className='mb-4 flex flex-col items-center gap-4'>
+          <Avatar className='size-20'>
             <AvatarImage src={employee.avatar} alt={employee.fullName} />
-            <AvatarFallback className='bg-gradient-to-br from-purple-100 to-green-100 text-gray-700'>
-              {employee.firstName.charAt(0)}
-              {employee.lastName.charAt(0)}
+            <AvatarFallback className='bg-gradient-to-br from-purple-100 to-green-100'>
+              {employee.firstName?.charAt(0)}
+              {employee.lastName?.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          <div className='flex-1'>
-            <h3 className='text-lg font-semibold text-gray-900'>
-              {employee.fullName}
-            </h3>
-            <p className='text-sm text-gray-600'>{employee.jobRole}</p>
+          <div className='flex flex-col items-center gap-2'>
+            <h3 className='text-lg font-semibold'>{employee.fullName}</h3>
+            <p className='text-muted-foreground h-5 text-sm'>
+              {employee.jobRole}
+            </p>
           </div>
         </div>
 
         {/* Information box */}
-        <div className='space-y-3 rounded-lg bg-gray-50 p-4'>
-          <div className='flex items-center justify-between'>
-            <span className='text-xs text-gray-500'>Employee ID</span>
-            <span className='text-sm font-medium'>
-              #
-              {employee.employeeId ||
-                employee.id?.toString().padStart(2, '0') ||
-                'EMP01'}
+        <div className='bg-accent/50 space-y-3 rounded-lg border p-4 shadow-sm'>
+          <div className='flex items-center space-x-2'>
+            <IconId className='text-muted-foreground size-4' />
+            <span className='text-sm'>#EM{index + 1}</span>
+          </div>
+
+          <div className='flex items-center space-x-2'>
+            <IconBriefcase className='text-muted-foreground size-4' />
+            <span className='text-sm'>
+              {
+                employeeRoleOptionsFn(t).find(
+                  (role) => role.value === employee.jobRole
+                )?.label
+              }
+            </span>
+            <span className='text-gray-400'>•</span>
+            <IconClock className='text-muted-foreground size-4' />
+            <span className='text-sm'>
+              {t(('employmentType.' + employee.employmentType) as any, {
+                ns: 'employee',
+              })}
             </span>
           </div>
 
-          <div className='flex items-center justify-between'>
-            <span className='text-xs text-gray-500'>Department</span>
-            <span className='text-sm font-medium'>{employee.department}</span>
-          </div>
-
-          <div className='flex items-center justify-between'>
-            <span className='text-xs text-gray-500'>Employment Type</span>
-            <span className='text-sm font-medium'>
-              {employee.employmentType}
+          <div className='flex items-center space-x-2'>
+            <IconMail className='text-muted-foreground size-4' />
+            <span className='text-chart-4 rounded-full border bg-white px-1 py-0.5 text-sm'>
+              {employee.email}
             </span>
           </div>
 
-          <div className='flex items-center space-x-2 text-sm'>
-            <IconMail className='h-4 w-4 text-gray-400' />
-            <span className='text-gray-600'>{employee.email}</span>
-          </div>
-
-          <div className='flex items-center space-x-2 text-sm'>
-            <IconPhone className='h-4 w-4 text-gray-400' />
-            <span className='text-gray-600'>{employee.phoneNumber}</span>
+          <div className='flex items-center space-x-2'>
+            <IconPhone className='text-muted-foreground size-4' />
+            <span className='text-chart-4 rounded-full border bg-white px-1 py-0.5 text-sm'>
+              {employee.phoneNumber}
+            </span>
           </div>
         </div>
 
         {/* Footer section */}
         <div className='mt-4 flex items-center justify-between'>
-          <div className='text-sm text-gray-500'>
-            Joined at {formatDate(employee.dateStarted)}
+          <div className='text-muted-foreground/50 text-sm'>
+            Joined at{' '}
+            <span className='text-foreground'>
+              {formatDate(employee.dateStarted)}
+            </span>
           </div>
-          <Button
-            variant='link'
-            className='h-auto p-0 text-sm text-blue-600 hover:text-blue-800'
-            onClick={() => setOpen('view')}
-          >
-            View details &gt;
-          </Button>
+          <div className='group/button'>
+            <Button
+              variant='link'
+              className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-sm'
+              onClick={() => setOpen('view')}
+            >
+              <span className='underline underline-offset-4'>View details</span>
+            </Button>
+            <span className='group-hover/button:text-primary'>&gt;</span>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -180,8 +174,12 @@ export function EmployeeCardView({ table }: EmployeeCardViewProps) {
   return (
     <div className='space-y-4'>
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {table.getRowModel().rows.map((row) => (
-          <EmployeeCard key={row.id} employee={row.original} />
+        {table.getRowModel().rows.map((row, index) => (
+          <EmployeeCard
+            key={row.id}
+            employee={row.original}
+            index={row.index}
+          />
         ))}
       </div>
 

@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { useDataTable } from '@/hooks/use-data-table'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
-import { UsersInput, useUsers } from '../api/get-users'
+import { UsersInput, useUsers } from '@/features/user/api/get-users'
 import {
   userRoleOptionsFn,
   userStatusOptionsFn,
-} from '../constants/user-options'
+} from '@/features/user/constants/user-options'
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
 

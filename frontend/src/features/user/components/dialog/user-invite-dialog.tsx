@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { SelectDropdown } from '@/components/select-dropdown'
-import { userRoleOptionsFn } from '../constants/user-options'
+import { userRoleOptionsFn } from '@/features/user/constants/user-options'
 
 const formSchema = z.object({
   email: z

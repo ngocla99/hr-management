@@ -30,7 +30,7 @@ import {
   employmentTypeOptionsFn,
 } from '@/features/employee/constants/employee-options'
 import { useEmployee } from '@/features/employee/context/employee-context'
-import { checkboxClass } from '@/features/user/components/user-columns'
+import { checkboxClass } from '@/features/user/components/table/user-columns'
 
 export const useEmployeeColumns = () => {
   const { t } = useTranslation()
@@ -83,8 +83,8 @@ export const useEmployeeColumns = () => {
               <Avatar className='h-8 w-8'>
                 <AvatarImage src={employee.avatar} alt={employee.fullName} />
                 <AvatarFallback>
-                  {employee.firstName.charAt(0)}
-                  {employee.lastName.charAt(0)}
+                  {employee.firstName?.charAt(0)}
+                  {employee.lastName?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className='min-w-0 flex-1'>

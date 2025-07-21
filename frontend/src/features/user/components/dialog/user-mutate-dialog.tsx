@@ -24,10 +24,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
-import { useCreateUser } from '../api/create-user'
-import { useUpdateUser } from '../api/update-user'
-import { USER_ROLES } from '../constants/user-constants'
-import { userRoleOptionsFn } from '../constants/user-options'
+import { useCreateUser } from '@/features/user/api/create-user'
+import { useUpdateUser } from '@/features/user/api/update-user'
+import { USER_ROLES } from '@/features/user/constants/user-constants'
+import { userRoleOptionsFn } from '@/features/user/constants/user-options'
 
 const formSchema = z
   .object({

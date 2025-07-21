@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { Main } from '@/components/layout/main'
-import { UserDialogs } from './components/user-dialogs'
+import { UserDialogs } from './components/dialog/user-dialogs'
 import { UserPrimaryButtons } from './components/user-primary-buttons'
-import { UserTable } from './components/user-table'
+import { UserTable } from './components/table/user-table'
 import UserProvider from './context/user-context'
 
 function UserContent() {

@@ -1,4 +1,4 @@
-import { useUser } from '../context/user-context'
+import { useUser } from '@/features/user/context/user-context'
 import { UserDeleteDialog } from './user-delete-dialog'
 import { UserInviteDialog } from './user-invite-dialog'
 import { UserMutateDialog } from './user-mutate-dialog'

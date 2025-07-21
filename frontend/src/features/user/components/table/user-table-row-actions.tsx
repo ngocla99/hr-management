@@ -13,9 +13,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import confirm from '@/components/confirm'
-import { useActivateUser } from '../api/activate-user'
-import { useSuspendUser } from '../api/suspend-user'
-import { useUser } from '../context/user-context'
+import { useActivateUser } from '@/features/user/api/activate-user'
+import { useSuspendUser } from '@/features/user/api/suspend-user'
+import { useUser } from '@/features/user/context/user-context'
 
 interface UsersTableRowActionsProps {
   row: Row<User>

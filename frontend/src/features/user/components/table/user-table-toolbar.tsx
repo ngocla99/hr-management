@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button'
 import { SingleDayPicker } from '@/components/ui/single-day-picker'
 import confirm from '@/components/confirm'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
-import { useDeleteUsers } from '../api/delete-users'
-import { UsersInput } from '../api/get-users'
+import { useDeleteUsers } from '@/features/user/api/delete-users'
+import { UsersInput } from '@/features/user/api/get-users'
 
 interface UsersTableToolbarProps<TData> {
   table: Table<TData>
