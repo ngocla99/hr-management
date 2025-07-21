@@ -16,6 +16,7 @@ import {
 } from '@tanstack/react-table'
 import type { DataTableFilterField } from '@/types/common'
 import { useDebounce } from '@/hooks/use-debounce'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface UseDataTableProps<TData, TValue> {
   /**
@@ -82,9 +83,16 @@ interface UseDataTableProps<TData, TValue> {
    * @type Route
    */
   route: RouteApi<any, any>
+
+  /**
+   * Whether the data is loading.
+   * @type boolean
+   */
+  isLoading: boolean
 }
 
 export function useDataTable<TData, TValue>({
+  isLoading,
   data,
   columns,
   rowCount,
@@ -280,9 +288,25 @@ export function useDataTable<TData, TValue>({
     JSON.stringify(filterableColumnFilters),
   ])
 
+  // Show loading skeleton
+  const tableData = React.useMemo(
+    () => (isLoading ? Array(searchParams.limit).fill({}) : data),
+    [isLoading, data, searchParams.limit]
+  )
+  const tableColumns = React.useMemo(
+    () =>
+      isLoading
+        ? columns.map((column) => ({
+            ...column,
+            cell: () => <Skeleton className='h-8 w-full' />,
+          }))
+        : columns,
+    [isLoading, columns]
+  )
+
   const table = useReactTable({
-    data,
-    columns,
+    data: tableData,
+    columns: tableColumns,
     rowCount: rowCount ?? -1,
     state: {
       pagination,

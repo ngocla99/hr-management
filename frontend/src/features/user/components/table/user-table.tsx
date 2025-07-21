@@ -3,7 +3,6 @@ import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { useDataTable } from '@/hooks/use-data-table'
-import { Skeleton } from '@/components/ui/skeleton'
 import { DataTable } from '@/components/data-table/data-table'
 import { UsersInput, useUsers } from '@/features/user/api/get-users'
 import {
@@ -26,7 +25,6 @@ export function UserTable() {
     },
   })
 
-  const users = data?.data ?? []
   const total = data?.pagination?.totalRecords ?? 0
 
   const filterFields: DataTableFilterField<User>[] = [
@@ -49,28 +47,18 @@ export function UserTable() {
   ]
 
   const { table } = useDataTable({
+    isLoading,
     route,
-    data: users,
+    data: data?.data ?? [],
     columns,
     rowCount: total,
     filterFields,
   })
 
-  if (isLoading) {
-    return (
-      <div className='space-y-2'>
-        <Skeleton className='h-8 w-full' />
-        <Skeleton className='h-8 w-full' />
-        <Skeleton className='h-8 w-full' />
-        <Skeleton className='h-8 w-full' />
-      </div>
-    )
-  }
-
   if (error) {
     return (
       <div className='flex h-64 items-center justify-center'>
-        <div className='text-lg text-red-500'>Error: {error.message}</div>
+        <div className='text-destructive text-lg'>Error: {error.message}</div>
       </div>
     )
   }

@@ -2,7 +2,7 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Main } from '@/components/layout/main'
 import { useUserStats } from '../user/api/get-user-stats'
-import { UsersInput, useUsers } from '../user/api/get-users'
+import { UsersInput } from '../user/api/get-users'
 import { EmployeeDetailView } from './components/employee-detail-view'
 import { EmployeePrimaryButtons } from './components/employee-primary-buttons'
 import { EmployeeTable } from './components/table'
@@ -12,21 +12,11 @@ const route = getRouteApi('/_authenticated/organization/employee')
 function EmployeeContent() {
   const { t } = useTranslation()
   const searchParams = route.useSearch() as UsersInput
-
-  const { data: usersData } = useUsers({
-    input: {
-      ...searchParams,
-    },
-  })
-
   const { data: statsData } = useUserStats({
     input: {
       ...searchParams,
     },
   })
-
-  const users = usersData?.data ?? []
-  const total = usersData?.pagination?.totalRecords ?? 0
 
   return (
     <>
@@ -61,7 +51,7 @@ function EmployeeContent() {
             <EmployeePrimaryButtons />
           </div>
           <div className='-mx-4 flex-1 overflow-auto px-4 py-1'>
-            <EmployeeTable users={users} total={total} />
+            <EmployeeTable />
           </div>
         </div>
       </Main>
