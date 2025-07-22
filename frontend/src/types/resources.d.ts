@@ -109,7 +109,8 @@ interface Resources {
     "clearFilters": "Clear filters",
     "backToTop": "Back to top",
     "notProvided": "Not Provided",
-    "viewOnMap": "View on Map"
+    "viewOnMap": "View on Map",
+    "viewContract": "View Contract"
   },
   "dashboard": {
     "welcome": "Welcome Back, {{name}}!",
@@ -141,10 +142,21 @@ interface Resources {
   "employee": {
     "page": {
       "title": "Employees",
-      "description": "Manage your company employees"
+      "description": "Manage your company employees",
+      "personalInformation": "Personal Information",
+      "contactInformation": "Contact Information",
+      "addressInformation": "Address Information",
+      "personalContact": "Personal Contact",
+      "otherContact": "Other Contact",
+      "residentialAddress": "Residential Address",
+      "citizenIdAddress": "Citizen ID Address",
+      "notes": "Notes",
+      "tags": "Tags",
+      "employmentOverview": "Employment Overview"
     },
     "actions": {
-      "addEmployee": "Add Employee"
+      "addEmployee": "Add Employee",
+      "addTag": "Add Tag"
     },
     "employmentType": {
       "fulltime": "Full Time",
@@ -154,14 +166,24 @@ interface Resources {
       "freelance": "Freelance"
     },
     "role": {
-      "feDeveloper": "Frontend Developer",
-      "beDeveloper": "Backend Developer",
-      "fullstackDeveloper": "Full Stack Developer",
-      "mobileDeveloper": "Mobile Developer",
+      "fe_developer": "Frontend Developer",
+      "be_developer": "Backend Developer",
+      "fullstack_developer": "Full Stack Developer",
+      "mobile_developer": "Mobile Developer",
       "qa": "QA",
       "hr": "HR",
       "designer": "Designer",
       "accountant": "Accountant"
+    },
+    "level": {
+      "entry": "Entry",
+      "junior": "Junior",
+      "mid": "Mid",
+      "senior": "Senior",
+      "lead": "Lead",
+      "manager": "Manager",
+      "director": "Director",
+      "executive": "Executive"
     },
     "department": {
       "qa": "QA",
@@ -180,16 +202,6 @@ interface Resources {
       "employeeCreated": "Employee created successfully",
       "deleteConfirmation": "Are you sure you want to delete this employee?",
       "payrollNotAvailable": "Payroll information is not available in this demo."
-    },
-    "card": {
-      "personalInformation": "Personal Information",
-      "contactInformation": "Contact Information",
-      "addressInformation": "Address Information",
-      "personalContact": "Personal Contact",
-      "otherContact": "Other Contact",
-      "residentialAddress": "Residential Address",
-      "citizenIdAddress": "Citizen ID Address",
-      "notes": "Notes"
     }
   },
   "glossary": {
@@ -280,7 +292,9 @@ interface Resources {
     "emergencyPhone": "Emergency Phone",
     "relationship": "Relationship",
     "phoneNumber": "Phone Number",
-    "notProvided": "Not Provided"
+    "notProvided": "Not Provided",
+    "jobLevel": "Job Level",
+    "employmentStatus": "Employment Status"
   },
   "users": {
     "page.title": "User List",

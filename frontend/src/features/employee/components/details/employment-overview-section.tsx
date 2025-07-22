@@ -1,18 +1,16 @@
-import React from 'react'
+import { IconPencilMinus } from '@tabler/icons-react'
 import { User } from '@/types/api'
-import { Edit, Briefcase, ExternalLink } from 'lucide-react'
+import { Briefcase } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { formatDate } from '@/lib/date'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-interface EmploymentOverviewSectionProps {
+interface EmploymentOverviewProps {
   employee: User
 }
 
-export function EmploymentOverviewSection({
-  employee,
-}: EmploymentOverviewSectionProps) {
+export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
   const { t } = useTranslation()
 
   const formatEmploymentDuration = (startDate: Date) => {
@@ -25,56 +23,82 @@ export function EmploymentOverviewSection({
 
   const employmentFields = [
     {
-      label: 'Date Started',
+      label: t('dateStarted', { ns: 'glossary' }),
       value: employee.dateStarted
         ? formatEmploymentDuration(employee.dateStarted)
         : '-',
+      className: 'pt-0 pb-2',
     },
     {
-      label: 'Job Role',
+      label: t('jobRole', { ns: 'glossary' }),
       value: employee.jobRole
         ? t(`role.${employee.jobRole}`, { ns: 'employee' })
         : '-',
+      className: 'pt-0 pb-2 pl-4',
     },
     {
-      label: 'Job Level',
+      label: t('jobLevel', { ns: 'glossary' }),
       value: employee.jobLevel
-        ? t(`jobLevel.${employee.jobLevel}`, { ns: 'employee' })
+        ? t(`level.${employee.jobLevel}`, { ns: 'employee' })
         : '-',
+      className: 'border-none pb-2',
     },
     {
-      label: 'Employment Status',
+      label: t('employmentStatus', { ns: 'glossary' }),
       value: employee.employmentType
         ? t(`employmentType.${employee.employmentType}`, { ns: 'employee' })
         : '-',
+      className: 'border-none pb-2 pl-4',
     },
   ]
 
   return (
     <Card>
-      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-4'>
+      <CardHeader className='flex flex-row items-center justify-between space-y-0'>
         <CardTitle className='flex items-center space-x-2'>
-          <div className='rounded-lg bg-purple-100 p-2 dark:bg-purple-900'>
-            <Briefcase className='h-4 w-4 text-purple-600 dark:text-purple-400' />
-          </div>
-          <span>Employment Overview</span>
+          <Briefcase className='text-muted-foreground size-5' />
+          <span className='font-bold'>
+            {t('page.employmentOverview', { ns: 'employee' })}
+          </span>
         </CardTitle>
+        <Button variant='light' size='sm' className='shadow-2xl'>
+          <IconPencilMinus className='mr-2 h-4 w-4' />
+          {t('edit', { ns: 'common' })}
+        </Button>
       </CardHeader>
-      <CardContent className='space-y-4'>
-        {employmentFields.map((field, index) => (
-          <div key={index} className='flex items-center justify-between'>
-            <label className='text-muted-foreground text-sm'>
-              {field.label}
-            </label>
-            <div className='text-sm font-medium'>{field.value}</div>
-          </div>
-        ))}
+      <CardContent>
+        <div className='grid grid-cols-2'>
+          {employmentFields.map((field, index) => (
+            <div
+              key={index}
+              className={cn('col-span-1 border-b py-5', field.className)}
+            >
+              <div className='grid gap-2'>
+                <label className='text-muted-foreground text-xs font-medium'>
+                  {field.label}
+                </label>
+                <div className='text-foreground text-sm font-medium capitalize'>
+                  {field.value}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-        <div className='pt-2'>
-          <Button variant='link' size='sm' className='h-auto p-0 text-sm'>
-            View contract
-            <ExternalLink className='ml-1 h-3 w-3' />
-          </Button>
+        <div className='pt-4'>
+          <div className='group/button'>
+            <Button
+              variant='link'
+              className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-xs'
+            >
+              <span className='underline underline-offset-4'>
+                {t('viewContract', { ns: 'common' })}
+              </span>
+            </Button>
+            <span className='group-hover/button:text-primary text-sm'>
+              &gt;
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>

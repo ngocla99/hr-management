@@ -18,7 +18,7 @@ export function ContactInformation({ employee }: ContactInformationProps) {
         <CardTitle className='flex items-center space-x-2'>
           <IconAddressBook className='text-muted-foreground size-5' />
           <span className='font-bold'>
-            {t('card.contactInformation', { ns: 'employee' })}
+            {t('page.contactInformation', { ns: 'employee' })}
           </span>
         </CardTitle>
         <Button variant='light' size='sm' className='shadow-2xl'>
@@ -30,7 +30,7 @@ export function ContactInformation({ employee }: ContactInformationProps) {
         {/* Personal Contact */}
         <div>
           <h4 className='mb-3 text-sm font-medium'>
-            {t('card.personalContact', { ns: 'employee' })}
+            {t('page.personalContact', { ns: 'employee' })}
           </h4>
           <div className='grid grid-cols-2 gap-4'>
             <div className='flex flex-col gap-2'>
@@ -65,7 +65,7 @@ export function ContactInformation({ employee }: ContactInformationProps) {
         {/* Emergency Contact */}
         <div>
           <h4 className='mb-3 text-sm font-medium'>
-            {t('card.otherContact', { ns: 'employee' })}
+            {t('page.otherContact', { ns: 'employee' })}
           </h4>
           <div className='grid grid-cols-3 gap-4'>
             <div className='flex flex-col gap-2'>

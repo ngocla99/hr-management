@@ -17,41 +17,41 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
     {
       label: t('fullName', { ns: 'glossary' }),
       value: employee.fullName,
-      span: 'col-span-1 pt-0',
+      className: 'pt-0',
     },
     {
       label: t('gender', { ns: 'glossary' }),
       value: employee.gender
         ? t(`gender.${employee.gender}`, { ns: 'users' })
         : '-',
-      span: 'col-span-1 pt-0 pl-4',
+      className: 'pt-0 pl-4',
     },
     {
       label: t('maritalStatus', { ns: 'glossary' }),
       value: employee.maritalStatus
         ? t(`maritalStatus.${employee.maritalStatus}`, { ns: 'users' })
         : '-',
-      span: 'col-span-1',
+      className: '',
     },
     {
       label: t('religion', { ns: 'glossary' }),
       value: employee.religion || '-',
-      span: 'col-span-1 pl-4',
+      className: 'pl-4',
     },
     {
       label: t('placeOfBirth', { ns: 'glossary' }),
       value: employee.placeOfBirth || '-',
-      span: 'col-span-1',
+      className: '',
     },
     {
       label: t('birthdate', { ns: 'glossary' }),
       value: employee.dateOfBirth ? formatDate(employee.dateOfBirth) : '-',
-      span: 'col-span-1 pl-4',
+      className: 'pl-4',
     },
     {
       label: t('bloodType', { ns: 'glossary' }),
       value: employee.bloodType || '-',
-      span: 'col-span-1 border-none pb-2',
+      className: 'border-none pb-2',
     },
     {
       label: t('age', { ns: 'glossary' }),
@@ -61,7 +61,7 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
               new Date(employee.dateOfBirth).getFullYear()
           )
         : '-',
-      span: 'col-span-1 border-none pb-2 pl-4',
+      className: 'border-none pb-2 pl-4',
     },
   ]
 
@@ -71,7 +71,7 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
         <CardTitle className='flex items-center space-x-2'>
           <IconUserFilled className='text-muted-foreground size-5' />
           <span className='font-bold'>
-            {t('card.personalInformation', { ns: 'employee' })}
+            {t('page.personalInformation', { ns: 'employee' })}
           </span>
         </CardTitle>
         <Button variant='light' size='sm' className='shadow-2xl'>
@@ -82,7 +82,10 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
       <CardContent>
         <div className='grid grid-cols-2'>
           {personalFields.map((field, index) => (
-            <div key={index} className={cn('border-b py-5', field.span)}>
+            <div
+              key={index}
+              className={cn('col-span-1 border-b py-5', field.className)}
+            >
               <div className='grid gap-2'>
                 <label className='text-muted-foreground text-xs font-medium'>
                   {field.label}

@@ -18,7 +18,7 @@ export function AddressInformation({ employee }: AddressInformationProps) {
         <CardTitle className='flex items-center space-x-2'>
           <IconMapPinFilled className='text-muted-foreground size-5' />
           <span className='font-bold'>
-            {t('card.addressInformation', { ns: 'employee' })}
+            {t('page.addressInformation', { ns: 'employee' })}
           </span>
         </CardTitle>
         <Button variant='light' size='sm' className='shadow-2xl'>
@@ -27,76 +27,71 @@ export function AddressInformation({ employee }: AddressInformationProps) {
         </Button>
       </CardHeader>
       <CardContent className='space-y-6'>
-        <div>
-          <div className='mb-3 flex items-center justify-between'>
-            <label className='text-muted-foreground text-xs font-medium'>
-              {t('card.residentialAddress', { ns: 'employee' })}
-            </label>
-            <div className='group/button'>
-              <Button
-                variant='link'
-                className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-xs'
-              >
-                <span className='underline underline-offset-4'>
-                  {t('viewOnMap', { ns: 'common' })}
-                </span>
-              </Button>
-              <span className='group-hover/button:text-primary text-sm'>
-                &gt;
+        <div className='mb-3 flex items-center justify-between'>
+          <label className='text-muted-foreground text-xs font-medium'>
+            {t('page.residentialAddress', { ns: 'employee' })}
+          </label>
+          <div className='group/button'>
+            <Button
+              variant='link'
+              className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-xs'
+            >
+              <span className='underline underline-offset-4'>
+                {t('viewOnMap', { ns: 'common' })}
               </span>
-            </div>
+            </Button>
+            <span className='group-hover/button:text-primary text-sm'>
+              &gt;
+            </span>
           </div>
-          <div className='mb-2 text-sm font-medium'>
-            {employee.residentialAddress ||
-              t('notProvided', { ns: 'glossary' })}
-          </div>
-          {employee.residentialAddressNotes && (
-            <div>
-              <label className='text-muted-foreground text-xs'>
-                {t('card.notes', { ns: 'employee' })}
-              </label>
-              <div className='mt-1 text-sm'>
-                {employee.residentialAddressNotes}
-              </div>
-            </div>
-          )}
         </div>
+        <div className='mb-2 text-sm font-medium'>
+          {employee.residentialAddress || t('notProvided', { ns: 'glossary' })}
+        </div>
+        {employee.residentialAddressNotes && (
+          <div>
+            <label className='text-muted-foreground text-xs'>
+              {t('page.notes', { ns: 'employee' })}
+            </label>
+            <div className='mt-1 text-sm'>
+              {employee.residentialAddressNotes}
+            </div>
+          </div>
+        )}
 
         <Separator />
 
-        <div>
-          <div className='mb-3 flex items-center justify-between'>
-            <label className='text-muted-foreground text-xs font-medium'>
-              {t('card.citizenIdAddress', { ns: 'employee' })}
-            </label>
-            <div className='group/button'>
-              <Button
-                variant='link'
-                className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-xs'
-              >
-                <span className='underline underline-offset-4'>
-                  {t('viewOnMap', { ns: 'common' })}
-                </span>
-              </Button>
-              <span className='group-hover/button:text-primary text-sm'>
-                &gt;
+        <div className='mb-3 flex items-center justify-between'>
+          <label className='text-muted-foreground text-xs font-medium'>
+            {t('page.citizenIdAddress', { ns: 'employee' })}
+          </label>
+          <div className='group/button'>
+            <Button
+              variant='link'
+              className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-xs'
+            >
+              <span className='underline underline-offset-4'>
+                {t('viewOnMap', { ns: 'common' })}
               </span>
-            </div>
+            </Button>
+            <span className='group-hover/button:text-primary text-sm'>
+              &gt;
+            </span>
           </div>
-          <div className='mb-2 text-sm font-medium'>
-            {employee.citizenIdAddress || t('notProvided', { ns: 'glossary' })}
-          </div>
-          {employee.citizenIdAddressNotes && (
-            <div>
-              <label className='text-muted-foreground text-xs'>
-                {t('card.notes', { ns: 'employee' })}
-              </label>
-              <div className='bg-muted/50 mt-1 rounded-md p-3 text-sm w-60/100'>
-                {employee.citizenIdAddressNotes}
-              </div>
-            </div>
-          )}
         </div>
+        <div className='mb-2 text-sm font-medium'>
+          {employee.citizenIdAddress || t('notProvided', { ns: 'glossary' })}
+        </div>
+        {employee.citizenIdAddressNotes && (
+          <div>
+            <label className='text-muted-foreground text-xs'>
+              {t('page.notes', { ns: 'employee' })}
+            </label>
+            <div className='bg-muted/50 mt-1 w-60/100 rounded-md p-3 text-sm'>
+              {employee.citizenIdAddressNotes}
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   )

@@ -1,10 +1,21 @@
 {
   "page": {
     "title": "Nhân viên",
-    "description": "Quản lý nhân viên của bạn"
+    "description": "Quản lý nhân viên của bạn",
+    "personalInformation": "Thông tin cá nhân",
+    "contactInformation": "Thông tin liên hệ",
+    "addressInformation": "Thông tin địa chỉ",
+    "personalContact": "Liên hệ cá nhân",
+    "otherContact": "Liên hệ khác",
+    "residentialAddress": "Địa chỉ nhà",
+    "citizenIdAddress": "Địa chỉ căn cước công dân",
+    "notes": "Ghi chú",
+    "tags": "Tags",
+    "employmentOverview": "Tổng quan việc làm"
   },
   "actions": {
-    "addEmployee": "Thêm nhân viên"
+    "addEmployee": "Thêm nhân viên",
+    "addTag": "Thêm tag"
   },
   "employmentType": {
     "fulltime": "Toàn thời gian",
@@ -14,14 +25,24 @@
     "freelance": "Freelance"
   },
   "role": {
-    "feDeveloper": "Frontend Developer",
-    "beDeveloper": "Backend Developer",
-    "fullstackDeveloper": "Full Stack Developer",
-    "mobileDeveloper": "Mobile Developer",
+    "fe_developer": "Frontend Developer",
+    "be_developer": "Backend Developer",
+    "fullstack_developer": "Full Stack Developer",
+    "mobile_developer": "Mobile Developer",
     "qa": "QA",
     "hr": "HR",
     "designer": "Designer",
     "accountant": "Accountant"
+  },
+  "level": {
+    "entry": "Entry",
+    "junior": "Junior",
+    "mid": "Mid",
+    "senior": "Senior",
+    "lead": "Lead",
+    "manager": "Manager",
+    "director": "Director",
+    "executive": "Executive"
   },
   "department": {
     "qa": "QA",
@@ -40,15 +61,5 @@
     "employeeCreated": "Nhân viên đã được tạo thành công",
     "deleteConfirmation": "Bạn có chắc chắn muốn xóa nhân viên này không?",
     "payrollNotAvailable": "Thông tin lương không khả dụng trong demo này."
-  },
-  "card": {
-    "personalInformation": "Thông tin cá nhân",
-    "contactInformation": "Thông tin liên hệ",
-    "addressInformation": "Thông tin địa chỉ",
-    "personalContact": "Liên hệ cá nhân",
-    "otherContact": "Liên hệ khác",
-    "residentialAddress": "Địa chỉ nhà",
-    "citizenIdAddress": "Địa chỉ căn cước công dân",
-    "notes": "Ghi chú"
   }
 }

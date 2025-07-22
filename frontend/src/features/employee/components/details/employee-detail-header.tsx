@@ -1,14 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import { IconDots, IconDotsVertical } from '@tabler/icons-react'
-import { Route as EmployeeRoute } from '@/routes/_authenticated/organization/employee'
+import { IconDotsVertical } from '@tabler/icons-react'
 import { User } from '@/types/api'
-import {
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Mail,
-  MoreHorizontal,
-} from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SEARCH_PARAMS } from '@/lib/constants/constant'
 import { formatDate } from '@/lib/date'

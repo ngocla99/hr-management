@@ -76,5 +76,6 @@
   "clearFilters": "Clear filters",
   "backToTop": "Back to top",
   "notProvided": "Not Provided",
-  "viewOnMap": "View on Map"
+  "viewOnMap": "View on Map",
+  "viewContract": "View Contract"
 }

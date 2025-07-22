@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AddressInformation } from './address-information.tsx'
 import { ContactInformation } from './contact-information.tsx'
 import { EmployeeDetailHeader } from './employee-detail-header'
-import { EmploymentOverviewSection } from './employment-overview-section.tsx'
+import { EmploymentOverview } from './employment-overview-section.tsx'
 import { PersonalInformation } from './personal-information.tsx'
 import { TagsSection } from './tags-section.tsx'
 
@@ -109,7 +109,7 @@ export function EmployeeInfo({
 
             <div className='space-y-6'>
               <ContactInformation employee={employee} />
-              <EmploymentOverviewSection employee={employee} />
+              <EmploymentOverview employee={employee} />
               <TagsSection employee={employee} />
             </div>
           </div>
