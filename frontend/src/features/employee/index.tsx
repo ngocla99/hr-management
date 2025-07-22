@@ -4,7 +4,7 @@ import { Main } from '@/components/layout/main'
 import { UserStatsInput, useUserStats } from '../user/api/get-user-stats'
 import { EmployeeDetailView } from './components/employee-detail-view'
 import { EmployeePrimaryButtons } from './components/employee-primary-buttons'
-import { EmployeeTable } from './components/table'
+import { EmployeeTable } from './components/table/employee-table'
 import EmployeeProvider from './context/employee-context'
 
 const route = getRouteApi('/_authenticated/organization/employee')

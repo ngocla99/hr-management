@@ -25,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import { employeeStatusStyles } from '@/features/employee/constants/employee-helpers'
 import { employeeRoleOptionsFn } from '@/features/employee/constants/employee-options'
 import { useEmployee } from '@/features/employee/context/employee-context'
@@ -195,6 +196,8 @@ export function EmployeeCardView({ table }: EmployeeCardViewProps) {
           </p>
         </div>
       )}
+
+      <ScrollToTop />
     </div>
   )
 }

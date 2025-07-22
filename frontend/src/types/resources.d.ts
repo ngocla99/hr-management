@@ -106,7 +106,8 @@ interface Resources {
     "message.generating": "Generating...",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "backToTop": "Back to top"
   },
   "dashboard": {
     "welcome": "Welcome Back, {{name}}!",

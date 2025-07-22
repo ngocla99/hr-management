@@ -73,5 +73,6 @@
   "message.generating": "Đang tạo...",
   "termsOfService": "Điều khoản dịch vụ",
   "privacyPolicy": "Chính sách bảo mật",
-  "clearFilters": "Xóa bộ lọc"
+  "clearFilters": "Xóa bộ lọc",
+  "backToTop": "Quay lại đầu trang"
 }

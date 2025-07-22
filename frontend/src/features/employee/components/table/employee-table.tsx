@@ -43,7 +43,6 @@ export function EmployeeTable() {
   const {
     status: statusInfinite,
     data: usersInfiniteData,
-    isFetching: isFetchingInfinite,
     isFetchingNextPage: isFetchingNextPageInfinite,
     fetchNextPage,
   } = useUsersInfinite({
@@ -60,10 +59,6 @@ export function EmployeeTable() {
       enabled: viewMode === 'card',
     },
   })
-  console.log(
-    '🚀 ~ EmployeeTable ~ isFetchingNextPageInfinite:',
-    isFetchingNextPageInfinite
-  )
 
   const users =
     viewMode === 'table' ? (usersData?.data ?? []) : (usersInfiniteData ?? [])
@@ -115,7 +110,6 @@ export function EmployeeTable() {
 
   const onSetViewMode = (mode: 'table' | 'card') => {
     setViewMode(mode)
-    table.resetPageIndex()
   }
 
   return (
@@ -130,8 +124,15 @@ export function EmployeeTable() {
         <DataTable table={table} />
       ) : (
         <>
-          <EmployeeCardView table={table} />
-          <div ref={ref} />
+          {statusInfinite === 'pending' ? (
+            <EmployeeCardSkeletonGrid count={8} />
+          ) : (
+            <>
+              <EmployeeCardView table={table} />
+              <div ref={ref} />
+            </>
+          )}
+
           {isFetchingNextPageInfinite && <EmployeeCardSkeletonGrid count={4} />}
         </>
       )}
