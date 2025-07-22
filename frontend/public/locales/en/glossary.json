@@ -65,6 +65,7 @@
   "jobRole": "Job Role",
   "dateStarted": "Date Joined",
   "employmentType": "Type",
+  "joinAt": "Join At",
   "form": {
     "enterDescription": "Enter description",
     "enterEmail": "Enter email",

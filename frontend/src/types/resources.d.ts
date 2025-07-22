@@ -49,6 +49,7 @@ interface Resources {
     "invite": "Invite",
     "inviteEmail": "Invite Email",
     "view": "View",
+    "viewDetail": "View Detail",
     "viewAll": "View All",
     "reset": "Reset",
     "activate": "Activate",
@@ -245,6 +246,7 @@ interface Resources {
     "jobRole": "Job Role",
     "dateStarted": "Date Joined",
     "employmentType": "Type",
+    "joinAt": "Join At",
     "form": {
       "enterDescription": "Enter description",
       "enterEmail": "Enter email",

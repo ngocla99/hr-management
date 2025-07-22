@@ -36,7 +36,7 @@ interface EmployeeCardProps {
 
 function EmployeeCard({ employee, index }: EmployeeCardProps) {
   const { t } = useTranslation()
-  const { setOpen } = useEmployee()
+  const { setOpen, setCurrentRow } = useEmployee()
 
   return (
     <Card className='relative shadow transition-shadow hover:shadow-2xl'>
@@ -143,7 +143,7 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
         {/* Footer section */}
         <div className='mt-4 flex items-center justify-between'>
           <div className='text-muted-foreground/50 text-sm'>
-            Joined at{' '}
+            {t('joinAt', { ns: 'glossary' })}{' '}
             <span className='text-foreground'>
               {formatDate(employee.dateStarted)}
             </span>
@@ -152,9 +152,14 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
             <Button
               variant='link'
               className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-sm'
-              onClick={() => setOpen('view')}
+              onClick={() => {
+                setCurrentRow(employee)
+                setOpen('view')
+              }}
             >
-              <span className='underline underline-offset-4'>View details</span>
+              <span className='underline underline-offset-4'>
+                {t('viewDetail', { ns: 'common' })}
+              </span>
             </Button>
             <span className='group-hover/button:text-primary'>&gt;</span>
           </div>

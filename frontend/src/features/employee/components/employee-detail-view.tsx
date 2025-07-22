@@ -28,8 +28,7 @@ import { useEmployee } from '../context/employee-context'
 
 export function EmployeeDetailView() {
   const { t } = useTranslation()
-  const { open, setOpen } = useEmployee()
-  const { currentRow: employee } = useEmployee()
+  const { open, setOpen, currentRow: employee } = useEmployee()
 
   if (!employee) return null
 

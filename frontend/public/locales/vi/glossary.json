@@ -65,6 +65,7 @@
   "jobRole": "Chức vụ",
   "dateStarted": "Ngày tham gia",
   "employmentType": "Loại",
+  "joinAt": "Ngày tham gia",
   "form": {
     "enterDescription": "Nhập mô tả",
     "enterEmail": "Nhập email",
