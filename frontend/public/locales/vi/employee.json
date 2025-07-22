@@ -40,5 +40,12 @@
     "employeeCreated": "Nhân viên đã được tạo thành công",
     "deleteConfirmation": "Bạn có chắc chắn muốn xóa nhân viên này không?",
     "payrollNotAvailable": "Thông tin lương không khả dụng trong demo này."
+  },
+  "card": {
+    "personalInformation": "Thông tin cá nhân",
+    "contactInformation": "Thông tin liên hệ",
+    "addressInformation": "Thông tin địa chỉ",
+    "personalContact": "Liên hệ cá nhân",
+    "otherContact": "Liên hệ khác"
   }
 }

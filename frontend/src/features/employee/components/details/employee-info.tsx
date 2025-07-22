@@ -1,14 +1,24 @@
 import { useNavigate } from '@tanstack/react-router'
 import { User } from '@/types/api'
+import {
+  User as UserIcon,
+  FileText as FileTextIcon,
+  Coins as CoinsIcon,
+  Clock as ClockIcon,
+  BarChart3 as BarChartIcon,
+  FileSpreadsheet as FileSpreadsheetIcon,
+  BookOpen as BookOpenIcon,
+  Wallet as WalletIcon,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AddressInformationSection } from './address-information-section.tsx'
-import { ContactInformationSection } from './contact-information-section.tsx'
+import { ContactInformation } from './contact-information.tsx'
 import { EmployeeDetailHeader } from './employee-detail-header'
 import { EmploymentOverviewSection } from './employment-overview-section.tsx'
-import { PersonalInformationSection } from './personal-information-section.tsx'
+import { PersonalInformation } from './personal-information.tsx'
 import { TagsSection } from './tags-section.tsx'
 
 interface EmployeeInfoProps {
@@ -32,14 +42,19 @@ export function EmployeeInfo({
   const navigate = useNavigate()
 
   const tabs = [
-    { value: 'personal', label: 'Personal Information' },
-    { value: 'contract', label: 'Contract' },
-    { value: 'payroll', label: 'Payroll' },
-    { value: 'time', label: 'Time Management' },
-    { value: 'assets', label: 'Assets', count: 3 },
-    { value: 'document', label: 'Document', count: 6 },
-    { value: 'training', label: 'Training' },
-    { value: 'finance', label: 'Finance' },
+    { value: 'personal', label: 'Personal Information', icon: UserIcon },
+    { value: 'contract', label: 'Contract', icon: FileTextIcon },
+    { value: 'payroll', label: 'Payroll', icon: CoinsIcon },
+    { value: 'time', label: 'Time Management', icon: ClockIcon },
+    { value: 'assets', label: 'Assets', icon: BarChartIcon, count: 3 },
+    {
+      value: 'document',
+      label: 'Document',
+      icon: FileSpreadsheetIcon,
+      count: 6,
+    },
+    { value: 'training', label: 'Training', icon: BookOpenIcon },
+    { value: 'finance', label: 'Finance', icon: WalletIcon },
   ]
 
   const handleTabChange = (value: string) => {
@@ -66,16 +81,17 @@ export function EmployeeInfo({
         onValueChange={handleTabChange}
         className='space-y-6'
       >
-        <TabsList className='grid h-auto w-full grid-cols-8 p-1'>
+        <TabsList className='justify-start'>
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
               className='flex items-center space-x-2 px-4 py-2'
             >
+              <tab.icon className='h-4 w-4' />
               <span>{tab.label}</span>
               {tab.count && (
-                <Badge variant='secondary' className='ml-1 h-5 px-1.5 text-xs'>
+                <Badge variant='neutral' className='h-5 rounded px-1.5 text-xs'>
                   {tab.count}
                 </Badge>
               )}
@@ -88,13 +104,13 @@ export function EmployeeInfo({
           <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
             {/* Left Column - Personal & Address Information */}
             <div className='space-y-6 lg:col-span-2'>
-              <PersonalInformationSection employee={employee} />
+              <PersonalInformation employee={employee} />
               <AddressInformationSection employee={employee} />
             </div>
 
             {/* Right Column - Contact & Employment */}
             <div className='space-y-6'>
-              <ContactInformationSection employee={employee} />
+              <ContactInformation employee={employee} />
               <EmploymentOverviewSection employee={employee} />
               <TagsSection employee={employee} />
             </div>

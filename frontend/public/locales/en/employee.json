@@ -40,5 +40,12 @@
     "employeeCreated": "Employee created successfully",
     "deleteConfirmation": "Are you sure you want to delete this employee?",
     "payrollNotAvailable": "Payroll information is not available in this demo."
+  },
+  "card": {
+    "personalInformation": "Personal Information",
+    "contactInformation": "Contact Information",
+    "addressInformation": "Address Information",
+    "personalContact": "Personal Contact",
+    "otherContact": "Other Contact"
   }
 }

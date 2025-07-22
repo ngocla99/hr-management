@@ -51,5 +51,16 @@
     "inactive": "Inactive",
     "notVerified": "Not Verified",
     "suspended": "Suspended"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "maritalStatus": {
+    "single": "Single",
+    "married": "Married",
+    "divorced": "Divorced",
+    "widowed": "Widowed"
   }
 }

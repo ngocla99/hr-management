@@ -178,9 +178,25 @@ interface Resources {
       "employeeCreated": "Employee created successfully",
       "deleteConfirmation": "Are you sure you want to delete this employee?",
       "payrollNotAvailable": "Payroll information is not available in this demo."
+    },
+    "card": {
+      "personalInformation": "Personal Information",
+      "contactInformation": "Contact Information",
+      "addressInformation": "Address Information",
+      "personalContact": "Personal Contact",
+      "otherContact": "Other Contact"
     }
   },
   "glossary": {
+    "form": {
+      "enterDescription": "Enter description",
+      "enterEmail": "Enter email",
+      "enterPassword": "Enter password",
+      "enterConfirmPassword": "Enter confirm password",
+      "selectRole": "Select role",
+      "selectCreatedAtFrom": "Select created at from",
+      "selectCreatedAtTo": "Select created at to"
+    },
     "task": "Task",
     "tasks": "Tasks",
     "project": "Project",
@@ -248,15 +264,18 @@ interface Resources {
     "dateStarted": "Date Joined",
     "employmentType": "Type",
     "joinAt": "Join At",
-    "form": {
-      "enterDescription": "Enter description",
-      "enterEmail": "Enter email",
-      "enterPassword": "Enter password",
-      "enterConfirmPassword": "Enter confirm password",
-      "selectRole": "Select role",
-      "selectCreatedAtFrom": "Select created at from",
-      "selectCreatedAtTo": "Select created at to"
-    }
+    "gender": "Gender",
+    "maritalStatus": "Marital Status",
+    "religion": "Religion",
+    "placeOfBirth": "Place of Birth",
+    "birthdate": "Birthdate",
+    "bloodType": "Blood Type",
+    "age": "Age",
+    "emergencyContact": "Emergency Contact",
+    "emergencyPhone": "Emergency Phone",
+    "relationship": "Relationship",
+    "phoneNumber": "Phone Number",
+    "notProvided": "Not Provided"
   },
   "users": {
     "page.title": "User List",
@@ -311,6 +330,17 @@ interface Resources {
       "inactive": "Inactive",
       "notVerified": "Not Verified",
       "suspended": "Suspended"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "maritalStatus": {
+      "single": "Single",
+      "married": "Married",
+      "divorced": "Divorced",
+      "widowed": "Widowed"
     }
   },
   "validation": {

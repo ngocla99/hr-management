@@ -1,10 +1,10 @@
-import { Main } from '@/components/layout/main'
-import { EmployeeInfo } from '@/features/employee/components/details'
-import apiClient from '@/lib/api-client'
-import { User } from '@/types/api'
+import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
+import { User } from '@/types/api'
+import apiClient from '@/lib/api-client'
+import { Main } from '@/components/layout/main'
+import { EmployeeInfo } from '@/features/employee/components/details/employee-info'
 
 const employeeDetailSearchSchema = z.object({
   tab: z.string().optional().default('personal'),

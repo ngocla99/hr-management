@@ -1,4 +1,13 @@
 {
+  "form": {
+    "enterDescription": "Nhập mô tả",
+    "enterEmail": "Nhập email",
+    "enterPassword": "Nhập mật khẩu",
+    "enterConfirmPassword": "Xác nhận mật khẩu",
+    "selectRole": "Chọn vai trò",
+    "selectCreatedAtFrom": "Chọn ngày tạo từ",
+    "selectCreatedAtTo": "Chọn ngày tạo đến"
+  },
   "task": "Công việc",
   "tasks": "Công việc",
   "project": "Dự án",
@@ -66,13 +75,16 @@
   "dateStarted": "Ngày tham gia",
   "employmentType": "Loại",
   "joinAt": "Ngày tham gia",
-  "form": {
-    "enterDescription": "Nhập mô tả",
-    "enterEmail": "Nhập email",
-    "enterPassword": "Nhập mật khẩu",
-    "enterConfirmPassword": "Xác nhận mật khẩu",
-    "selectRole": "Chọn vai trò",
-    "selectCreatedAtFrom": "Chọn ngày tạo từ",
-    "selectCreatedAtTo": "Chọn ngày tạo đến"
-  }
+  "gender": "Giới tính",
+  "maritalStatus": "Tình trạng hôn nhân",
+  "religion": "Tôn giáo",
+  "placeOfBirth": "Nơi sinh",
+  "birthdate": "Ngày sinh",
+  "bloodType": "Nhóm máu",
+  "age": "Tuổi",
+  "emergencyContact": "Người liên hệ khẩn cấp",
+  "emergencyPhone": "Số điện thoại khẩn cấp",
+  "relationship": "Mối quan hệ",
+  "phoneNumber": "Số điện thoại",
+  "notProvided": "Không cung cấp"
 }

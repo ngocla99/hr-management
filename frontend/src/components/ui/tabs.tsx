@@ -79,7 +79,7 @@ const tabsTriggerVariants = cva(
         pills:
           'data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground h-[calc(100%-1px)] flex-1 gap-1.5 rounded-md border border-transparent px-2 py-1 focus-visible:ring-[3px] focus-visible:outline-1 data-[state=active]:shadow-sm',
         underline:
-          'border-b-2 border-transparent px-3 py-1.5 data-[state=active]:border-primary data-[state=active]:text-foreground text-muted-foreground hover:text-foreground',
+          'border-b-3 border-transparent px-3 py-1.5 data-[state=active]:border-[#1d212c] data-[state=active]:text-foreground text-muted-foreground hover:text-foreground',
       },
     },
     defaultVariants: {

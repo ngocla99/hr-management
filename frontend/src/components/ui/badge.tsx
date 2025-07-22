@@ -20,6 +20,7 @@ const badgeVariants = cva(
         warning: 'bg-[#f59e0b] text-white [a&]:hover:bg-[#f59e0b]/90',
         info: 'border-transparent bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 [a&]:hover:bg-blue-200 dark:[a&]:hover:bg-blue-900/30',
         dark: 'bg-[#1d212c] text-white [a&]:hover:bg-[#1d212c]/90',
+        neutral: 'bg-accent text-foreground [a&]:hover:bg-accent/90',
       },
       size: {
         sm: 'px-1.5 py-0.5 text-xs',

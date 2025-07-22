@@ -51,5 +51,16 @@
     "inactive": "Không hoạt động",
     "notVerified": "Chưa xác thực",
     "suspended": "Tạm dừng"
+  },
+  "gender": {
+    "male": "Nam",
+    "female": "Nữ",
+    "other": "Khác"
+  },
+  "maritalStatus": {
+    "single": "Độc thân",
+    "married": "Đã kết hôn",
+    "divorced": "Đã ly hôn",
+    "widowed": "Đã vợ chồng"
   }
 }

@@ -1,6 +1,0 @@
-export { EmployeeInfo } from './employee-info'
-export { PersonalInformationSection } from './personal-information-section'
-export { ContactInformationSection } from './contact-information-section'
-export { AddressInformationSection } from './address-information-section'
-export { EmploymentOverviewSection } from './employment-overview-section'
-export { TagsSection } from './tags-section' 

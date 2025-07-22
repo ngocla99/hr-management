@@ -1,4 +1,13 @@
 {
+  "form": {
+    "enterDescription": "Enter description",
+    "enterEmail": "Enter email",
+    "enterPassword": "Enter password",
+    "enterConfirmPassword": "Enter confirm password",
+    "selectRole": "Select role",
+    "selectCreatedAtFrom": "Select created at from",
+    "selectCreatedAtTo": "Select created at to"
+  },
   "task": "Task",
   "tasks": "Tasks",
   "project": "Project",
@@ -66,13 +75,16 @@
   "dateStarted": "Date Joined",
   "employmentType": "Type",
   "joinAt": "Join At",
-  "form": {
-    "enterDescription": "Enter description",
-    "enterEmail": "Enter email",
-    "enterPassword": "Enter password",
-    "enterConfirmPassword": "Enter confirm password",
-    "selectRole": "Select role",
-    "selectCreatedAtFrom": "Select created at from",
-    "selectCreatedAtTo": "Select created at to"
-  }
+  "gender": "Gender",
+  "maritalStatus": "Marital Status",
+  "religion": "Religion",
+  "placeOfBirth": "Place of Birth",
+  "birthdate": "Birthdate",
+  "bloodType": "Blood Type",
+  "age": "Age",
+  "emergencyContact": "Emergency Contact",
+  "emergencyPhone": "Emergency Phone",
+  "relationship": "Relationship",
+  "phoneNumber": "Phone Number",
+  "notProvided": "Not Provided"
 }
