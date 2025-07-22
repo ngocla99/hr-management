@@ -133,7 +133,7 @@ export const useEmployeeColumns = () => {
           const status = cell.getValue() as UserStatus
           const badgeVariant = employeeStatusStyles.get(status)
           return (
-            <Badge variant={badgeVariant} className={cn('capitalize')}>
+            <Badge variant={badgeVariant} className={cn('capitalize')} hasDot>
               {t(('status.' + status) as any, {
                 ns: 'users',
               })}

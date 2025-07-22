@@ -54,7 +54,7 @@ export function EmployeeDetailHeader({
         <div className='flex items-center'>
           <div className='flex flex-col gap-2'>
             <h1 className='text-lg font-semibold'>{employee.fullName}</h1>
-            <Badge variant='success' withDot>
+            <Badge variant='success' hasDot>
               {t(`status.${employee.status}` as any, { ns: 'users' })}
             </Badge>
           </div>

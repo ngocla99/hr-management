@@ -41,14 +41,24 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
   const { setOpen, setCurrentRow } = useEmployee()
   const navigate = useNavigate()
 
+  const navigateToDetail = () => {
+    navigate({
+      to: EmployeeDetailRoute.fullPath,
+      params: { employeeId: employee.id },
+    })
+  }
+
   return (
-    <Card className='relative shadow transition-shadow hover:shadow-2xl'>
+    <Card
+      className='relative shadow transition-shadow hover:shadow-2xl'
+      onClick={navigateToDetail}
+    >
       <CardContent className='px-6'>
         <div className='mb-4 flex items-start justify-between'>
           <Badge
             variant={employeeStatusStyles.get(employee.status)}
             className={cn('capitalize')}
-            withDot
+            hasDot
             size='lg'
           >
             {t(('status.' + employee.status) as any, {
@@ -166,12 +176,7 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
             <Button
               variant='link'
               className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-sm'
-              onClick={() => {
-                navigate({
-                  to: EmployeeDetailRoute.fullPath,
-                  params: { employeeId: employee.id },
-                })
-              }}
+              onClick={navigateToDetail}
             >
               <span className='underline underline-offset-4'>
                 {t('viewDetail', { ns: 'common' })}

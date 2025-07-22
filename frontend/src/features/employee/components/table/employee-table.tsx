@@ -1,6 +1,8 @@
 import React from 'react'
 import { getRouteApi } from '@tanstack/react-router'
+import { Row } from '@tanstack/react-table'
 import { Route as EmployeeRoute } from '@/routes/_authenticated/organization/employee'
+import { Route as EmployeeDetailRoute } from '@/routes/_authenticated/organization/employee/$employeeId'
 import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
@@ -30,6 +32,7 @@ export function EmployeeTable() {
   const columns = useEmployeeColumns()
   const [viewMode, setViewMode] = React.useState<'table' | 'card'>('table')
   const searchParams = route.useSearch() as UsersInput
+  const navigate = route.useNavigate()
   const { ref, inView } = useInView()
 
   const { data: usersData, isLoading } = useUsers({
@@ -113,6 +116,13 @@ export function EmployeeTable() {
     setViewMode(mode)
   }
 
+  const navigateToDetail = (row: Row<User>) => {
+    navigate({
+      to: EmployeeDetailRoute.fullPath,
+      params: { employeeId: row.original.id },
+    })
+  }
+
   return (
     <div className='space-y-4'>
       <EmployeeTableToolbar
@@ -122,7 +132,7 @@ export function EmployeeTable() {
         setViewMode={onSetViewMode}
       />
       {viewMode === 'table' ? (
-        <DataTable table={table} />
+        <DataTable table={table} onRowClick={navigateToDetail} />
       ) : (
         <>
           {statusInfinite === 'pending' ? (

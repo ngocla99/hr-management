@@ -26,7 +26,7 @@ const badgeVariants = cva(
         md: 'px-2 py-1 text-xs',
         lg: 'px-2.5 py-1.5 text-xs',
       },
-      withDot: {
+      hasDot: {
         true: 'pl-2',
         false: '',
       },
@@ -34,7 +34,7 @@ const badgeVariants = cva(
     defaultVariants: {
       variant: 'default',
       size: 'md',
-      withDot: false,
+      hasDot: false,
     },
   }
 )
@@ -43,7 +43,7 @@ function Badge({
   className,
   variant,
   size,
-  withDot,
+  hasDot,
   asChild = false,
   children,
   ...props
@@ -54,10 +54,10 @@ function Badge({
   return (
     <Comp
       data-slot='badge'
-      className={cn(badgeVariants({ variant, size, withDot }), className)}
+      className={cn(badgeVariants({ variant, size, hasDot }), className)}
       {...props}
     >
-      {withDot && (
+      {hasDot && (
         <div className='size-1.5 flex-shrink-0 rounded-full bg-white' />
       )}
       {children}

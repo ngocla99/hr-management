@@ -93,7 +93,11 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         const { status } = row.original
         const badgeVariant = userStatusStyles.get(status)
         return (
-          <Badge variant={badgeVariant as any} className={cn('capitalize')}>
+          <Badge
+            variant={badgeVariant as any}
+            className={cn('capitalize')}
+            hasDot
+          >
             {t(('status.' + status) as any, {
               ns: 'users',
             })}

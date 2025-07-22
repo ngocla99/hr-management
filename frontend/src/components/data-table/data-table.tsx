@@ -2,6 +2,7 @@ import * as React from 'react'
 import {
   ColumnMeta,
   flexRender,
+  Row,
   RowData,
   type Table as TanstackTable,
 } from '@tanstack/react-table'
@@ -37,6 +38,13 @@ interface DataTableProps<TData> {
    * @type boolean
    */
   enablePagination?: boolean
+
+  /**
+   * The function to handle row click.
+   * @default null
+   * @type (row: Row<TData>) => void | null
+   */
+  onRowClick?: (row: Row<TData>) => void
 }
 
 declare module '@tanstack/react-table' {
@@ -51,6 +59,7 @@ export function DataTable<TData>({
   table,
   floatingBar = null,
   enablePagination = true,
+  onRowClick,
 }: DataTableProps<TData>) {
   return (
     <div className='w-full space-y-2.5 overflow-auto'>
@@ -95,6 +104,7 @@ export function DataTable<TData>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   className='bg-white [&_td]:border-r [&_td:last-child]:border-r-0'
+                  onClick={() => onRowClick?.(row)}
                 >
                   {row.getVisibleCells().map((cell) => {
                     const meta = cell.column.columnDef.meta as ColumnMeta<
