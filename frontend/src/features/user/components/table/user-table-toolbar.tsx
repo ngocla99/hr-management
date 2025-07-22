@@ -1,5 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { Table } from '@tanstack/react-table'
+import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
 import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { TrashIcon } from 'lucide-react'
@@ -16,7 +17,7 @@ interface UsersTableToolbarProps<TData> {
   filterFields: DataTableFilterField<TData>[]
 }
 
-const route = getRouteApi('/_authenticated/organization/user')
+const route = getRouteApi(UserRoute.id)
 
 export function UsersTableToolbar({
   table,

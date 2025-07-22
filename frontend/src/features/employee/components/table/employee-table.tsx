@@ -1,5 +1,6 @@
 import React from 'react'
 import { getRouteApi } from '@tanstack/react-router'
+import { Route as EmployeeRoute } from '@/routes/_authenticated/organization/employee'
 import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +23,7 @@ import { userStatusOptionsFn } from '@/features/user/constants/user-options'
 import { useEmployeeColumns } from './employee-columns'
 import { EmployeeTableToolbar } from './employee-table-toolbar'
 
-const route = getRouteApi('/_authenticated/organization/employee')
+const route = getRouteApi(EmployeeRoute.id)
 
 export function EmployeeTable() {
   const { t } = useTranslation()

@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
 import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
@@ -12,7 +13,7 @@ import {
 import { useUserColumns } from './user-columns'
 import { UsersTableToolbar } from './user-table-toolbar'
 
-const route = getRouteApi('/_authenticated/organization/user')
+const route = getRouteApi(UserRoute.id)
 
 export function UserTable() {
   const { t } = useTranslation()

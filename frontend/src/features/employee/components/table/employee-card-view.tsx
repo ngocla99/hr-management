@@ -1,15 +1,16 @@
+import { useNavigate } from '@tanstack/react-router'
 import { type Table as TanstackTable } from '@tanstack/react-table'
 import {
   IconBriefcase,
   IconClock,
   IconDots,
-  IconEdit,
   IconEye,
   IconId,
   IconMail,
   IconPhone,
   IconTrash,
 } from '@tabler/icons-react'
+import { Route as EmployeeDetailRoute } from '@/routes/_authenticated/organization/employee/$employeeId'
 import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
@@ -38,6 +39,7 @@ interface EmployeeCardProps {
 function EmployeeCard({ employee, index }: EmployeeCardProps) {
   const { t } = useTranslation()
   const { setOpen, setCurrentRow } = useEmployee()
+  const navigate = useNavigate()
 
   return (
     <Card className='relative shadow transition-shadow hover:shadow-2xl'>
@@ -60,21 +62,32 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem onClick={() => setOpen('view')}>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigate({
+                    to: EmployeeDetailRoute.fullPath,
+                    params: { employeeId: employee.id },
+                  })
+                }}
+              >
                 <IconEye className='mr-2 size-4' />
                 {t('view', { ns: 'common' })}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpen('edit')}>
-                <IconEdit className='mr-2 size-4' />
-                {t('edit', { ns: 'common' })}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setOpen('invite')}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setCurrentRow(employee)
+                  setOpen('invite')
+                }}
+              >
                 <IconMail className='mr-2 size-4' />
                 {t('inviteEmail', { ns: 'common' })}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => setOpen('delete')}
+                onClick={() => {
+                  setCurrentRow(employee)
+                  setOpen('delete')
+                }}
                 className='text-destructive'
               >
                 <IconTrash className='mr-2 size-4' />
@@ -154,8 +167,10 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
               variant='link'
               className='text-foreground hover:text-primary mr-1.5 h-auto p-0 text-sm'
               onClick={() => {
-                setCurrentRow(employee)
-                setOpen('view')
+                navigate({
+                  to: EmployeeDetailRoute.fullPath,
+                  params: { employeeId: employee.id },
+                })
               }}
             >
               <span className='underline underline-offset-4'>

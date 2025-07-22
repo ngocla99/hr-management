@@ -1,13 +1,13 @@
 import { getRouteApi } from '@tanstack/react-router'
+import { Route as EmployeeRoute } from '@/routes/_authenticated/organization/employee'
 import { useTranslation } from 'react-i18next'
 import { Main } from '@/components/layout/main'
 import { UserStatsInput, useUserStats } from '../user/api/get-user-stats'
-import { EmployeeDetailView } from './components/employee-detail-view'
 import { EmployeePrimaryButtons } from './components/employee-primary-buttons'
 import { EmployeeTable } from './components/table/employee-table'
 import EmployeeProvider from './context/employee-context'
 
-const route = getRouteApi('/_authenticated/organization/employee')
+const route = getRouteApi(EmployeeRoute.id)
 function EmployeeContent() {
   const { t } = useTranslation()
   const searchParams = route.useSearch() as UserStatsInput
@@ -58,8 +58,6 @@ function EmployeeContent() {
           </div>
         </div>
       </Main>
-
-      <EmployeeDetailView />
     </>
   )
 }

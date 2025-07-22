@@ -5,13 +5,11 @@ export const APP_CONSTANTS = {
     MAX_LIMIT: 100,
   },
 
-  QUERY_KEYS: {
-    DASHBOARD: 'dashboard',
-    USERS: 'users',
-    TASKS: 'tasks',
-    PROJECTS: 'projects',
-    AUTH: 'auth',
+  SEARCH_PARAMS: {
+    page: 1,
+    limit: 10,
+    sort: 'createdAt.desc',
   },
 } as const
 
-export const { PAGINATION, QUERY_KEYS } = APP_CONSTANTS
+export const { PAGINATION, SEARCH_PARAMS } = APP_CONSTANTS

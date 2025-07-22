@@ -22,7 +22,7 @@ const employeeSearchSchema = z.object({
 
 export type EmployeeSearch = z.infer<typeof employeeSearchSchema>
 
-export const Route = createFileRoute('/_authenticated/organization/employee')({
+export const Route = createFileRoute('/_authenticated/organization/employee/employee')({
   validateSearch: (search) => employeeSearchSchema.parse(search),
   component: Employee,
 })

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getRouteApi } from '@tanstack/react-router'
+import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
 import { User, UserRole, UserStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -96,7 +97,7 @@ interface Props {
   onOpenChange: (open: boolean) => void
 }
 
-const route = getRouteApi('/_authenticated/organization/user')
+const route = getRouteApi(UserRoute.id)
 export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
   const { t } = useTranslation()
   const searchParams = route.useSearch()

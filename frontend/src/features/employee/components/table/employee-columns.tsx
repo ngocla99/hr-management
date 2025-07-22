@@ -1,12 +1,7 @@
 import { useMemo } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { ColumnDef } from '@tanstack/react-table'
-import {
-  IconDots,
-  IconEdit,
-  IconEye,
-  IconMail,
-  IconTrash,
-} from '@tabler/icons-react'
+import { IconDots, IconEye, IconMail, IconTrash } from '@tabler/icons-react'
 import { User, UserStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
@@ -34,7 +29,8 @@ import { checkboxClass } from '@/features/user/components/table/user-columns'
 
 export const useEmployeeColumns = () => {
   const { t } = useTranslation()
-  const { setOpen } = useEmployee()
+  const { setOpen, setCurrentRow } = useEmployee()
+  const navigate = useNavigate()
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -241,21 +237,32 @@ export const useEmployeeColumns = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end' className='w-[160px]'>
-                  <DropdownMenuItem onClick={() => setOpen('view')}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      navigate({
+                        to: '/organization/employee/$employeeId',
+                        params: { employeeId: employee.id },
+                      })
+                    }}
+                  >
                     <IconEye className='mr-2 h-4 w-4' />
                     {t('view', { ns: 'common' })}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setOpen('edit')}>
-                    <IconEdit className='mr-2 h-4 w-4' />
-                    {t('edit', { ns: 'common' })}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setOpen('invite')}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setCurrentRow(employee)
+                      setOpen('invite')
+                    }}
+                  >
                     <IconMail className='mr-2 h-4 w-4' />
                     {t('inviteEmail', { ns: 'common' })}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onClick={() => setOpen('delete')}
+                    onClick={() => {
+                      setCurrentRow(employee)
+                      setOpen('delete')
+                    }}
                     className='text-red-600'
                   >
                     <IconTrash className='mr-2 h-4 w-4' />
@@ -271,7 +278,7 @@ export const useEmployeeColumns = () => {
         meta: { className: 'w-12' },
       },
     ],
-    [t, setOpen]
+    [t, setOpen, setCurrentRow, navigate]
   )
 
   return columns

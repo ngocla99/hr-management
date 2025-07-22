@@ -39,7 +39,7 @@ export function ScrollToTop({ threshold = 300, className }: ScrollToTopProps) {
       onClick={scrollToTop}
       size='icon'
       className={cn(
-        'fixed right-8 bottom-8 z-50 h-12 w-12 rounded-full shadow-lg',
+        'fixed right-8 bottom-8 z-50 size-12 rounded-full shadow-lg',
         'transition-all duration-300 ease-in-out',
         'hover:scale-105 hover:shadow-xl',
         'bg-primary text-primary-foreground hover:bg-primary/90',

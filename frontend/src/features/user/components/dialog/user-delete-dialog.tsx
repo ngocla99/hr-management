@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getRouteApi } from '@tanstack/react-router'
+import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
 import { User } from '@/types/api'
 import { Trans, useTranslation } from 'react-i18next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -15,7 +16,7 @@ interface Props {
   currentRow: User
 }
 
-const route = getRouteApi('/_authenticated/organization/user')
+const route = getRouteApi(UserRoute.id)
 
 export function UserDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState('')
