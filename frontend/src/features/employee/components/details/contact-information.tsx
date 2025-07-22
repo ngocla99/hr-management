@@ -16,8 +16,10 @@ export function ContactInformation({ employee }: ContactInformationProps) {
     <Card>
       <CardHeader className='flex flex-row items-center justify-between space-y-0'>
         <CardTitle className='flex items-center space-x-2'>
-          <IconAddressBook className='text-muted-foreground size-6' />
-          <span>{t('card.contactInformation', { ns: 'employee' })}</span>
+          <IconAddressBook className='text-muted-foreground size-5' />
+          <span className='font-bold'>
+            {t('card.contactInformation', { ns: 'employee' })}
+          </span>
         </CardTitle>
         <Button variant='light' size='sm' className='shadow-2xl'>
           <IconPencilMinus className='mr-2 h-4 w-4' />

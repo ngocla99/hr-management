@@ -107,7 +107,9 @@ interface Resources {
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
     "clearFilters": "Clear filters",
-    "backToTop": "Back to top"
+    "backToTop": "Back to top",
+    "notProvided": "Not Provided",
+    "viewOnMap": "View on Map"
   },
   "dashboard": {
     "welcome": "Welcome Back, {{name}}!",
@@ -184,7 +186,10 @@ interface Resources {
       "contactInformation": "Contact Information",
       "addressInformation": "Address Information",
       "personalContact": "Personal Contact",
-      "otherContact": "Other Contact"
+      "otherContact": "Other Contact",
+      "residentialAddress": "Residential Address",
+      "citizenIdAddress": "Citizen ID Address",
+      "notes": "Notes"
     }
   },
   "glossary": {

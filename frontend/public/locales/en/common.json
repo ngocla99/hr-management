@@ -74,5 +74,7 @@
   "termsOfService": "Terms of Service",
   "privacyPolicy": "Privacy Policy",
   "clearFilters": "Clear filters",
-  "backToTop": "Back to top"
+  "backToTop": "Back to top",
+  "notProvided": "Not Provided",
+  "viewOnMap": "View on Map"
 }

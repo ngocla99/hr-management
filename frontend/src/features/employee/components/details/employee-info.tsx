@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AddressInformationSection } from './address-information-section.tsx'
+import { AddressInformation } from './address-information.tsx'
 import { ContactInformation } from './contact-information.tsx'
 import { EmployeeDetailHeader } from './employee-detail-header'
 import { EmploymentOverviewSection } from './employment-overview-section.tsx'
@@ -102,13 +102,11 @@ export function EmployeeInfo({
         {/* Personal Information Tab */}
         <TabsContent value='personal' className='space-y-6'>
           <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
-            {/* Left Column - Personal & Address Information */}
             <div className='space-y-6 lg:col-span-2'>
               <PersonalInformation employee={employee} />
-              <AddressInformationSection employee={employee} />
+              <AddressInformation employee={employee} />
             </div>
 
-            {/* Right Column - Contact & Employment */}
             <div className='space-y-6'>
               <ContactInformation employee={employee} />
               <EmploymentOverviewSection employee={employee} />

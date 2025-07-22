@@ -46,6 +46,9 @@
     "contactInformation": "Contact Information",
     "addressInformation": "Address Information",
     "personalContact": "Personal Contact",
-    "otherContact": "Other Contact"
+    "otherContact": "Other Contact",
+    "residentialAddress": "Residential Address",
+    "citizenIdAddress": "Citizen ID Address",
+    "notes": "Notes"
   }
 }

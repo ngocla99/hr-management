@@ -46,6 +46,9 @@
     "contactInformation": "Thông tin liên hệ",
     "addressInformation": "Thông tin địa chỉ",
     "personalContact": "Liên hệ cá nhân",
-    "otherContact": "Liên hệ khác"
+    "otherContact": "Liên hệ khác",
+    "residentialAddress": "Địa chỉ nhà",
+    "citizenIdAddress": "Địa chỉ căn cước công dân",
+    "notes": "Ghi chú"
   }
 }
