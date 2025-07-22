@@ -184,9 +184,9 @@ export function EmployeeCardView({ table }: EmployeeCardViewProps) {
       </div>
 
       {table.getRowModel().rows.length === 0 && (
-        <div className='py-12 text-center'>
-          <p className='text-gray-500'>
-            No employees found matching your criteria.
+        <div className='grid h-[calc(100vh-248px)] place-items-center'>
+          <p className='text-muted-foreground'>
+            {t('messages.noEmployeesFound', { ns: 'employee' })}
           </p>
         </div>
       )}

@@ -1,5 +1,6 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import {
+  Department,
   EmploymentType,
   JobRole,
   User,
@@ -14,8 +15,9 @@ import { QueryConfig } from '@/lib/react-query'
 
 export type UsersInput = PaginationInput & {
   username?: string
-  jobRole?: JobRole
-  employmentType?: EmploymentType
+  jobRole?: JobRole[]
+  employmentType?: EmploymentType[]
+  department?: Department[]
   role?: UserRole[]
   status?: UserStatus
   createdAtFrom?: string
@@ -61,6 +63,39 @@ export const useUsers = ({
 }: UseUsersOptions = {}) => {
   return useQuery({
     ...getUsersQueryOptions(input),
+    ...queryConfig,
+  })
+}
+
+type UseUsersInfiniteOptions = {
+  input?: UsersInput
+  queryConfig?: QueryConfig<any>
+}
+
+export const useUsersInfinite = ({
+  input = {
+    page: PAGINATION.DEFAULT_PAGE,
+    limit: PAGINATION.DEFAULT_PAGE,
+  },
+  queryConfig,
+}: UseUsersInfiniteOptions = {}) => {
+  return useInfiniteQuery({
+    queryKey: ['users', 'infinite', input],
+    queryFn: ({ pageParam = 1 }) =>
+      getUsersApi({
+        ...input,
+        page: pageParam,
+      }),
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      if (lastPage.data.length === 0) {
+        return undefined
+      }
+      return lastPageParam + 1
+    },
+    initialPageParam: 1,
+    select: (data) => {
+      return data.pages.flatMap((page) => page.data)
+    },
     ...queryConfig,
   })
 }
