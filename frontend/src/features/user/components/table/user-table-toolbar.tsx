@@ -65,7 +65,7 @@ export function UsersTableToolbar({
 
   const handleCreatedAtFromChange = (date: Date | undefined) => {
     navigate({
-      search: (prev) => ({ ...prev, createdAtFrom: date?.toISOString() }),
+      search: (prev) => ({ ...prev, createdAtFrom: date }),
     })
   }
 

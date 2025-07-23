@@ -36,7 +36,7 @@ export function EmployeeTable() {
   const { ref, inView } = useInView()
 
   const { data: usersData, isLoading } = useUsers({
-    input: {
+    inputQuery: {
       ...searchParams,
     },
     queryConfig: {
@@ -50,7 +50,7 @@ export function EmployeeTable() {
     isFetchingNextPage: isFetchingNextPageInfinite,
     fetchNextPage,
   } = useUsersInfinite({
-    input: {
+    inputQuery: {
       username: searchParams.username,
       jobRole: searchParams.jobRole,
       employmentType: searchParams.employmentType,

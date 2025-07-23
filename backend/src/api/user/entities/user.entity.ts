@@ -251,9 +251,7 @@ export const UserSchemaFactory = () => {
   // Virtual for full name
   userSchema.virtual("fullName").get(function () {
     if (!this.firstName && !this.lastName) return "N/A";
-    return `${this.firstName??
-""
-    } ${this.lastName ?? ""}`;
+    return `${this.firstName ?? ""} ${this.lastName ?? ""}`;
   });
 
   // Virtual for age calculation

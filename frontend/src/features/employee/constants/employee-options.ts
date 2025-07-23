@@ -1,6 +1,7 @@
 import { IconBriefcase, IconCalendar, IconUser } from '@tabler/icons-react'
 import { Department, EmploymentType, JobRole } from '@/types/api'
 import { TFunction } from 'i18next'
+import { BLOOD_TYPES, GENDERS, MARITAL_STATUSES } from './employee-constants'
 
 export const employeeDepartmentOptionsFn = (t: TFunction) => [
   {
@@ -60,22 +61,22 @@ export const employmentTypeOptionsFn = (t: TFunction) => [
 
 export const employeeRoleOptionsFn = (t: TFunction) => [
   {
-    label: t('role.feDeveloper', { ns: 'employee' }),
+    label: t('role.fe_developer', { ns: 'employee' }),
     value: JobRole.FE_DEVELOPER,
     icon: IconUser,
   },
   {
-    label: t('role.beDeveloper', { ns: 'employee' }),
+    label: t('role.be_developer', { ns: 'employee' }),
     value: JobRole.BE_DEVELOPER,
     icon: IconUser,
   },
   {
-    label: t('role.fullstackDeveloper', { ns: 'employee' }),
+    label: t('role.fullstack_developer', { ns: 'employee' }),
     value: JobRole.FULLSTACK_DEVELOPER,
     icon: IconUser,
   },
   {
-    label: t('role.mobileDeveloper', { ns: 'employee' }),
+    label: t('role.mobile_developer', { ns: 'employee' }),
     value: JobRole.MOBILE_DEVELOPER,
     icon: IconUser,
   },
@@ -100,3 +101,21 @@ export const employeeRoleOptionsFn = (t: TFunction) => [
     icon: IconUser,
   },
 ]
+
+export const genderOptionsFn = (t: TFunction) =>
+  GENDERS.map((gender) => ({
+    value: gender,
+    label: t(`gender.${gender}`, { ns: 'users' } as any),
+  }))
+
+export const maritalStatusOptionsFn = (t: TFunction) =>
+  MARITAL_STATUSES.map((status) => ({
+    value: status,
+    label: t(`maritalStatus.${status}`, { ns: 'users' } as any),
+  }))
+
+export const bloodTypeOptionsFn = (t: TFunction) =>
+  BLOOD_TYPES.map((type) => ({
+    value: type,
+    label: type,
+  }))

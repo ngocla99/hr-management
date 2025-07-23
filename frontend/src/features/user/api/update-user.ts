@@ -1,33 +1,47 @@
-import { USER_ROLES } from '@/features/user/constants/user-constants'
-import apiClient from '@/lib/api-client'
-import { MutationConfig } from '@/lib/react-query'
-import { User } from '@/types/api'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { z } from 'zod'
 import { AxiosError } from 'axios'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import apiClient from '@/lib/api-client'
+import { MutationConfig } from '@/lib/react-query'
 import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const updateUserSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
-  firstName: z.string(),
-  lastName: z.string(),
-  password: z.string(),
-  role: z.enum(USER_ROLES),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  gender: z.string().optional(),
+  maritalStatus: z.string().optional(),
+  religion: z.string().optional(),
+  placeOfBirth: z.string().optional(),
+  dateOfBirth: z.coerce.date().optional(),
+  bloodType: z.string().optional(),
+  residentialAddress: z.string().optional(),
+  residentialAddressNotes: z.string().optional(),
+  citizenIdAddress: z.string().optional(),
+  citizenIdAddressNotes: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
+  emergencyContactName: z.string().optional(),
+  emergencyContactRelationship: z.string().optional(),
+  employeeId: z.string().optional(),
+  dateStarted: z.coerce.date().optional(),
+  jobRole: z.string().optional(),
+  jobLevel: z.string().optional(),
+  employmentType: z.string().optional(),
+  department: z.string().optional(),
+  contractEndDate: z.coerce.date().optional(),
+  role: z.string().optional(),
+  status: z.string().optional(),
+  tags: z.array(z.string()).optional(),
 })
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>
 
 export const updateUserApi = (input: UpdateUserInput): Promise<User> => {
-  return apiClient.patch(`/users/${input.id}`, {
-    email: input.email,
-    firstName: input.firstName,
-    lastName: input.lastName,
-    password: input.password,
-    role: input.role,
-  })
+  const { id, ...rest } = input
+  return apiClient.patch(`/users/${id}`, rest)
 }
 
 type UseUpdateUserOptions = {

@@ -52,7 +52,15 @@
     "marketing": "Marketing"
   },
   "form": {
-    "searchEmployees": "Tìm kiếm nhân viên"
+    "searchEmployees": "Tìm kiếm nhân viên",
+    "enterFirstName": "Nhập tên",
+    "enterLastName": "Nhập họ",
+    "enterReligion": "Nhập tôn giáo",
+    "enterPlaceOfBirth": "Nhập nơi sinh",
+    "selectGender": "Chọn giới tính",
+    "selectMaritalStatus": "Chọn tình trạng hôn nhân",
+    "selectBirthdate": "Chọn ngày sinh",
+    "selectBloodType": "Chọn nhóm máu"
   },
   "messages": {
     "noEmployeesFound": "Không tìm thấy nhân viên phù hợp.",

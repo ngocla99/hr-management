@@ -50,40 +50,40 @@ export const getUsersQueryOptions = (
 }
 
 type UseUsersOptions = {
-  input?: UsersInput
+  inputQuery?: UsersInput
   queryConfig?: QueryConfig<typeof getUsersQueryOptions>
 }
 
 export const useUsers = ({
-  input = {
+  inputQuery = {
     page: PAGINATION.DEFAULT_PAGE,
     limit: PAGINATION.DEFAULT_LIMIT,
   },
   queryConfig,
 }: UseUsersOptions = {}) => {
   return useQuery({
-    ...getUsersQueryOptions(input),
+    ...getUsersQueryOptions(inputQuery),
     ...queryConfig,
   })
 }
 
 type UseUsersInfiniteOptions = {
-  input?: UsersInput
+  inputQuery?: UsersInput
   queryConfig?: QueryConfig<any>
 }
 
 export const useUsersInfinite = ({
-  input = {
+  inputQuery = {
     page: PAGINATION.DEFAULT_PAGE,
     limit: PAGINATION.DEFAULT_PAGE,
   },
   queryConfig,
 }: UseUsersInfiniteOptions = {}) => {
   return useInfiniteQuery({
-    queryKey: ['users', 'infinite', input],
+    queryKey: ['users', 'infinite', inputQuery],
     queryFn: ({ pageParam = 1 }) =>
       getUsersApi({
-        ...input,
+        ...inputQuery,
         page: pageParam,
       }),
     getNextPageParam: (lastPage, _, lastPageParam) => {

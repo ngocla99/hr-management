@@ -3,7 +3,7 @@ import {
   DateFieldOptional,
   EmailField,
   EnumFieldOptional,
-  PasswordField,
+  PasswordFieldOptional,
   StringFieldOptional,
 } from "@/decorators/field.decorators";
 import {
@@ -34,10 +34,10 @@ export class CreateUserReqDto {
   })
   email: string;
 
-  @PasswordField({
+  @PasswordFieldOptional({
     example: "Qwe123!@#",
   })
-  password: string;
+  password?: string;
 
   @StringFieldOptional({
     example: "john.doe",

@@ -193,7 +193,15 @@ interface Resources {
       "marketing": "Marketing"
     },
     "form": {
-      "searchEmployees": "Search employees"
+      "searchEmployees": "Search employees",
+      "enterFirstName": "Enter First Name",
+      "enterLastName": "Enter Last Name",
+      "enterReligion": "Enter Religion",
+      "enterPlaceOfBirth": "Enter Place of Birth",
+      "selectGender": "Select Gender",
+      "selectMaritalStatus": "Select Marital Status",
+      "selectBirthdate": "Select Birthdate",
+      "selectBloodType": "Select Blood Type"
     },
     "messages": {
       "noEmployeesFound": "No employees found matching your criteria.",

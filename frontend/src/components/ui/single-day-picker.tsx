@@ -46,6 +46,7 @@ function SingleDayPicker({
           mode='single'
           selected={value as any}
           onSelect={onChange as any}
+          defaultMonth={value as any}
           captionLayout='dropdown'
           disabled={disabled}
           {...props}

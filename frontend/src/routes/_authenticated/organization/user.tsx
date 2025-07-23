@@ -14,8 +14,8 @@ const userSearchSchema = z.object({
   status: z.enum(USER_STATUSES).optional(),
   role: z.array(z.enum(USER_ROLES)).optional(),
   username: z.string().optional(),
-  createdAtFrom: z.string().optional(),
-  createdAtTo: z.string().optional(),
+  createdAtFrom: z.coerce.date().optional(),
+  createdAtTo: z.coerce.date().optional(),
 })
 
 export type UserSearch = z.infer<typeof userSearchSchema>

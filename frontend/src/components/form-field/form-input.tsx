@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useFormContext } from 'react-hook-form'
+import { cn } from '@/lib/utils'
 import {
   FormControl,
   FormField,
@@ -16,6 +17,12 @@ interface FormInputProps extends Omit<React.ComponentProps<'input'>, 'size'> {
   placeholder?: string
   required?: boolean
   InputComponent?: React.ComponentType<React.ComponentProps<'input'>>
+  classes?: {
+    root?: string
+    label?: string
+    input?: string
+    message?: string
+  }
 }
 
 export const FormInput = ({
@@ -25,6 +32,7 @@ export const FormInput = ({
   placeholder,
   required,
   InputComponent = Input,
+  classes,
   ...props
 }: FormInputProps) => {
   const form = useFormContext()
@@ -34,9 +42,9 @@ export const FormInput = ({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className=''>
+        <FormItem className={cn(classes?.root)}>
           {label && (
-            <FormLabel>
+            <FormLabel className={cn(classes?.label)}>
               {label}
               {required && <span className='text-destructive'>*</span>}
             </FormLabel>
@@ -45,11 +53,12 @@ export const FormInput = ({
             <InputComponent
               type={type}
               placeholder={placeholder}
+              className={cn(classes?.input)}
               {...field}
               {...props}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage className={cn(classes?.message)} />
         </FormItem>
       )}
     />

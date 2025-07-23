@@ -25,6 +25,12 @@ interface FormDatePickerProps {
   description?: string
   required?: boolean
   disabled?: boolean
+  classes?: {
+    root?: string
+    label?: string
+    input?: string
+    message?: string
+  }
 }
 
 export function FormDatePicker({
@@ -34,6 +40,7 @@ export function FormDatePicker({
   description,
   required,
   disabled,
+  classes,
   ...props
 }: FormDatePickerProps) {
   const form = useFormContext()
@@ -43,8 +50,8 @@ export function FormDatePicker({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className=''>
-          <FormLabel>
+        <FormItem className={cn(classes?.root)}>
+          <FormLabel className={cn(classes?.label)}>
             {label}
             {required && <span className='text-text-error ml-1'>*</span>}
           </FormLabel>
@@ -52,10 +59,11 @@ export function FormDatePicker({
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
-                  variant={'outline'}
+                  variant={'light'}
                   className={cn(
-                    'pl-3 text-left font-normal',
-                    !field.value && 'text-muted-foreground'
+                    'border pl-3 text-left font-normal',
+                    !field.value && 'text-muted-foreground',
+                    classes?.input
                   )}
                 >
                   {field.value ? (
@@ -70,6 +78,7 @@ export function FormDatePicker({
             <PopoverContent className='w-auto p-0' align='start'>
               <Calendar
                 mode='single'
+                defaultMonth={field.value}
                 selected={field.value}
                 onSelect={field.onChange}
                 captionLayout='dropdown'
@@ -79,7 +88,7 @@ export function FormDatePicker({
             </PopoverContent>
           </Popover>
           {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
+          <FormMessage className={cn(classes?.message)} />
         </FormItem>
       )}
     />
