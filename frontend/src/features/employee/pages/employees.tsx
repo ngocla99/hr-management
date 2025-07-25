@@ -2,10 +2,13 @@ import { getRouteApi } from '@tanstack/react-router'
 import { Route as EmployeeRoute } from '@/routes/_authenticated/organization/employee'
 import { useTranslation } from 'react-i18next'
 import { Main } from '@/components/layout/main'
-import { UserStatsInput, useUserStats } from '../user/api/get-user-stats'
-import { EmployeePrimaryButtons } from './components/employee-primary-buttons'
-import { EmployeeTable } from './components/table/employee-table'
-import EmployeeProvider from './context/employee-context'
+import { EmployeePrimaryButtons } from '@/features/employee/components/employee-primary-buttons'
+import { EmployeeTable } from '@/features/employee/components/table/employee-table'
+import EmployeeProvider from '@/features/employee/context/employee-context'
+import {
+  UserStatsInput,
+  useUserStats,
+} from '@/features/user/api/get-user-stats'
 
 const route = getRouteApi(EmployeeRoute.id)
 function EmployeeContent() {
@@ -62,7 +65,7 @@ function EmployeeContent() {
   )
 }
 
-export default function Employee() {
+export default function EmployeesPage() {
   return (
     <EmployeeProvider>
       <EmployeeContent />
