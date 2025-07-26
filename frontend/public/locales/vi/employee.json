@@ -18,6 +18,16 @@
     "aFewSecondsAgo": "Vài giây trước",
     "twoDaysAgo": "Hôm qua"
   },
+  "tabs": {
+    "personal": "Thông tin cá nhân",
+    "contract": "Hợp đồng",
+    "payroll": "Lương",
+    "time": "Quản lý thời gian",
+    "assets": "Tài sản",
+    "document": "Tài liệu",
+    "training": "Đào tạo",
+    "finance": "Tài chính"
+  },
   "actions": {
     "addEmployee": "Thêm nhân viên",
     "addTag": "Thêm tag",

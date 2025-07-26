@@ -1,35 +1,14 @@
-import {
-  BarChart3 as BarChartIcon,
-  BookOpen as BookOpenIcon,
-  Clock as ClockIcon,
-  Coins as CoinsIcon,
-  FileSpreadsheet as FileSpreadsheetIcon,
-  FileText as FileTextIcon,
-  User as UserIcon,
-  Wallet as WalletIcon,
-} from 'lucide-react'
 import { Separator } from 'react-aria-components'
+import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Main } from '@/components/layout/main'
+import { employeeTabsFn } from '@/features/employee/constants/employee-config'
 
 export function EmployeeDetailSkeleton() {
-  const tabs = [
-    { value: 'personal', label: 'Personal Information', icon: UserIcon },
-    { value: 'contract', label: 'Contract', icon: FileTextIcon },
-    { value: 'payroll', label: 'Payroll', icon: CoinsIcon },
-    { value: 'time', label: 'Time Management', icon: ClockIcon },
-    { value: 'assets', label: 'Assets', icon: BarChartIcon, count: 3 },
-    {
-      value: 'document',
-      label: 'Document',
-      icon: FileSpreadsheetIcon,
-      count: 6,
-    },
-    { value: 'training', label: 'Training', icon: BookOpenIcon },
-    { value: 'finance', label: 'Finance', icon: WalletIcon },
-  ]
+  const { t } = useTranslation()
+  const tabs = employeeTabsFn(t)
 
   return (
     <Main>

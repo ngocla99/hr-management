@@ -1,15 +1,5 @@
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
 import { Route as EmployeeRouteId } from '@/routes/_authenticated/organization/employee/$employeeId'
-import {
-  BarChart3 as BarChartIcon,
-  BookOpen as BookOpenIcon,
-  Clock as ClockIcon,
-  Coins as CoinsIcon,
-  FileSpreadsheet as FileSpreadsheetIcon,
-  FileText as FileTextIcon,
-  User as UserIcon,
-  Wallet as WalletIcon,
-} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,6 +11,7 @@ import { ContactInformation } from '@/features/employee/components/details/infor
 import { EmploymentOverview } from '@/features/employee/components/details/information/employment-overview'
 import { PersonalInformation } from '@/features/employee/components/details/information/personal-information'
 import { Tags } from '@/features/employee/components/details/information/tags'
+import { employeeTabsFn } from '@/features/employee/constants/employee-config'
 
 const route = getRouteApi(EmployeeRouteId.id)
 export function EmployeeDetailPage() {
@@ -30,22 +21,7 @@ export function EmployeeDetailPage() {
 
   const { t } = useTranslation()
   const navigate = useNavigate()
-
-  const tabs = [
-    { value: 'personal', label: 'Personal Information', icon: UserIcon },
-    { value: 'contract', label: 'Contract', icon: FileTextIcon },
-    { value: 'payroll', label: 'Payroll', icon: CoinsIcon },
-    { value: 'time', label: 'Time Management', icon: ClockIcon },
-    { value: 'assets', label: 'Assets', icon: BarChartIcon, count: 3 },
-    {
-      value: 'document',
-      label: 'Document',
-      icon: FileSpreadsheetIcon,
-      count: 6,
-    },
-    { value: 'training', label: 'Training', icon: BookOpenIcon },
-    { value: 'finance', label: 'Finance', icon: WalletIcon },
-  ]
+  const tabs = employeeTabsFn(t)
 
   const handleTabChange = (value: string) => {
     navigate({

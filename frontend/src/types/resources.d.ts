@@ -159,6 +159,16 @@ interface Resources {
       "aFewSecondsAgo": "A few seconds ago",
       "twoDaysAgo": "2 Days ago"
     },
+    "tabs": {
+      "personal": "Personal Information",
+      "contract": "Contract",
+      "payroll": "Payroll",
+      "time": "Time Management",
+      "assets": "Assets",
+      "document": "Document",
+      "training": "Training",
+      "finance": "Finance"
+    },
     "actions": {
       "addEmployee": "Add Employee",
       "addTag": "Add Tag",
