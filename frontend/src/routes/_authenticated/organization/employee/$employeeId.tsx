@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { createFileRoute } from '@tanstack/react-router'
-import { EmployeeDetailLoading } from '@/features/employee/components/details/employee-detail-loading'
+import { EmployeeDetailSkeleton } from '@/features/employee/components/details/employee-detail-skeleton'
 import { EmployeeDetailPage } from '@/features/employee/pages/employee-detail'
 import GeneralError from '@/features/errors/general-error'
 import NotFoundError from '@/features/errors/not-found-error'
@@ -16,9 +16,9 @@ export const Route = createFileRoute(
   loader: async ({ params: { employeeId } }) => getUserApi(employeeId),
   validateSearch: employeeDetailSearchSchema,
   component: EmployeeDetailPage,
-  errorComponent: () => <GeneralError />,
-  notFoundComponent: () => <NotFoundError />,
-  pendingComponent: () => <EmployeeDetailLoading />,
+  errorComponent: GeneralError,
+  notFoundComponent: NotFoundError,
+  pendingComponent: EmployeeDetailSkeleton,
 })
 
 export type EmployeeDetailSearch = z.infer<typeof employeeDetailSearchSchema>
