@@ -11,11 +11,17 @@
     "citizenIdAddress": "Địa chỉ căn cước công dân",
     "notes": "Ghi chú",
     "tags": "Tags",
-    "employmentOverview": "Tổng quan việc làm"
+    "employmentOverview": "Tổng quan việc làm",
+    "lastClockedIn": "Lần đăng nhập cuối",
+    "lastMessaged": "Lần tin nhắn cuối",
+    "employeeId": "Mã nhân viên",
+    "aFewSecondsAgo": "Vài giây trước",
+    "twoDaysAgo": "Hôm qua"
   },
   "actions": {
     "addEmployee": "Thêm nhân viên",
-    "addTag": "Thêm tag"
+    "addTag": "Thêm tag",
+    "sendEmail": "Gửi email"
   },
   "employmentType": {
     "fulltime": "Toàn thời gian",

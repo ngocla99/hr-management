@@ -152,11 +152,17 @@ interface Resources {
       "citizenIdAddress": "Citizen ID Address",
       "notes": "Notes",
       "tags": "Tags",
-      "employmentOverview": "Employment Overview"
+      "employmentOverview": "Employment Overview",
+      "lastClockedIn": "Last Clocked In",
+      "lastMessaged": "Last Messaged",
+      "employeeId": "Employee ID",
+      "aFewSecondsAgo": "A few seconds ago",
+      "twoDaysAgo": "2 Days ago"
     },
     "actions": {
       "addEmployee": "Add Employee",
-      "addTag": "Add Tag"
+      "addTag": "Add Tag",
+      "sendEmail": "Send Email"
     },
     "employmentType": {
       "fulltime": "Full Time",

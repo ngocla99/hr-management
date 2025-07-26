@@ -69,23 +69,29 @@ export function EmployeeDetailHeader({ employee }: EmployeeDetailHeaderProps) {
 
           <div className='text-muted-foreground mt-1 flex items-center space-x-6 text-sm'>
             <div className='flex flex-col gap-2'>
-              <span className='font-medium'>Last Clocked In</span>
+              <span className='font-medium'>
+                {t('page.lastClockedIn', { ns: 'employee' })}
+              </span>
               <span className='text-foreground font-semibold'>
                 {employee.lastClockedIn
                   ? formatDate(employee.lastClockedIn)
-                  : 'A few seconds ago'}
+                  : t('page.aFewSecondsAgo', { ns: 'employee' })}
               </span>
             </div>
             <div className='flex flex-col gap-2'>
-              <span className='font-medium'>Last Messaged</span>
+              <span className='font-medium'>
+                {t('page.lastMessaged', { ns: 'employee' })}
+              </span>
               <span className='text-foreground font-semibold'>
                 {employee.lastMessaged
                   ? formatDate(employee.lastMessaged)
-                  : '2 Days ago'}
+                  : t('page.twoDaysAgo', { ns: 'employee' })}
               </span>
             </div>
             <div className='flex flex-col gap-2'>
-              <span className='font-medium'>Employee ID</span>
+              <span className='font-medium'>
+                {t('page.employeeId', { ns: 'employee' })}
+              </span>
               <span className='text-foreground font-semibold'>
                 #{employee.employeeId}
               </span>
@@ -125,7 +131,7 @@ export function EmployeeDetailHeader({ employee }: EmployeeDetailHeaderProps) {
 
         <Button>
           <Mail className='mr-2 h-4 w-4' />
-          Send Email
+          {t('actions.sendEmail', { ns: 'employee' })}
         </Button>
       </div>
     </div>
