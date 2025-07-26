@@ -60,7 +60,20 @@
     "selectGender": "Select Gender",
     "selectMaritalStatus": "Select Marital Status",
     "selectBirthdate": "Select Birthdate",
-    "selectBloodType": "Select Blood Type"
+    "selectBloodType": "Select Blood Type",
+    "enterPhoneNumber": "Enter Phone Number",
+    "enterEmail": "Enter Email",
+    "enterEmergencyContact": "Enter Emergency Contact",
+    "enterEmergencyPhone": "Enter Emergency Phone",
+    "enterRelationship": "Enter Relationship",
+    "enterResidentialAddress": "Enter Residential Address",
+    "enterCitizenIdAddress": "Enter Citizen ID Address",
+    "enterNotes": "Enter Notes",
+    "selectStartDate": "Select Start Date",
+    "selectJobRole": "Select Job Role",
+    "selectJobLevel": "Select Job Level",
+    "selectEmploymentType": "Select Employment Type",
+    "selectDepartment": "Select Department"
   },
   "messages": {
     "noEmployeesFound": "No employees found matching your criteria.",

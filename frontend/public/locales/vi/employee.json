@@ -60,7 +60,20 @@
     "selectGender": "Chọn giới tính",
     "selectMaritalStatus": "Chọn tình trạng hôn nhân",
     "selectBirthdate": "Chọn ngày sinh",
-    "selectBloodType": "Chọn nhóm máu"
+    "selectBloodType": "Chọn nhóm máu",
+    "enterPhoneNumber": "Nhập số điện thoại",
+    "enterEmail": "Nhập email",
+    "enterEmergencyContact": "Nhập liên hệ khẩn cấp",
+    "enterEmergencyPhone": "Nhập số điện thoại khẩn cấp",
+    "enterRelationship": "Nhập mối quan hệ",
+    "enterResidentialAddress": "Nhập địa chỉ nhà",
+    "enterCitizenIdAddress": "Nhập địa chỉ căn cước công dân",
+    "enterNotes": "Nhập ghi chú",
+    "selectStartDate": "Chọn ngày bắt đầu",
+    "selectJobRole": "Chọn chức vụ",
+    "selectJobLevel": "Chọn trình độ",
+    "selectEmploymentType": "Chọn loại hình làm việc",
+    "selectDepartment": "Chọn phòng ban"
   },
   "messages": {
     "noEmployeesFound": "Không tìm thấy nhân viên phù hợp.",

@@ -17,6 +17,45 @@ interface FormTextareaProps extends React.ComponentProps<'textarea'> {
   maxLength?: number
 }
 
+const TextareaWithCharCount = ({
+  maxLength,
+  onChange,
+  value,
+  ...props
+}: React.ComponentProps<'textarea'> & { maxLength?: number }) => {
+  const stringValue = String(value || '')
+  const [charCount, setCharCount] = React.useState(stringValue.length)
+
+  React.useEffect(() => {
+    const currentValue = String(value || '')
+    setCharCount(currentValue.length)
+  }, [value])
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCharCount(e.target.value.length)
+    onChange?.(e)
+  }
+
+  return (
+    <div className=''>
+      <Textarea
+        maxLength={maxLength}
+        className='break-all'
+        onChange={handleChange}
+        value={value}
+        {...props}
+      />
+      {maxLength && (
+        <div className='mt-1 flex justify-end'>
+          <span className='text-text-secondary text-sm'>
+            {charCount}/{maxLength}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export const FormTextarea = ({
   name,
   label,
@@ -26,7 +65,6 @@ export const FormTextarea = ({
   ...props
 }: FormTextareaProps) => {
   const form = useFormContext()
-  const [charCount, setCharCount] = React.useState(0)
 
   return (
     <FormField
@@ -41,26 +79,12 @@ export const FormTextarea = ({
             </FormLabel>
           )}
           <FormControl>
-            <div className=''>
-              <Textarea
-                placeholder={placeholder}
-                maxLength={maxLength}
-                className='break-all'
-                {...props}
-                {...field}
-                onChange={(e) => {
-                  setCharCount(e.target.value.length)
-                  field.onChange(e)
-                }}
-              />
-              {maxLength && (
-                <div className='mt-1 flex justify-end'>
-                  <span className='text-text-secondary text-sm'>
-                    {charCount}/{maxLength}
-                  </span>
-                </div>
-              )}
-            </div>
+            <TextareaWithCharCount
+              placeholder={placeholder}
+              maxLength={maxLength}
+              {...props}
+              {...field}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

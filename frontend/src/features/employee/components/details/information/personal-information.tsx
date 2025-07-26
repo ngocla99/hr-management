@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
 import { IconPencilMinus, IconUserFilled } from '@tabler/icons-react'
 import { BloodType, Gender, MaritalStatus, User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FormDatePicker } from '@/components/form-field/form-date-picker'
 import { FormInput } from '@/components/form-field/form-input'
 import { FormSelect } from '@/components/form-field/form-select'
-import { getUserQueryOptions } from '@/features/user/api/get-user'
 import { useUpdateUser } from '@/features/user/api/update-user'
 import {
   bloodTypeOptionsFn,
@@ -26,11 +25,14 @@ interface PersonalInformationProps {
 }
 
 const personalInformationSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  firstName: z.string().min(1, 'required'),
+  lastName: z.string().min(1, 'required'),
   gender: z.nativeEnum(Gender).optional(),
   maritalStatus: z.nativeEnum(MaritalStatus).optional(),
-  religion: z.string().optional(),
+  religion: z
+    .string()
+    .transform((val) => val || undefined)
+    .optional(),
   placeOfBirth: z.string().optional(),
   dateOfBirth: z.coerce.date().optional(),
   bloodType: z.nativeEnum(BloodType).optional(),
@@ -41,7 +43,7 @@ type PersonalInformationFormData = z.infer<typeof personalInformationSchema>
 export function PersonalInformation({ employee }: PersonalInformationProps) {
   const { t } = useTranslation()
   const [isEditing, setIsEditing] = useState(false)
-  const queryClient = useQueryClient()
+  const router = useRouter()
 
   const form = useForm<PersonalInformationFormData>({
     resolver: zodResolver(personalInformationSchema),
@@ -60,9 +62,7 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
   const updateUserMutation = useUpdateUser({
     mutationConfig: {
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: getUserQueryOptions(employee.id).queryKey,
-        })
+        router.invalidate()
         setIsEditing(false)
       },
     },

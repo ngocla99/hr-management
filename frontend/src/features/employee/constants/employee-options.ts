@@ -1,7 +1,12 @@
 import { IconBriefcase, IconCalendar, IconUser } from '@tabler/icons-react'
 import { Department, EmploymentType, JobRole } from '@/types/api'
 import { TFunction } from 'i18next'
-import { BLOOD_TYPES, GENDERS, MARITAL_STATUSES } from './employee-constants'
+import {
+  BLOOD_TYPES,
+  GENDERS,
+  JOB_LEVELS,
+  MARITAL_STATUSES,
+} from './employee-constants'
 
 export const employeeDepartmentOptionsFn = (t: TFunction) => [
   {
@@ -118,4 +123,10 @@ export const bloodTypeOptionsFn = (t: TFunction) =>
   BLOOD_TYPES.map((type) => ({
     value: type,
     label: type,
+  }))
+
+export const jobLevelOptionsFn = (t: TFunction) =>
+  JOB_LEVELS.map((level) => ({
+    value: level,
+    label: t(`level.${level}`, { ns: 'employee' } as any),
   }))
