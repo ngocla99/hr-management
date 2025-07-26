@@ -1,5 +1,6 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { IconDotsVertical } from '@tabler/icons-react'
+import { Route as EmployeeDetailRoute } from '@/routes/_authenticated/organization/employee/$employeeId'
 import { User } from '@/types/api'
 import { ArrowLeft, ChevronLeft, ChevronRight, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -9,24 +10,35 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { useUserAdjacent } from '@/features/user/api/get-adjacent-user'
 import { employeeStatusStyles } from '../../constants/employee-helpers'
 
 interface EmployeeDetailHeaderProps {
   employee: User
-  onPrevious?: () => void
-  onNext?: () => void
-  currentIndex?: number
-  totalCount?: number
 }
 
-export function EmployeeDetailHeader({
-  employee,
-  onPrevious,
-  onNext,
-  currentIndex = 1,
-  totalCount = 32,
-}: EmployeeDetailHeaderProps) {
+export function EmployeeDetailHeader({ employee }: EmployeeDetailHeaderProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { data: adjacent } = useUserAdjacent({
+    input: { id: employee.id },
+  })
+
+  const handlePreviousEmployee = () => {
+    if (!adjacent?.previous.id) return
+    navigate({
+      to: EmployeeDetailRoute.fullPath,
+      params: { employeeId: adjacent?.previous.id },
+    })
+  }
+
+  const handleNextEmployee = () => {
+    if (!adjacent?.next.id) return
+    navigate({
+      to: EmployeeDetailRoute.fullPath,
+      params: { employeeId: adjacent?.next.id },
+    })
+  }
 
   return (
     <div className='flex items-center justify-between'>
@@ -83,11 +95,11 @@ export function EmployeeDetailHeader({
       </div>
 
       <div className='flex items-center space-x-3'>
-        <div className='flex items-center space-x-1'>
+        <div className='flex items-center space-x-2'>
           <Button
             variant='light'
             size='icon'
-            onClick={onPrevious}
+            onClick={handlePreviousEmployee}
             className='size-8 rounded-full'
           >
             <ChevronLeft className='h-4 w-4' />
@@ -95,14 +107,14 @@ export function EmployeeDetailHeader({
           <Button
             variant='light'
             size='icon'
-            onClick={onNext}
+            onClick={handleNextEmployee}
             className='size-8 rounded-full'
           >
             <ChevronRight className='h-4 w-4' />
           </Button>
-          <span className='text-muted-foreground px-2 text-sm'>
-            {currentIndex} of {totalCount}
-          </span>
+          <div className='text-muted-foreground w-20 px-2 text-sm'>
+            {adjacent?.current.position} of {adjacent?.total}
+          </div>
         </div>
 
         <Button variant='light' size='icon' className='size-8'>
