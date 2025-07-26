@@ -26,6 +26,7 @@ import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { LoadMoreUsersReqDto } from "./dto/load-more-users.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
+import { UserAdjacentResDto } from "./dto/user-adjacent.res.dto";
 import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
 import { UserService } from "./user.service";
@@ -44,8 +45,8 @@ export class UserController {
     summary: "Get current user",
   })
   @Get("me")
-  async getCurrentUser(@CurrentUser("id") userId: Uuid): Promise<UserResDto> {
-    return await this.userService.findOne(userId);
+  getCurrentUser(@CurrentUser("id") userId: Uuid): Promise<UserResDto> {
+    return this.userService.findOne(userId);
   }
 
   @Post()
@@ -55,8 +56,8 @@ export class UserController {
     statusCode: HttpStatus.CREATED,
   })
   @RequireRole(UserRole.ADMIN)
-  async createUser(@Body() createUserDto: CreateUserReqDto): Promise<UserResDto> {
-    return await this.userService.create(createUserDto);
+  createUser(@Body() createUserDto: CreateUserReqDto): Promise<UserResDto> {
+    return this.userService.create(createUserDto);
   }
 
   @Post("create-many")
@@ -66,8 +67,8 @@ export class UserController {
     statusCode: HttpStatus.CREATED,
   })
   @RequireRole(UserRole.ADMIN)
-  async createManyUsers(@Body() createUsersDto: CreateUsersReqDto): Promise<UserResDto[]> {
-    return await this.userService.createMany(createUsersDto.users);
+  createManyUsers(@Body() createUsersDto: CreateUsersReqDto): Promise<UserResDto[]> {
+    return this.userService.createMany(createUsersDto.users);
   }
 
   @Get("stats")
@@ -75,8 +76,8 @@ export class UserController {
     type: UserStatsDto,
     summary: "Get user stats",
   })
-  async getUserStats(@Query() reqDto: ListUserStatsReqDto): Promise<UserStatsDto> {
-    return await this.userService.getUserStats(reqDto);
+  getUserStats(@Query() reqDto: ListUserStatsReqDto): Promise<UserStatsDto> {
+    return this.userService.getUserStats(reqDto);
   }
 
   @Get()
@@ -85,8 +86,8 @@ export class UserController {
     summary: "List users with statistics",
     isPaginated: true,
   })
-  async findAllUsers(@Query() reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
-    return await this.userService.findAll(reqDto);
+  findAllUsers(@Query() reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
+    return this.userService.findAll(reqDto);
   }
 
   @Get("/load-more")
@@ -96,17 +97,25 @@ export class UserController {
     isPaginated: true,
     paginationType: "cursor",
   })
-  async loadMoreUsers(
-    @Query() reqDto: LoadMoreUsersReqDto,
-  ): Promise<CursorPaginatedDto<UserResDto>> {
-    return await this.userService.loadMoreUsers(reqDto);
+  loadMoreUsers(@Query() reqDto: LoadMoreUsersReqDto): Promise<CursorPaginatedDto<UserResDto>> {
+    return this.userService.loadMoreUsers(reqDto);
   }
 
   @Get(":id")
   @ApiAuth({ type: UserResDto, summary: "Find user by id" })
   @ApiParam({ name: "id", type: "String" })
-  async findUser(@Param("id") id: string): Promise<UserResDto> {
-    return await this.userService.findOne(id);
+  findUser(@Param("id") id: string): Promise<UserResDto> {
+    return this.userService.findOne(id);
+  }
+
+  @Get(":id/adjacent")
+  @ApiAuth({
+    summary: "Get previous and next user relative to current user",
+    type: UserResDto,
+  })
+  @ApiParam({ name: "id", type: "String" })
+  getAdjacentUsers(@Param("id") id: string): Promise<UserAdjacentResDto> {
+    return this.userService.getAdjacentUsers(id);
   }
 
   @Patch(":id")

@@ -13,6 +13,7 @@ import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { LoadMoreUsersReqDto } from "./dto/load-more-users.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
+import { UserAdjacentResDto } from "./dto/user-adjacent.res.dto";
 import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
 import { UserDocument } from "./entities/user.entity";
@@ -118,6 +119,34 @@ export class UserService {
     const user = await this.userRepository.findById(id);
 
     return plainToInstance(UserResDto, user);
+  }
+
+  async getAdjacentUsers(id: string): Promise<UserAdjacentResDto> {
+    const current = await this.userRepository.findById(id);
+    if (!current) throw new NotFoundException(ErrorCode.U002);
+
+    const [total, position, previous, next] = await Promise.all([
+      this.userRepository.countDocuments(),
+      this.userRepository.countDocuments({
+        createdAt: { $lte: current.createdAt },
+      }),
+      this.userRepository.findPreviousOne({
+        createdAt: { $lt: current.createdAt },
+      }),
+      this.userRepository.findNextOne({
+        createdAt: { $gt: current.createdAt },
+      }),
+    ]);
+
+    return {
+      current: {
+        user: plainToInstance(UserResDto, current),
+        position,
+      },
+      total,
+      previous: plainToInstance(UserResDto, previous),
+      next: plainToInstance(UserResDto, next),
+    };
   }
 
   async update(id: string, updateUserDto: UpdateUserReqDto) {
