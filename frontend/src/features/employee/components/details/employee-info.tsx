@@ -1,25 +1,25 @@
 import { useNavigate } from '@tanstack/react-router'
 import { User } from '@/types/api'
 import {
-  User as UserIcon,
-  FileText as FileTextIcon,
-  Coins as CoinsIcon,
-  Clock as ClockIcon,
   BarChart3 as BarChartIcon,
-  FileSpreadsheet as FileSpreadsheetIcon,
   BookOpen as BookOpenIcon,
+  Clock as ClockIcon,
+  Coins as CoinsIcon,
+  FileSpreadsheet as FileSpreadsheetIcon,
+  FileText as FileTextIcon,
+  User as UserIcon,
   Wallet as WalletIcon,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AddressInformation } from './address-information.tsx'
-import { ContactInformation } from './contact-information.tsx'
-import { EmployeeDetailHeader } from './employee-detail-header'
-import { EmploymentOverview } from './employment-overview-section.tsx'
-import { PersonalInformation } from './personal-information.tsx'
-import { TagsSection } from './tags-section.tsx'
+import { EmployeeDetailHeader } from '@/features/employee/components/details/employee-detail-header'
+import { AddressInformation } from './information/address-information'
+import { ContactInformation } from './information/contact-information'
+import { EmploymentOverview } from './information/employment-overview'
+import { PersonalInformation } from './information/personal-information'
+import { Tags } from './information/tags'
 
 interface EmployeeInfoProps {
   employee: User
@@ -110,7 +110,7 @@ export function EmployeeInfo({
             <div className='space-y-6'>
               <ContactInformation employee={employee} />
               <EmploymentOverview employee={employee} />
-              <TagsSection employee={employee} />
+              <Tags employee={employee} />
             </div>
           </div>
         </TabsContent>

@@ -1,6 +1,5 @@
 import {
   IconBrowserCheck,
-  IconChecklist,
   IconHelp,
   IconLayoutDashboard,
   IconLayoutGrid,
@@ -48,11 +47,6 @@ export const sidebarData: SidebarData = {
           title: 'dashboard',
           url: '/',
           icon: IconLayoutDashboard,
-        },
-        {
-          title: 'tasks',
-          url: '/tasks',
-          icon: IconChecklist,
         },
         {
           title: 'chats',

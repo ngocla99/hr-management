@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { employeeStatusStyles } from '../../constants/employee-helpers'
 
 interface EmployeeDetailHeaderProps {
   employee: User
@@ -47,7 +48,7 @@ export function EmployeeDetailHeader({
         <div className='flex items-center'>
           <div className='flex flex-col gap-2'>
             <h1 className='text-lg font-semibold'>{employee.fullName}</h1>
-            <Badge variant='success' hasDot>
+            <Badge variant={employeeStatusStyles.get(employee.status)} hasDot>
               {t(`status.${employee.status}` as any, { ns: 'users' })}
             </Badge>
           </div>

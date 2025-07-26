@@ -1,18 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { User } from '@/types/api'
-import { Hash, Plus, X } from 'lucide-react'
+import { Hash } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-interface TagsSectionProps {
+interface TagsProps {
   employee: User
 }
 
-export function TagsSection({ employee }: TagsSectionProps) {
+export function Tags({ employee }: TagsProps) {
   const { t } = useTranslation()
   const [newTag, setNewTag] = useState('')
 

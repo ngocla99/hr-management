@@ -19,7 +19,7 @@ import {
   bloodTypeOptionsFn,
   genderOptionsFn,
   maritalStatusOptionsFn,
-} from '../../constants/employee-options'
+} from '../../../constants/employee-options'
 
 interface PersonalInformationProps {
   employee: User
