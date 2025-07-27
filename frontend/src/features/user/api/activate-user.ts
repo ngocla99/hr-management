@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
-import { getUsersQueryOptions } from './get-users'
+import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const activateUserSchema = z.object({
   id: z.string(),
@@ -18,10 +18,12 @@ export const activateUserApi = (input: ActivateUserInput): Promise<void> => {
 }
 
 type UseActivateUserOptions = {
+  inputQuery?: UsersInput
   mutationConfig?: MutationConfig<typeof activateUserApi>
 }
 
 export const useActivateUser = ({
+  inputQuery,
   mutationConfig,
 }: UseActivateUserOptions = {}) => {
   const { t } = useTranslation()
@@ -32,7 +34,7 @@ export const useActivateUser = ({
   return useMutation({
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryOptions().queryKey,
+        queryKey: getUsersQueryOptions(inputQuery).queryKey,
       })
       toast.success(t('message.success.activated', { ns: 'users' }))
       onSuccess?.(...args)

@@ -7,7 +7,6 @@ export type UserAdjacentInput = {
   id: string
 }
 
-
 export type UserAdjacent = {
   current: {
     user: User

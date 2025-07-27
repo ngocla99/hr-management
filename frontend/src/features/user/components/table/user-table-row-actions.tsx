@@ -1,6 +1,8 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { getRouteApi, useSearch } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import { IconEdit, IconTrash, IconUser } from '@tabler/icons-react'
+import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
 import { User } from '@/types/api'
 import { Trans, useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -14,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import confirm from '@/components/confirm'
 import { useActivateUser } from '@/features/user/api/activate-user'
+import { UsersInput } from '@/features/user/api/get-users'
 import { useSuspendUser } from '@/features/user/api/suspend-user'
 import { useUser } from '@/features/user/context/user-context'
 
@@ -21,12 +24,18 @@ interface UsersTableRowActionsProps {
   row: Row<User>
 }
 
+const route = getRouteApi(UserRoute.id)
 export function UsersTableRowActions({ row }: UsersTableRowActionsProps) {
   const { t } = useTranslation()
   const { setOpen, setCurrentRow } = useUser()
+  const searchParams = route.useSearch() as UsersInput
 
-  const suspendUserMutation = useSuspendUser()
-  const activateUserMutation = useActivateUser()
+  const suspendUserMutation = useSuspendUser({
+    inputQuery: { ...searchParams },
+  })
+  const activateUserMutation = useActivateUser({
+    inputQuery: { ...searchParams },
+  })
 
   const handleSuspendUser = () => {
     if (suspendUserMutation.isPending) return

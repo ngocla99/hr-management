@@ -1,78 +1,88 @@
 import { queryOptions, useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { User, UserRole, UserStatus } from '@/types/api'
+import {
+  Department,
+  JobRole,
+  Employee,
+  EmploymentType,
+  UserRole,
+  UserStatus,
+} from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
 import qs from 'qs'
 import apiClient from '@/lib/api-client'
 import { PAGINATION } from '@/lib/constants/constant'
 import { QueryConfig } from '@/lib/react-query'
 
-export type UsersInput = PaginationInput & {
+export type EmployeesInput = PaginationInput & {
   username?: string
+  jobRole?: JobRole[]
+  employmentType?: EmploymentType[]
+  department?: Department[]
   role?: UserRole[]
   status?: UserStatus
   createdAtFrom?: string
   createdAtTo?: string
 }
 
-export const getUsersApi = (
-  input?: UsersInput
+export const getEmployeesApi = (
+  input?: EmployeesInput
 ): Promise<{
-  data: User[]
+  data: Employee[]
   pagination: Pagination
 }> => {
-  return apiClient.get('/users', {
+  return apiClient.get('/employees', {
     params: input,
     paramsSerializer: (params) =>
       qs.stringify(params, { arrayFormat: 'repeat' }),
   })
 }
 
-export const getUsersQueryOptions = (
-  input: UsersInput = {
+export const getEmployeesQueryOptions = (
+  input: EmployeesInput = {
     page: PAGINATION.DEFAULT_PAGE,
     limit: PAGINATION.DEFAULT_LIMIT,
   }
 ) => {
   return queryOptions({
-    queryKey: ['users', 'list', input],
-    queryFn: () => getUsersApi(input),
+    queryKey: ['employees', 'list', input],
+    queryFn: () => getEmployeesApi(input),
   })
 }
 
-type UseUsersOptions = {
-  input?: UsersInput
-  queryConfig?: QueryConfig<typeof getUsersQueryOptions>
+type UseEmployeesOptions = {
+  input?: EmployeesInput
+  queryConfig?: QueryConfig<typeof getEmployeesQueryOptions>
 }
 
-export const useUsers = ({
+export const useEmployees = ({
   input = {
     page: PAGINATION.DEFAULT_PAGE,
     limit: PAGINATION.DEFAULT_LIMIT,
   },
   queryConfig,
-}: UseUsersOptions = {}) => {
+}: UseEmployeesOptions = {}) => {
   return useQuery({
-    ...getUsersQueryOptions(input),
+    ...getEmployeesQueryOptions(input),
     ...queryConfig,
   })
 }
 
-type UseUsersInfiniteOptions = {
-  input?: UsersInput
+type UseEmployeesInfiniteOptions = {
+  input?: EmployeesInput
   queryConfig?: QueryConfig<any>
 }
 
-export const useUsersInfinite = ({
+export const useEmployeesInfinite = ({
   input = {
     page: PAGINATION.DEFAULT_PAGE,
     limit: PAGINATION.DEFAULT_PAGE,
   },
   queryConfig,
-}: UseUsersInfiniteOptions = {}) => {
+}: UseEmployeesInfiniteOptions = {}) => {
   return useInfiniteQuery({
-    queryKey: ['users', 'infinite', input],
+    queryKey: ['employees', 'infinite', input],
     queryFn: ({ pageParam = 1 }) =>
-      getUsersApi({
+      getEmployeesApi({
         ...input,
         page: pageParam,
       }),

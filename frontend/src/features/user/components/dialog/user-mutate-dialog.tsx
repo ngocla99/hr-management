@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { useCreateUser } from '@/features/user/api/create-user'
+import { UsersInput } from '@/features/user/api/get-users'
 import { useUpdateUser } from '@/features/user/api/update-user'
 import { USER_ROLES } from '@/features/user/constants/user-constants'
 import { userRoleOptionsFn } from '@/features/user/constants/user-options'
@@ -100,26 +101,16 @@ interface Props {
 const route = getRouteApi(UserRoute.id)
 export function UserMutateDialog({ currentRow, open, onOpenChange }: Props) {
   const { t } = useTranslation()
-  const searchParams = route.useSearch()
-  const inputQuery = {
-    q: searchParams.username,
-    status: searchParams.status as UserStatus,
-    role: searchParams.role as UserRole[],
-    page: searchParams.page,
-    limit: searchParams.limit,
-    sort: searchParams.sort,
-    createdAtFrom: searchParams.createdAtFrom,
-    createdAtTo: searchParams.createdAtTo,
-  }
+  const searchParams = route.useSearch() as UsersInput
   const isEdit = !!currentRow
   const createUserMutation = useCreateUser({
-    inputQuery,
+    inputQuery: { ...searchParams },
     mutationConfig: {
       onSuccess: handleResetForm,
     },
   })
   const updateUserMutation = useUpdateUser({
-    inputQuery,
+    inputQuery: { ...searchParams },
     mutationConfig: {
       onSuccess: handleResetForm,
     },

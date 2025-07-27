@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
-import { getUsersQueryOptions } from './get-users'
+import { getUsersQueryOptions, UsersInput } from './get-users'
 
 export const suspendUserSchema = z.object({
   id: z.string(),
@@ -18,10 +18,12 @@ export const suspendUserApi = (input: SuspendUserInput): Promise<void> => {
 }
 
 type UseSuspendUserOptions = {
+  inputQuery?: UsersInput
   mutationConfig?: MutationConfig<typeof suspendUserApi>
 }
 
 export const useSuspendUser = ({
+  inputQuery,
   mutationConfig,
 }: UseSuspendUserOptions = {}) => {
   const { t } = useTranslation()
@@ -32,7 +34,7 @@ export const useSuspendUser = ({
   return useMutation({
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryOptions().queryKey,
+        queryKey: getUsersQueryOptions(inputQuery).queryKey,
       })
       toast.success(t('message.success.suspended', { ns: 'users' }))
       onSuccess?.(...args)

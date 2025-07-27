@@ -15,13 +15,13 @@ export const getUserQueryOptions = (id: string) => {
 }
 
 type UseUserOptions = {
-  inputQuery: string
+  input: string
   queryConfig?: QueryConfig<typeof getUserQueryOptions>
 }
 
-export const useUser = ({ inputQuery, queryConfig }: UseUserOptions) => {
+export const useUser = ({ input, queryConfig }: UseUserOptions) => {
   return useQuery({
-    ...getUserQueryOptions(inputQuery),
+    ...getUserQueryOptions(input),
     ...queryConfig,
   })
 }

@@ -95,7 +95,33 @@ export type UserStats = {
   totalUnverified: number
 }
 
+export type EmployeeStats = {
+  totalActive: number
+  totalInactive: number
+  totalSuspended: number
+  totalUnverified: number
+}
+
 export type User = Entity<{
+  username: string
+  firstName: string
+  lastName: string
+  fullName: string
+  email: string
+  password: string
+  role: UserRole
+  avatar: string
+  dateOfBirth: Date
+  age?: number
+  phoneNumber: string
+  gender: Gender
+  status: UserStatus
+  bio?: string
+  lastLogin?: Date
+  emailVerified: boolean
+}>
+
+export type Employee = Entity<{
   username: string
   firstName: string
   lastName: string
@@ -126,7 +152,7 @@ export type User = Entity<{
   department: Department
   contractEndDate: Date
   status: UserStatus
-  lastClockedIn: Date
-  lastMessaged: Date
-  tags: string[]
+  lastClockedIn?: Date
+  lastMessaged?: Date
+  tags?: string[]
 }>
