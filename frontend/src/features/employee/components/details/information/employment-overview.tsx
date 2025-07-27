@@ -4,13 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@tanstack/react-router'
 import { IconPencilMinus } from '@tabler/icons-react'
-import {
-  Department,
-  EmploymentType,
-  JobLevel,
-  JobRole,
-  User,
-} from '@/types/api'
+import { Department, EmploymentType, JobLevel, JobRole } from '@/types/api'
 import { Briefcase } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
@@ -24,14 +18,15 @@ import {
   employmentTypeOptionsFn,
   jobLevelOptionsFn,
 } from '@/features/employee/constants/employee-options'
+import { Employee } from '@/features/employee/type/employee'
 import { useUpdateUser } from '@/features/user/api/update-user'
 
 interface EmploymentOverviewProps {
-  employee: User
+  employee: Employee
 }
 
 const employmentOverviewSchema = z.object({
-  dateStarted: z.coerce.date().optional(),
+  hireDate: z.coerce.date().optional(),
   jobRole: z.nativeEnum(JobRole).optional(),
   jobLevel: z.nativeEnum(JobLevel).optional(),
   employmentType: z.nativeEnum(EmploymentType).optional(),
@@ -48,7 +43,7 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
   const form = useForm<EmploymentOverviewFormData>({
     resolver: zodResolver(employmentOverviewSchema),
     defaultValues: {
-      dateStarted: employee.dateStarted,
+      hireDate: employee.hireDate,
       jobRole: employee.jobRole,
       jobLevel: employee.jobLevel,
       employmentType: employee.employmentType,
@@ -77,7 +72,7 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
   const handleSave = async (data: EmploymentOverviewFormData) => {
     if (updateUserMutation.isPending) return
     updateUserMutation.mutate({
-      id: employee.id,
+      id: employee.userId,
       ...data,
     })
   }
@@ -93,8 +88,8 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
   const employmentFields = [
     {
       label: t('dateStarted', { ns: 'glossary' }),
-      value: employee.dateStarted
-        ? formatEmploymentDuration(employee.dateStarted)
+      value: employee.hireDate
+        ? formatEmploymentDuration(employee.hireDate)
         : '-',
       className: 'pt-0 pb-2',
     },
@@ -204,7 +199,7 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
               className='grid grid-cols-2 gap-4 pb-4'
             >
               <FormDatePicker
-                name='dateStarted'
+                name='hireDate'
                 label={t('dateStarted', { ns: 'glossary' })}
                 placeholder={t('form.selectStartDate', { ns: 'employee' })}
               />

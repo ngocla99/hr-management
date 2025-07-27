@@ -5,7 +5,7 @@ import { ErrorCode } from "@/constants/error-code.constant";
 import { UserRole } from "@/constants/roles.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
 import { EmployeeResDto } from "./dto/employee.res.dto";
@@ -23,6 +23,7 @@ export class EmployeeService {
   constructor(
     private readonly employeeRepository: EmployeeRepository,
     private readonly employeeNumberUtil: EmployeeNumberUtil,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
@@ -43,18 +44,12 @@ export class EmployeeService {
         avatar: createEmployeeDto.avatar,
         password: createEmployeeDto.password,
         role: UserRole.EMPLOYEE,
+        gender: createEmployeeDto.gender,
+        dateOfBirth: createEmployeeDto.dateOfBirth,
       };
 
-      try {
-        const newUser = await this.userService.create(createUserDto);
-        userId = newUser.id;
-        this.logger.log(`Created new user with ID: ${userId} for employee`);
-      } catch (error) {
-        this.logger.error(
-          `Failed to create user for employee: ${error instanceof Error ? error.message : "Unknown error"}`,
-        );
-        throw error;
-      }
+      const newUser = await this.userService.create(createUserDto);
+      userId = newUser.id;
     } else {
       // Check if user already has an employee record
       const existingUserEmployee = await this.employeeRepository.findByUserId(userId);
@@ -76,8 +71,6 @@ export class EmployeeService {
       lastName,
     );
 
-    this.logger.log(`Creating employee with employee number: ${employeeNumber}`);
-
     if (createEmployeeDto.hireDate > new Date()) {
       throw new ValidationException(ErrorCode.E005);
     }
@@ -89,9 +82,8 @@ export class EmployeeService {
     };
 
     const employee = await this.employeeRepository.create(employeeData);
-    this.logger.log(`Employee created successfully with ID: ${employee.id}`);
 
-    return employee;
+    return plainToInstance(EmployeeResDto, employee);
   }
 
   async createMany(createEmployeeDto: CreateEmployeeReqDto[]): Promise<EmployeeResDto[]> {
@@ -108,51 +100,44 @@ export class EmployeeService {
         skipCount: false,
         takeAll: false,
         filter,
-        populate: { userId: "id firstName lastName email avatar phoneNumber username role status" },
+        populate: {
+          userId:
+            "id firstName lastName email avatar phoneNumber username role status gender age dateOfBirth",
+        },
       },
     );
-
-    console.log("🚀 ~ EmployeeService ~ employees:", employees);
 
     return new OffsetPaginatedDto(plainToInstance(EmployeeResDto, employees), metaDto);
   }
 
   async findById(id: string): Promise<EmployeeResDto> {
-    this.logger.log(`Finding employee by ID: ${id}`);
-
     const employee = await this.employeeRepository.findById(id);
     if (!employee) {
       throw new NotFoundException(ErrorCode.E002);
     }
 
-    return employee;
+    return plainToInstance(EmployeeResDto, employee);
   }
 
   async findByUserId(userId: string): Promise<EmployeeResDto> {
-    this.logger.log(`Finding employee by user ID: ${userId}`);
-
     const employee = await this.employeeRepository.findByUserId(userId);
     if (!employee) {
       throw new NotFoundException(ErrorCode.E002);
     }
 
-    return employee;
+    return plainToInstance(EmployeeResDto, employee);
   }
 
   async findByEmployeeNumber(employeeNumber: string): Promise<EmployeeResDto> {
-    this.logger.log(`Finding employee by employee number: ${employeeNumber}`);
-
     const employee = await this.employeeRepository.findByEmployeeNumber(employeeNumber);
     if (!employee) {
       throw new NotFoundException(ErrorCode.E002);
     }
 
-    return employee;
+    return plainToInstance(EmployeeResDto, employee);
   }
 
   async update(id: string, updateEmployeeDto: UpdateEmployeeReqDto): Promise<EmployeeResDto> {
-    this.logger.log(`Updating employee with ID: ${id}`);
-
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
@@ -177,13 +162,10 @@ export class EmployeeService {
       throw new NotFoundException(ErrorCode.E002);
     }
 
-    this.logger.log(`Employee updated successfully with ID: ${id}`);
-    return updatedEmployee;
+    return plainToInstance(EmployeeResDto, updatedEmployee);
   }
 
   async remove(id: string): Promise<void> {
-    this.logger.log(`Removing employee with ID: ${id}`);
-
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
@@ -194,17 +176,6 @@ export class EmployeeService {
     if (!deleted) {
       throw new NotFoundException(ErrorCode.E002);
     }
-
-    this.logger.log(`Employee removed successfully with ID: ${id}`);
-  }
-
-  async findByDepartment(departmentId: string): Promise<EmployeeResDto[]> {
-    this.logger.log(`Finding employees by department ID: ${departmentId}`);
-
-    const employees = await this.employeeRepository.findByDepartment(departmentId);
-    this.logger.log(`Found ${employees.length} employees in department: ${departmentId}`);
-
-    return employees;
   }
 
   async getEmployeeStats(): Promise<{
@@ -215,17 +186,12 @@ export class EmployeeService {
     probation: number;
     onboarding: number;
   }> {
-    this.logger.log("Getting employee statistics");
-
     const stats = await this.employeeRepository.getEmployeeStats();
-    this.logger.log(`Employee stats retrieved: ${JSON.stringify(stats)}`);
 
     return stats;
   }
 
   async terminateEmployee(id: string, terminationDate: Date): Promise<EmployeeResDto> {
-    this.logger.log(`Terminating employee with ID: ${id}`);
-
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
@@ -251,13 +217,10 @@ export class EmployeeService {
       throw new NotFoundException(ErrorCode.E002);
     }
 
-    this.logger.log(`Employee terminated successfully with ID: ${id}`);
-    return updatedEmployee;
+    return plainToInstance(EmployeeResDto, updatedEmployee);
   }
 
   async reactivateEmployee(id: string): Promise<EmployeeResDto> {
-    this.logger.log(`Reactivating employee with ID: ${id}`);
-
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
@@ -278,7 +241,6 @@ export class EmployeeService {
       throw new NotFoundException(ErrorCode.E002);
     }
 
-    this.logger.log(`Employee reactivated successfully with ID: ${id}`);
-    return updatedEmployee;
+    return plainToInstance(EmployeeResDto, updatedEmployee);
   }
 }

@@ -1,3 +1,4 @@
+import { Gender } from "@/api/user/entities/user.entity";
 import {
   DateFieldOptional,
   EmailFieldOptional,
@@ -59,6 +60,18 @@ export class CreateEmployeeReqDto {
   })
   password?: string;
 
+  @EnumFieldOptional(() => Gender, {
+    description: "Gender",
+    example: Gender.MALE,
+  })
+  gender?: Gender;
+
+  @DateFieldOptional({
+    description: "Date of birth",
+    example: "2024-01-15T00:00:00.000Z",
+  })
+  dateOfBirth?: Date;
+
   @DateFieldOptional({
     description: "Hire date",
     example: "2024-01-15T00:00:00.000Z",
@@ -79,7 +92,7 @@ export class CreateEmployeeReqDto {
 
   @StringFieldOptional({
     description: "Religion",
-    example: "Christian",
+    example: "Buddhism",
   })
   religion?: string;
 

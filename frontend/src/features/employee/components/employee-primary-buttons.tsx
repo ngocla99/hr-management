@@ -13,7 +13,7 @@ export function EmployeePrimaryButtons() {
 
   const handleCreateEmployees = () => {
     if (createEmployeesMutation.isPending) return
-    const employees = generateRandomEmployees(1)
+    const employees = generateRandomEmployees(10)
     createEmployeesMutation.mutate({ employees })
   }
 

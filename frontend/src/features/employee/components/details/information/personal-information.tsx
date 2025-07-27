@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@tanstack/react-router'
 import { IconPencilMinus, IconUserFilled } from '@tabler/icons-react'
-import { BloodType, Gender, MaritalStatus, User } from '@/types/api'
+import { BloodType, Gender, MaritalStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -13,15 +13,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FormDatePicker } from '@/components/form-field/form-date-picker'
 import { FormInput } from '@/components/form-field/form-input'
 import { FormSelect } from '@/components/form-field/form-select'
-import { useUpdateUser } from '@/features/user/api/update-user'
 import {
   bloodTypeOptionsFn,
   genderOptionsFn,
   maritalStatusOptionsFn,
-} from '../../../constants/employee-options'
+} from '@/features/employee/constants/employee-options'
+import { Employee } from '@/features/employee/type/employee'
+import { useUpdateUser } from '@/features/user/api/update-user'
 
 interface PersonalInformationProps {
-  employee: User
+  employee: Employee
 }
 
 const personalInformationSchema = z.object({

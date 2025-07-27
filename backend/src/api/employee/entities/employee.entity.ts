@@ -56,6 +56,7 @@ export enum JobRole {
 }
 
 export enum Department {
+  QA = "qa",
   IT = "it",
   HR = "hr",
   FINANCE = "finance",

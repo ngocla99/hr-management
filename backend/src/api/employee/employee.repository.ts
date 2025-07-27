@@ -1,9 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { plainToInstance } from "class-transformer";
 import { Model, Types } from "mongoose";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
-import { EmployeeResDto } from "./dto/employee.res.dto";
 import { UpdateEmployeeReqDto } from "./dto/update-employee.req.dto";
 import { Employee, EmployeeDocument } from "./entities/employee.entity";
 
@@ -11,82 +9,57 @@ import { Employee, EmployeeDocument } from "./entities/employee.entity";
 export class EmployeeRepository {
   constructor(@InjectModel(Employee.name) public readonly model: Model<EmployeeDocument>) {}
 
-  async create(employeeData: CreateEmployeeReqDto): Promise<EmployeeResDto> {
-    console.log("🚀 ~ EmployeeRepository ~ create ~ employeeData:", employeeData);
+  async create(employeeData: CreateEmployeeReqDto): Promise<EmployeeDocument> {
     const employee = new this.model({
       ...employeeData,
       userId: new Types.ObjectId(employeeData.userId),
     });
 
     const savedEmployee = await employee.save();
-    return plainToInstance(EmployeeResDto, savedEmployee);
+    return savedEmployee;
   }
 
-  async findById(id: string): Promise<EmployeeResDto | null> {
-    const employee = await this.model
+  async findById(id: string): Promise<EmployeeDocument | null> {
+    return await this.model
       .findById(id)
-      .populate("userId", "firstName lastName email avatar phoneNumber username role status")
-      .populate("department", "name description")
-      .populate("manager", "employeeNumber position jobTitle")
+      .populate(
+        "userId",
+        "id firstName lastName email avatar phoneNumber username role status gender age dateOfBirth",
+      )
       .exec();
-
-    if (!employee) return null;
-    return plainToInstance(EmployeeResDto, employee);
   }
 
-  async findByUserId(userId: string): Promise<EmployeeResDto | null> {
-    const employee = await this.model
+  async findByUserId(userId: string): Promise<EmployeeDocument | null> {
+    return await this.model
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate("userId", "firstName lastName email avatar phoneNumber username role status")
-      .populate("department", "name description")
-      .populate("manager", "employeeNumber position jobTitle")
       .exec();
-
-    if (!employee) return null;
-    return plainToInstance(EmployeeResDto, employee);
   }
 
-  async findByEmployeeNumber(employeeNumber: string): Promise<EmployeeResDto | null> {
-    const employee = await this.model
+  async findByEmployeeNumber(employeeNumber: string): Promise<EmployeeDocument | null> {
+    return await this.model
       .findOne({ employeeNumber: employeeNumber.toUpperCase() })
       .populate("userId", "firstName lastName email avatar phoneNumber username role status")
-      .populate("department", "name description")
-      .populate("manager", "employeeNumber position jobTitle")
       .exec();
-
-    if (!employee) return null;
-    return plainToInstance(EmployeeResDto, employee);
   }
 
-  async updateById(id: string, updateData: UpdateEmployeeReqDto): Promise<EmployeeResDto | null> {
+  async updateById(id: string, updateData: UpdateEmployeeReqDto): Promise<EmployeeDocument | null> {
     const updateObj: any = { ...updateData };
 
     const employee = await this.model
       .findByIdAndUpdate(id, updateObj, { new: true })
       .populate("userId", "firstName lastName email avatar phoneNumber username role status")
-      .populate("department", "name description")
-      .populate("manager", "employeeNumber position jobTitle")
       .exec();
 
-    if (!employee) return null;
-    return plainToInstance(EmployeeResDto, employee);
+    return employee;
   }
 
-  async deleteById(id: string): Promise<boolean> {
-    const result = await this.model.findByIdAndDelete(id).exec();
-    return !!result;
+  async deleteById(id: string): Promise<EmployeeDocument | null> {
+    return await this.model.findByIdAndDelete(id).exec();
   }
 
-  async findByDepartment(departmentId: string): Promise<EmployeeResDto[]> {
-    const employees = await this.model
-      .find({ department: new Types.ObjectId(departmentId) })
-      .populate("userId", "firstName lastName email avatar phoneNumber username role status")
-      .populate("department", "name description")
-      .populate("manager", "employeeNumber position jobTitle")
-      .sort({ "userId.firstName": 1, "userId.lastName": 1 })
-      .exec();
-
-    return plainToInstance(EmployeeResDto, employees);
+  async deleteByUserId(userId: string): Promise<EmployeeDocument | null> {
+    return await this.model.findOneAndDelete({ userId: new Types.ObjectId(userId) }).exec();
   }
 
   async getEmployeeStats(): Promise<{

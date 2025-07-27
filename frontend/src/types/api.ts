@@ -118,6 +118,7 @@ export enum Department {
   HR = 'hr',
   FINANCE = 'finance',
   MARKETING = 'marketing',
+  SALES = 'sales',
 }
 
 export type EmployeeStats = {
@@ -141,7 +142,7 @@ export type EmployeeApi = Entity<{
   emergencyContactName: string
   emergencyContactRelationship: string
   employeeNumber: string
-  dateStarted: Date
+  hireDate: Date
   employmentStatus: EmploymentStatus
   jobRole: JobRole
   jobLevel: JobLevel

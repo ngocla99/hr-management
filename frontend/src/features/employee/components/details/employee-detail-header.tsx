@@ -93,7 +93,7 @@ export function EmployeeDetailHeader({ employee }: EmployeeDetailHeaderProps) {
                 {t('page.employeeId', { ns: 'employee' })}
               </span>
               <span className='text-foreground font-semibold'>
-                #{employee.employeeId}
+                #{employee.employeeNumber}
               </span>
             </div>
           </div>

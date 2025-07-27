@@ -1,11 +1,13 @@
 import { CursorPaginatedDto } from "@/common/dto/cursor-pagination/paginated.dto";
 import { OffsetPaginatedDto } from "@/common/dto/offset-pagination/paginated.dto";
 import { ErrorCode } from "@/constants/error-code.constant";
+import { UserRole } from "@/constants/roles.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { buildPaginator } from "@/utils/cursor-pagination";
 import { paginate } from "@/utils/offset-pagination";
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
+import { EmployeeRepository } from "../employee/employee.repository";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
 import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
@@ -24,7 +26,11 @@ import { generateBaseUsername, generateUniqueUsername } from "./utils/username.u
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    @Inject(forwardRef(() => EmployeeRepository))
+    private readonly employeeRepository: EmployeeRepository,
+  ) {}
 
   async create(dto: CreateUserReqDto): Promise<UserResDto> {
     const { firstName, lastName, email, username: providedUsername, ...rest } = dto;
@@ -159,6 +165,12 @@ export class UserService {
   }
 
   async delete(id: string): Promise<{ message: string }> {
+    const user = await this.userRepository.findById(id);
+
+    if (user?.role === UserRole.EMPLOYEE) {
+      await this.employeeRepository.deleteByUserId(id);
+    }
+
     const result = await this.userRepository.hardDeleteUser(id);
 
     if (result.deletedCount === 0) {

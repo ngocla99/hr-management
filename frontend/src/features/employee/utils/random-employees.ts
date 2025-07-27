@@ -40,6 +40,13 @@ export function generateRandomEmployees(count: number) {
     const maritalStatus = faker.helpers.arrayElement(MARITAL_STATUSES)
     const bloodType = faker.helpers.arrayElement(BLOOD_TYPES)
     const placeOfBirth = faker.location.city()
+    const religion = faker.helpers.arrayElement([
+      'Islam',
+      'Christian',
+      'Hindu',
+      'Buddhist',
+      'Other',
+    ])
     const residentialAddress = faker.location.streetAddress()
     const residentialAddressNotes = faker.lorem.sentence()
     const citizenIdAddress = faker.location.streetAddress()
@@ -83,6 +90,7 @@ export function generateRandomEmployees(count: number) {
       emergencyContactRelationship,
       employeeNumber,
       hireDate,
+      religion,
     })
   }
   return employees

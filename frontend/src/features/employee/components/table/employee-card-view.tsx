@@ -128,7 +128,7 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
         <div className='bg-accent/50 space-y-3 rounded-lg border p-4 shadow-sm'>
           <div className='flex items-center space-x-2'>
             <IconId className='text-muted-foreground size-4' />
-            <span className='text-sm'>#EM{index + 1}</span>
+            <span className='text-sm'>#{employee.employeeNumber}</span>
           </div>
 
           <div className='flex items-center space-x-2'>
@@ -169,7 +169,7 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
           <div className='text-muted-foreground/50 text-sm'>
             {t('joinAt', { ns: 'glossary' })}{' '}
             <span className='text-foreground'>
-              {formatDate(employee.dateStarted)}
+              {formatDate(employee.hireDate)}
             </span>
           </div>
           <div className='group/button'>
