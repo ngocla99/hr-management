@@ -33,10 +33,9 @@ import { Employee } from '@/features/employee/type/employee'
 
 interface EmployeeCardProps {
   employee: Employee
-  index: number
 }
 
-function EmployeeCard({ employee, index }: EmployeeCardProps) {
+function EmployeeCard({ employee }: EmployeeCardProps) {
   const { t } = useTranslation()
   const { setOpen, setCurrentRow } = useEmployee()
   const navigate = useNavigate()
@@ -200,12 +199,8 @@ export function EmployeeCardView({ table }: EmployeeCardViewProps) {
   return (
     <div className='space-y-4'>
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {table.getRowModel().rows.map((row, index) => (
-          <EmployeeCard
-            key={row.id}
-            employee={row.original}
-            index={row.index}
-          />
+        {table.getRowModel().rows.map((row) => (
+          <EmployeeCard key={row.id} employee={row.original} />
         ))}
       </div>
 

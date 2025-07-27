@@ -1,7 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { IconDotsVertical } from '@tabler/icons-react'
 import { Route as EmployeeDetailRoute } from '@/routes/_authenticated/organization/employee/$employeeId'
-import { User } from '@/types/api'
 import { ArrowLeft, ChevronLeft, ChevronRight, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SEARCH_PARAMS } from '@/lib/constants/constant'
@@ -10,17 +9,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { useUserAdjacent } from '@/features/user/api/get-adjacent-user'
-import { employeeStatusStyles } from '../../constants/employee-helpers'
+import { useEmployeeAdjacent } from '@/features/employee/api/get-adjacent-employee'
+import { employeeStatusStyles } from '@/features/employee/constants/employee-helpers'
+import { Employee } from '@/features/employee/type/employee'
 
 interface EmployeeDetailHeaderProps {
-  employee: User
+  employee: Employee
 }
 
 export function EmployeeDetailHeader({ employee }: EmployeeDetailHeaderProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { data: adjacent } = useUserAdjacent({
+  const { data: adjacent } = useEmployeeAdjacent({
     input: { id: employee.id },
   })
 
@@ -60,8 +60,11 @@ export function EmployeeDetailHeader({ employee }: EmployeeDetailHeaderProps) {
         <div className='flex items-center'>
           <div className='flex flex-col gap-2'>
             <h1 className='text-lg font-semibold'>{employee.fullName}</h1>
-            <Badge variant={employeeStatusStyles.get(employee.status)} hasDot>
-              {t(`status.${employee.status}` as any, { ns: 'users' })}
+            <Badge
+              variant={employeeStatusStyles.get(employee.employmentStatus)}
+              hasDot
+            >
+              {t(`status.${employee.employmentStatus}` as any, { ns: 'users' })}
             </Badge>
           </div>
 

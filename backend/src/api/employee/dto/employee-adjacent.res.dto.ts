@@ -1,13 +1,13 @@
 import { ClassField, ClassFieldOptional, NumberField } from "@/decorators/field.decorators";
 import { Exclude, Expose } from "class-transformer";
-import { UserResDto } from "./user.res.dto";
+import { EmployeeResDto } from "./employee.res.dto";
 
-export class CurrentUserResDto {
-  @ClassField(() => UserResDto, {
+export class CurrentEmployeeResDto {
+  @ClassField(() => EmployeeResDto, {
     description: "User",
   })
   @Expose()
-  user: UserResDto;
+  employee: EmployeeResDto;
   @NumberField({
     description: "Position",
   })
@@ -16,23 +16,23 @@ export class CurrentUserResDto {
 }
 
 @Exclude()
-export class UserAdjacentResDto {
-  @ClassField(() => CurrentUserResDto, {
+export class EmployeeAdjacentResDto {
+  @ClassField(() => CurrentEmployeeResDto, {
     description: "Current user",
   })
   @Expose()
-  current: CurrentUserResDto;
+  current: CurrentEmployeeResDto;
 
-  @ClassFieldOptional(() => UserResDto, {
+  @ClassFieldOptional(() => EmployeeResDto, {
     description: "Previous user",
   })
   @Expose()
-  previous: UserResDto;
-  @ClassFieldOptional(() => UserResDto, {
+  previous: EmployeeResDto;
+  @ClassFieldOptional(() => EmployeeResDto, {
     description: "Next user",
   })
   @Expose()
-  next: UserResDto;
+  next: EmployeeResDto;
 
   @NumberField({
     description: "Total number of users",

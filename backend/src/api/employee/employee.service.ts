@@ -8,6 +8,7 @@ import { paginate } from "@/utils/offset-pagination";
 import { forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
+import { EmployeeAdjacentResDto } from "./dto/employee-adjacent.res.dto";
 import { EmployeeResDto } from "./dto/employee.res.dto";
 import { ListEmployeeReqDto } from "./dto/list-employee.req.dto";
 import { UpdateEmployeeReqDto } from "./dto/update-employee.req.dto";
@@ -176,6 +177,34 @@ export class EmployeeService {
     if (!deleted) {
       throw new NotFoundException(ErrorCode.E002);
     }
+  }
+
+  async getAdjacentUsers(id: string): Promise<EmployeeAdjacentResDto> {
+    const current = await this.employeeRepository.findById(id);
+    if (!current) throw new NotFoundException(ErrorCode.U002);
+
+    const [total, position, previous, next] = await Promise.all([
+      this.employeeRepository.countDocuments(),
+      this.employeeRepository.countDocuments({
+        createdAt: { $gte: current.createdAt },
+      }),
+      this.employeeRepository.findPreviousOne({
+        createdAt: { $gt: current.createdAt },
+      }),
+      this.employeeRepository.findNextOne({
+        createdAt: { $lt: current.createdAt },
+      }),
+    ]);
+
+    return {
+      current: {
+        employee: plainToInstance(EmployeeResDto, current),
+        position,
+      },
+      total,
+      previous: plainToInstance(EmployeeResDto, previous),
+      next: plainToInstance(EmployeeResDto, next),
+    };
   }
 
   async getEmployeeStats(): Promise<{

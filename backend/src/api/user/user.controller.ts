@@ -26,7 +26,6 @@ import { ListUserStatsReqDto } from "./dto/list-user-stats.req.dto";
 import { ListUserReqDto } from "./dto/list-user.req.dto";
 import { LoadMoreUsersReqDto } from "./dto/load-more-users.req.dto";
 import { UpdateUserReqDto } from "./dto/update-user.req.dto";
-import { UserAdjacentResDto } from "./dto/user-adjacent.res.dto";
 import { UserStatsDto } from "./dto/user-stats.dto";
 import { UserResDto } from "./dto/user.res.dto";
 import { UserService } from "./user.service";
@@ -106,16 +105,6 @@ export class UserController {
   @ApiParam({ name: "id", type: "String" })
   findUser(@Param("id") id: string): Promise<UserResDto> {
     return this.userService.findOne(id);
-  }
-
-  @Get(":id/adjacent")
-  @ApiAuth({
-    summary: "Get previous and next user relative to current user",
-    type: UserResDto,
-  })
-  @ApiParam({ name: "id", type: "String" })
-  getAdjacentUsers(@Param("id") id: string): Promise<UserAdjacentResDto> {
-    return this.userService.getAdjacentUsers(id);
   }
 
   @Patch(":id")

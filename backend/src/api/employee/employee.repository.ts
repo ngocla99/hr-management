@@ -62,6 +62,34 @@ export class EmployeeRepository {
     return await this.model.findOneAndDelete({ userId: new Types.ObjectId(userId) }).exec();
   }
 
+  async findPreviousOne(filter?: Record<string, any>): Promise<EmployeeDocument | null> {
+    const employee = await this.model
+      .findOne({ deletedAt: null, ...filter })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    if (!employee)
+      return await this.model.findOne({ deletedAt: null }).sort({ createdAt: 1 }).exec();
+
+    return employee;
+  }
+
+  async findNextOne(filter?: Record<string, any>): Promise<EmployeeDocument | null> {
+    const employee = await this.model
+      .findOne({ deletedAt: null, ...filter })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    if (!employee)
+      return await this.model.findOne({ deletedAt: null }).sort({ createdAt: -1 }).exec();
+
+    return employee;
+  }
+
+  async countDocuments(filter?: Record<string, any>): Promise<number> {
+    return await this.model.countDocuments({ deletedAt: null, ...filter });
+  }
+
   async getEmployeeStats(): Promise<{
     total: number;
     active: number;

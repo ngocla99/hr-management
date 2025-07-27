@@ -28,34 +28,6 @@ export class UserRepository {
     return this.userModel.findOne({ deletedAt: null, ...filter }).exec();
   }
 
-  async findPreviousOne(filter?: Record<string, any>): Promise<UserDocument | null> {
-    const user = await this.userModel
-      .findOne({ deletedAt: null, ...filter })
-      .sort({ createdAt: -1 })
-      .exec();
-
-    if (!user)
-      return await this.userModel.findOne({ deletedAt: null }).sort({ createdAt: -1 }).exec();
-
-    return user;
-  }
-
-  async findNextOne(filter?: Record<string, any>): Promise<UserDocument | null> {
-    const user = await this.userModel
-      .findOne({ deletedAt: null, ...filter })
-      .sort({ createdAt: 1 })
-      .exec();
-
-    if (!user)
-      return await this.userModel.findOne({ deletedAt: null }).sort({ createdAt: 1 }).exec();
-
-    return user;
-  }
-
-  async countDocuments(filter?: Record<string, any>): Promise<number> {
-    return this.userModel.countDocuments({ deletedAt: null, ...filter });
-  }
-
   async isUsernameExists(username: string): Promise<boolean> {
     const user = await this.userModel.findOne({ username, deletedAt: null }).exec();
     return !!user;

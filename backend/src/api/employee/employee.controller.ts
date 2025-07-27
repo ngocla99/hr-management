@@ -18,6 +18,7 @@ import {
 import { ApiParam, ApiTags } from "@nestjs/swagger";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
 import { CreateEmployeesReqDto } from "./dto/create-employees.req.dto";
+import { EmployeeAdjacentResDto } from "./dto/employee-adjacent.res.dto";
 import { EmployeeResDto } from "./dto/employee.res.dto";
 import { ListEmployeeReqDto } from "./dto/list-employee.req.dto";
 import { UpdateEmployeeReqDto } from "./dto/update-employee.req.dto";
@@ -73,6 +74,16 @@ export class EmployeeController {
   @RequirePermission(Permission.READ_EMPLOYEE)
   async getEmployeeStats() {
     return await this.employeeService.getEmployeeStats();
+  }
+
+  @Get(":id/adjacent")
+  @ApiAuth({
+    summary: "Get previous and next employee relative to current employee",
+    type: EmployeeAdjacentResDto,
+  })
+  @ApiParam({ name: "id", type: "String" })
+  getAdjacentUsers(@Param("id") id: string): Promise<EmployeeAdjacentResDto> {
+    return this.employeeService.getAdjacentUsers(id);
   }
 
   @Get(":id")
