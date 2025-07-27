@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FormDatePicker } from '@/components/form-field/form-date-picker'
 import { FormSelect } from '@/components/form-field/form-select'
+import { useUpdateEmployee } from '@/features/employee/api/update-employee'
 import {
   employeeDepartmentOptionsFn,
   employeeRoleOptionsFn,
@@ -51,7 +52,7 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
     },
   })
 
-  const updateUserMutation = useUpdateUser({
+  const updateEmployeeMutation = useUpdateEmployee({
     mutationConfig: {
       onSuccess: () => {
         router.invalidate()
@@ -70,8 +71,8 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
   }
 
   const handleSave = async (data: EmploymentOverviewFormData) => {
-    if (updateUserMutation.isPending) return
-    updateUserMutation.mutate({
+    if (updateEmployeeMutation.isPending) return
+    updateEmployeeMutation.mutate({
       id: employee.userId,
       ...data,
     })

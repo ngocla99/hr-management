@@ -13,13 +13,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FormDatePicker } from '@/components/form-field/form-date-picker'
 import { FormInput } from '@/components/form-field/form-input'
 import { FormSelect } from '@/components/form-field/form-select'
+import { useUpdateEmployee } from '@/features/employee/api/update-employee'
 import {
   bloodTypeOptionsFn,
   genderOptionsFn,
   maritalStatusOptionsFn,
 } from '@/features/employee/constants/employee-options'
 import { Employee } from '@/features/employee/type/employee'
-import { useUpdateUser } from '@/features/user/api/update-user'
 
 interface PersonalInformationProps {
   employee: Employee
@@ -60,7 +60,7 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
     },
   })
 
-  const updateUserMutation = useUpdateUser({
+  const updateEmployeeMutation = useUpdateEmployee({
     mutationConfig: {
       onSuccess: () => {
         router.invalidate()
@@ -79,8 +79,8 @@ export function PersonalInformation({ employee }: PersonalInformationProps) {
   }
 
   const handleSave = async (data: PersonalInformationFormData) => {
-    if (updateUserMutation.isPending) return
-    updateUserMutation.mutate({
+    if (updateEmployeeMutation.isPending) return
+    updateEmployeeMutation.mutate({
       id: employee.id,
       ...data,
     })
