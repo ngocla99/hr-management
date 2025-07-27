@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import apiClient from '@/lib/api-client'
 import { QueryConfig } from '@/lib/react-query'
 
@@ -9,12 +9,12 @@ export type UserAdjacentInput = {
 
 export type UserAdjacent = {
   current: {
-    user: User
+    user: UserApi
     position: number
   }
   total: number
-  previous: User
-  next: User
+  previous: UserApi
+  next: UserApi
 }
 
 export const getUserAdjacentApi = (

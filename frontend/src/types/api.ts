@@ -31,16 +31,55 @@ export enum Gender {
   OTHER = 'other',
 }
 
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  SUSPENDED = 'suspended',
+  NOT_VERIFIED = 'not_verified',
+}
+
+export type UserStats = {
+  totalActive: number
+  totalInactive: number
+  totalSuspended: number
+  totalUnverified: number
+}
+
+export type UserApi = Entity<{
+  username: string
+  firstName: string
+  lastName: string
+  fullName: string
+  email: string
+  role: UserRole
+  avatar: string
+  dateOfBirth: Date
+  age?: number
+  phoneNumber: string
+  gender: Gender
+  status: UserStatus
+  bio?: string
+  lastLogin?: Date
+  emailVerified: boolean
+}>
+
 export enum MaritalStatus {
   SINGLE = 'single',
   MARRIED = 'married',
 }
 
 export enum BloodType {
-  A = 'A',
-  B = 'B',
-  AB = 'AB',
-  O = 'O',
+  A = 'a',
+  B = 'b',
+  AB = 'ab',
+  O = 'o',
+}
+
+export enum EmploymentStatus {
+  ACTIVE = 'active',
+  TERMINATED = 'terminated',
+  ON_LEAVE = 'on_leave',
+  PROBATION = 'probation',
 }
 
 export enum EmploymentType {
@@ -81,20 +120,6 @@ export enum Department {
   MARKETING = 'marketing',
 }
 
-export enum UserStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  SUSPENDED = 'suspended',
-  NOT_VERIFIED = 'not_verified',
-}
-
-export type UserStats = {
-  totalActive: number
-  totalInactive: number
-  totalSuspended: number
-  totalUnverified: number
-}
-
 export type EmployeeStats = {
   totalActive: number
   totalInactive: number
@@ -102,37 +127,8 @@ export type EmployeeStats = {
   totalUnverified: number
 }
 
-export type User = Entity<{
-  username: string
-  firstName: string
-  lastName: string
-  fullName: string
-  email: string
-  password: string
-  role: UserRole
-  avatar: string
-  dateOfBirth: Date
-  age?: number
-  phoneNumber: string
-  gender: Gender
-  status: UserStatus
-  bio?: string
-  lastLogin?: Date
-  emailVerified: boolean
-}>
-
-export type Employee = Entity<{
-  username: string
-  firstName: string
-  lastName: string
-  fullName: string
-  email: string
-  password: string
-  role: UserRole
-  avatar: string
-  dateOfBirth: Date
-  phoneNumber: string
-  gender: Gender
+export type EmployeeApi = Entity<{
+  userId: UserApi | string
   maritalStatus: MaritalStatus
   religion: string
   placeOfBirth: string
@@ -144,14 +140,14 @@ export type Employee = Entity<{
   emergencyContactPhone: string
   emergencyContactName: string
   emergencyContactRelationship: string
-  employeeId: string
+  employeeNumber: string
   dateStarted: Date
+  employmentStatus: EmploymentStatus
   jobRole: JobRole
   jobLevel: JobLevel
   employmentType: EmploymentType
   department: Department
   contractEndDate: Date
-  status: UserStatus
   lastClockedIn?: Date
   lastMessaged?: Date
   tags?: string[]

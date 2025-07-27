@@ -1,5 +1,5 @@
 import { queryOptions, useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { User, UserRole, UserStatus } from '@/types/api'
+import { UserApi, UserRole, UserStatus } from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
 import qs from 'qs'
 import apiClient from '@/lib/api-client'
@@ -17,7 +17,7 @@ export type UsersInput = PaginationInput & {
 export const getUsersApi = (
   input?: UsersInput
 ): Promise<{
-  data: User[]
+  data: UserApi[]
   pagination: Pagination
 }> => {
   return apiClient.get('/users', {

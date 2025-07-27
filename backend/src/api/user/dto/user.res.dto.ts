@@ -7,16 +7,7 @@ import {
   StringField,
 } from "@/decorators/field.decorators";
 import { Exclude, Expose } from "class-transformer";
-import {
-  BloodType,
-  Department,
-  EmploymentType,
-  Gender,
-  JobLevel,
-  JobRole,
-  MaritalStatus,
-  UserStatus,
-} from "../entities/user.entity";
+import { Gender, UserStatus } from "../entities/user.entity";
 
 @Exclude()
 export class UserResDto {
@@ -92,148 +83,12 @@ export class UserResDto {
   @Expose()
   gender: string;
 
-  @EnumField(() => MaritalStatus, {
-    description: "Marital status",
-    example: MaritalStatus.SINGLE,
-  })
-  @Expose()
-  maritalStatus: string;
-
-  @StringField({
-    description: "Religion",
-    example: "Muslim",
-  })
-  @Expose()
-  religion: string;
-
-  @StringField({
-    description: "Place of birth",
-    example: "Bandung",
-  })
-  @Expose()
-  placeOfBirth: string;
-
-  @EnumField(() => BloodType, {
-    description: "Blood type",
-    example: BloodType.B,
-  })
-  @Expose()
-  bloodType: string;
-
   @NumberField({
     description: "Age (computed)",
     example: 27,
   })
   @Expose()
   age: number;
-
-  // Address Information
-  @StringField({
-    description: "Residential address",
-    example: "4517 Washington Ave. Manchester, Kentucky 39495",
-  })
-  @Expose()
-  residentialAddress: string;
-
-  @StringField({
-    description: "Residential address notes",
-    example: "Additional notes about residential address",
-  })
-  @Expose()
-  residentialAddressNotes: string;
-
-  @StringField({
-    description: "Citizen ID address",
-    example: "2715 Ash Dr. San Jose, South Dakota 83475",
-  })
-  @Expose()
-  citizenIdAddress: string;
-
-  @StringField({
-    description: "Citizen ID address notes",
-    example: "Egestas scelerisque sit curabitur massa eu sit.",
-  })
-  @Expose()
-  citizenIdAddressNotes: string;
-
-  // Contact Information
-  @StringField({
-    description: "Emergency contact phone",
-    example: "+62-921-019-113",
-  })
-  @Expose()
-  emergencyContactPhone: string;
-
-  @StringField({
-    description: "Emergency contact name",
-    example: "Jane Doe",
-  })
-  @Expose()
-  emergencyContactName: string;
-
-  @StringField({
-    description: "Emergency contact relationship",
-    example: "Spouse",
-  })
-  @Expose()
-  emergencyContactRelationship: string;
-
-  // Employment Information
-  @StringField({
-    description: "Employee ID",
-    example: "EMP07",
-  })
-  @Expose()
-  employeeId: string;
-
-  @DateField({
-    description: "Employment start date",
-    example: "2020-01-15T00:00:00.000Z",
-  })
-  @Expose()
-  dateStarted: Date;
-
-  @NumberField({
-    description: "Years of service (computed)",
-    example: 4,
-  })
-  @Expose()
-  yearsOfService: number;
-
-  @EnumField(() => JobRole, {
-    description: "Job role",
-    example: JobRole.FE_DEVELOPER,
-  })
-  @Expose()
-  jobRole: string;
-
-  @EnumField(() => JobLevel, {
-    description: "Job level",
-    example: JobLevel.MANAGER,
-  })
-  @Expose()
-  jobLevel: string;
-
-  @EnumField(() => EmploymentType, {
-    description: "Employment type",
-    example: EmploymentType.FULLTIME,
-  })
-  @Expose()
-  employmentType: string;
-
-  @EnumField(() => Department, {
-    description: "Department",
-    example: Department.IT,
-  })
-  @Expose()
-  department: string;
-
-  @DateField({
-    description: "Contract end date",
-    example: "2025-01-15T00:00:00.000Z",
-  })
-  @Expose()
-  contractEndDate: Date;
 
   // System Information
   @EnumField(() => UserRole, {
@@ -249,28 +104,6 @@ export class UserResDto {
   })
   @Expose()
   status: string;
-
-  @DateField({
-    description: "Last clock-in timestamp",
-    example: "2024-01-15T08:30:00.000Z",
-  })
-  @Expose()
-  lastClockedIn: Date;
-
-  @DateField({
-    description: "Last message timestamp",
-    example: "2024-01-13T14:20:00.000Z",
-  })
-  @Expose()
-  lastMessaged: Date;
-
-  @StringField({
-    description: "User tags",
-    example: ["developer", "senior", "team-lead"],
-    each: true,
-  })
-  @Expose()
-  tags: string[];
 
   // Timestamps
   @ClassField(() => Date, {

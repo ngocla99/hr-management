@@ -1,9 +1,9 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import apiClient from '@/lib/api-client'
 import { QueryConfig } from '@/lib/react-query'
 
-export const getMeApi = (): Promise<User> => {
+export const getMeApi = (): Promise<UserApi> => {
   return apiClient.get('/users/me')
 }
 

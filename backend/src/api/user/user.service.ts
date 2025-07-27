@@ -5,7 +5,6 @@ import { ValidationException } from "@/exceptions/validation.exception";
 import { buildPaginator } from "@/utils/cursor-pagination";
 import { paginate } from "@/utils/offset-pagination";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import assert from "assert";
 import { plainToInstance } from "class-transformer";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
 import { DeleteUsersReqDto } from "./dto/delete-users.req.dto";
@@ -115,7 +114,6 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<UserResDto> {
-    assert(id, "id is required");
     const user = await this.userRepository.findById(id);
 
     return plainToInstance(UserResDto, user);

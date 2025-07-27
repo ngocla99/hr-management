@@ -2,7 +2,6 @@ import { queryOptions, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import {
   Department,
   JobRole,
-  Employee,
   EmploymentType,
   UserRole,
   UserStatus,
@@ -12,6 +11,8 @@ import qs from 'qs'
 import apiClient from '@/lib/api-client'
 import { PAGINATION } from '@/lib/constants/constant'
 import { QueryConfig } from '@/lib/react-query'
+import { Employee } from '@/features/employee/type/employee'
+import { transformEmployee } from '@/features/employee/utils/transform-employee'
 
 export type EmployeesInput = PaginationInput & {
   username?: string
@@ -64,6 +65,12 @@ export const useEmployees = ({
   return useQuery({
     ...getEmployeesQueryOptions(input),
     ...queryConfig,
+    select: (data) => {
+      return {
+        data: data.data.map(transformEmployee),
+        pagination: data.pagination,
+      }
+    },
   })
 }
 
@@ -94,7 +101,7 @@ export const useEmployeesInfinite = ({
     },
     initialPageParam: 1,
     select: (data) => {
-      return data.pages.flatMap((page) => page.data)
+      return data.pages.flatMap((page) => page.data.map(transformEmployee))
     },
     ...queryConfig,
   })

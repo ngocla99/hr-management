@@ -5,16 +5,13 @@ import { Main } from '@/components/layout/main'
 import { EmployeePrimaryButtons } from '@/features/employee/components/employee-primary-buttons'
 import { EmployeeTable } from '@/features/employee/components/table/employee-table'
 import EmployeeProvider from '@/features/employee/context/employee-context'
-import {
-  UserStatsInput,
-  useUserStats,
-} from '@/features/user/api/get-user-stats'
+import { EmployeeStatsInput, useEmployeeStats } from '../api/get-employee-stats'
 
 const route = getRouteApi(EmployeeRoute.id)
 function EmployeeContent() {
   const { t } = useTranslation()
-  const searchParams = route.useSearch() as UserStatsInput
-  const { data: statsData } = useUserStats({
+  const searchParams = route.useSearch() as EmployeeStatsInput
+  const { data: statsData } = useEmployeeStats({
     input: {
       status: searchParams.status,
       jobRole: searchParams.jobRole,

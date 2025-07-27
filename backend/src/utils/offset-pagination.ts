@@ -9,6 +9,7 @@ export async function paginate<T>(
     skipCount: boolean;
     takeAll: boolean;
     filter: Record<string, any>;
+    populate: Record<string, string>;
   }>,
 ): Promise<[T[], OffsetPaginationDto]> {
   let query = model.find(options?.filter || {});
@@ -22,6 +23,12 @@ export async function paginate<T>(
 
   if (!options?.takeAll) {
     query = query.skip(pageOptionsDto.offset).limit(pageOptionsDto.limit!);
+  }
+
+  if (options?.populate) {
+    Object.entries(options.populate).forEach(([key, value]) => {
+      query = query.populate(key, value);
+    });
   }
 
   const entities = await query.exec();

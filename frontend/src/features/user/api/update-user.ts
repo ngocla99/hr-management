@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { AxiosError } from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
@@ -21,7 +21,7 @@ export const updateUserSchema = z.object({
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>
 
-export const updateUserApi = (input: UpdateUserInput): Promise<User> => {
+export const updateUserApi = (input: UpdateUserInput): Promise<UserApi> => {
   const { id, ...rest } = input
   return apiClient.patch(`/users/${id}`, rest)
 }

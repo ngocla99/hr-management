@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { getRouteApi } from '@tanstack/react-router'
 import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { Trans, useTranslation } from 'react-i18next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
@@ -13,7 +13,7 @@ import { UsersInput } from '@/features/user/api/get-users'
 interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
-  currentRow: User
+  currentRow: UserApi
 }
 
 const route = getRouteApi(UserRoute.id)

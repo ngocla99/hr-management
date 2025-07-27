@@ -171,6 +171,7 @@ interface Resources {
     },
     "actions": {
       "addEmployee": "Add Employee",
+      "addRandomEmployees": "Add Random Employees",
       "addTag": "Add Tag",
       "sendEmail": "Send Email"
     },
@@ -235,8 +236,13 @@ interface Resources {
     "messages": {
       "noEmployeesFound": "No employees found matching your criteria.",
       "employeeDeleted": "Employee deleted successfully",
+      "employeeDeletedFailed": "Employee deleted failed",
       "employeeUpdated": "Employee updated successfully",
+      "employeeUpdatedFailed": "Employee updated failed",
       "employeeCreated": "Employee created successfully",
+      "employeeCreatedFailed": "Employee created failed",
+      "employeesCreated": "Employees created successfully",
+      "employeesCreatedFailed": "Employees created failed",
       "deleteConfirmation": "Are you sure you want to delete this employee?",
       "payrollNotAvailable": "Payroll information is not available in this demo."
     }

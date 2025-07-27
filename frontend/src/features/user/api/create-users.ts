@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { AxiosError } from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
@@ -15,7 +15,7 @@ export const createUsersSchema = z.object({
 
 export type CreateUsersInput = z.infer<typeof createUsersSchema>
 
-export const createUsersApi = (input: CreateUsersInput): Promise<User[]> => {
+export const createUsersApi = (input: CreateUsersInput): Promise<UserApi[]> => {
   return apiClient.post('/users/create-many', input)
 }
 

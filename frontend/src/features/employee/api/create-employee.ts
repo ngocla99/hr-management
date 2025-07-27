@@ -6,18 +6,32 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import apiClient from '@/lib/api-client'
 import { MutationConfig } from '@/lib/react-query'
+import { USER_ROLES } from '@/features/user/constants/user-constants'
+import {
+  BLOOD_TYPES,
+  DEPARTMENTS,
+  EMPLOYMENT_TYPES,
+  GENDERS,
+  JOB_LEVELS,
+  JOB_ROLES,
+  MARITAL_STATUSES,
+} from '../constants/employee-constants'
 import { EmployeesInput, getEmployeesQueryOptions } from './get-employees'
 
-export const updateEmployeeSchema = z.object({
-  id: z.string(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  gender: z.string().optional(),
-  maritalStatus: z.string().optional(),
+export const createEmployeeSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  phoneNumber: z.string().optional(),
+  avatar: z.string().optional(),
+  password: z.string(),
+  role: z.enum(USER_ROLES),
+  gender: z.enum(GENDERS).optional(),
+  maritalStatus: z.enum(MARITAL_STATUSES).optional(),
   religion: z.string().optional(),
   placeOfBirth: z.string().optional(),
   dateOfBirth: z.coerce.date().optional(),
-  bloodType: z.string().optional(),
+  bloodType: z.enum(BLOOD_TYPES).optional(),
   residentialAddress: z.string().optional(),
   residentialAddressNotes: z.string().optional(),
   citizenIdAddress: z.string().optional(),
@@ -25,36 +39,32 @@ export const updateEmployeeSchema = z.object({
   emergencyContactPhone: z.string().optional(),
   emergencyContactName: z.string().optional(),
   emergencyContactRelationship: z.string().optional(),
-  employeeId: z.string().optional(),
-  dateStarted: z.coerce.date().optional(),
-  jobRole: z.string().optional(),
-  jobLevel: z.string().optional(),
-  employmentType: z.string().optional(),
-  department: z.string().optional(),
-  contractEndDate: z.coerce.date().optional(),
-  role: z.string().optional(),
-  status: z.string().optional(),
+  employeeNumber: z.string().optional(),
+  hireDate: z.coerce.date(),
+  jobRole: z.enum(JOB_ROLES),
+  jobLevel: z.enum(JOB_LEVELS),
+  employmentType: z.enum(EMPLOYMENT_TYPES),
+  department: z.enum(DEPARTMENTS),
   tags: z.array(z.string()).optional(),
 })
 
-export type UpdateEmployeeInput = z.infer<typeof updateEmployeeSchema>
+export type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>
 
-export const updateEmployeeApi = (
-  input: UpdateEmployeeInput
+export const createEmployeeApi = (
+  input: CreateEmployeeInput
 ): Promise<EmployeeApi> => {
-  const { id, ...rest } = input
-  return apiClient.patch(`/employees/${id}`, rest)
+  return apiClient.post('/employees', input)
 }
 
-type UseUpdateEmployeeOptions = {
+type UseCreateEmployeeOptions = {
   inputQuery?: EmployeesInput
-  mutationConfig?: MutationConfig<typeof updateEmployeeApi>
+  mutationConfig?: MutationConfig<typeof createEmployeeApi>
 }
 
-export const useUpdateEmployee = ({
+export const useCreateEmployee = ({
   inputQuery,
   mutationConfig,
-}: UseUpdateEmployeeOptions = {}) => {
+}: UseCreateEmployeeOptions = {}) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
@@ -65,18 +75,18 @@ export const useUpdateEmployee = ({
       queryClient.invalidateQueries({
         queryKey: getEmployeesQueryOptions(inputQuery).queryKey,
       })
+      toast.success(t('messages.employeeCreated', { ns: 'employee' }))
       onSuccess?.(...args)
-      toast.success(t('messages.employeeUpdated', { ns: 'employee' }))
     },
     onError: (error: Error, ...args) => {
       const errorMessage =
         error instanceof AxiosError
           ? error.response?.data?.message
-          : t('messages.employeeUpdatedFailed', { ns: 'employee' })
+          : t('messages.employeeCreatedFailed', { ns: 'employee' })
       toast.error(errorMessage)
       onError?.(error, ...args)
     },
     ...restConfig,
-    mutationFn: updateEmployeeApi,
+    mutationFn: createEmployeeApi,
   })
 }

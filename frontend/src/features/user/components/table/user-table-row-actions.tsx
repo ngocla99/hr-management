@@ -1,9 +1,9 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { getRouteApi, useSearch } from '@tanstack/react-router'
+import { getRouteApi } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import { IconEdit, IconTrash, IconUser } from '@tabler/icons-react'
 import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { Trans, useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,7 +21,7 @@ import { useSuspendUser } from '@/features/user/api/suspend-user'
 import { useUser } from '@/features/user/context/user-context'
 
 interface UsersTableRowActionsProps {
-  row: Row<User>
+  row: Row<UserApi>
 }
 
 const route = getRouteApi(UserRoute.id)

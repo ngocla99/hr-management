@@ -30,6 +30,7 @@
   },
   "actions": {
     "addEmployee": "Thêm nhân viên",
+    "addRandomEmployees": "Thêm nhân viên ngẫu nhiên",
     "addTag": "Thêm tag",
     "sendEmail": "Gửi email"
   },
@@ -94,8 +95,13 @@
   "messages": {
     "noEmployeesFound": "Không tìm thấy nhân viên phù hợp.",
     "employeeDeleted": "Nhân viên đã được xóa thành công",
+    "employeeDeletedFailed": "Nhân viên đã được xóa thành công",
     "employeeUpdated": "Nhân viên đã được cập nhật thành công",
+    "employeeUpdatedFailed": "Nhân viên đã được cập nhật thành công",
     "employeeCreated": "Nhân viên đã được tạo thành công",
+    "employeeCreatedFailed": "Nhân viên đã được tạo thành công",
+    "employeesCreated": "Nhân viên đã được tạo thành công",
+    "employeesCreatedFailed": "Nhân viên đã được tạo thành công",
     "deleteConfirmation": "Bạn có chắc chắn muốn xóa nhân viên này không?",
     "payrollNotAvailable": "Thông tin lương không khả dụng trong demo này."
   }

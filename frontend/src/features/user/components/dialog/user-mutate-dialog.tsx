@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getRouteApi } from '@tanstack/react-router'
 import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
-import { User, UserRole, UserStatus } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import {
@@ -93,7 +93,7 @@ const formSchema = z
 type UserForm = z.infer<typeof formSchema>
 
 interface Props {
-  currentRow?: User
+  currentRow?: UserApi
   open: boolean
   onOpenChange: (open: boolean) => void
 }

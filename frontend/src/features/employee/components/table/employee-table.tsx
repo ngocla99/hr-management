@@ -3,12 +3,16 @@ import { getRouteApi } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import { Route as EmployeeRoute } from '@/routes/_authenticated/organization/employee'
 import { Route as EmployeeDetailRoute } from '@/routes/_authenticated/organization/employee/$employeeId'
-import { User } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 import { useDataTable } from '@/hooks/use-data-table'
 import { DataTable } from '@/components/data-table/data-table'
+import {
+  EmployeesInput,
+  useEmployees,
+  useEmployeesInfinite,
+} from '@/features/employee/api/get-employees'
 import { EmployeeCardSkeletonGrid } from '@/features/employee/components/table/employee-card-skeleton'
 import { EmployeeCardView } from '@/features/employee/components/table/employee-card-view'
 import {
@@ -16,27 +20,22 @@ import {
   employeeRoleOptionsFn,
   employmentTypeOptionsFn,
 } from '@/features/employee/constants/employee-options'
-import {
-  UsersInput,
-  useUsers,
-  useUsersInfinite,
-} from '@/features/user/api/get-users'
+import { Employee } from '@/features/employee/type/employee'
 import { userStatusOptionsFn } from '@/features/user/constants/user-options'
 import { useEmployeeColumns } from './employee-columns'
 import { EmployeeTableToolbar } from './employee-table-toolbar'
 
 const route = getRouteApi(EmployeeRoute.id)
-
 export function EmployeeTable() {
   const { t } = useTranslation()
   const columns = useEmployeeColumns()
   const [viewMode, setViewMode] = React.useState<'table' | 'card'>('table')
-  const searchParams = route.useSearch() as UsersInput
+  const searchParams = route.useSearch() as EmployeesInput
   const navigate = route.useNavigate()
   const { ref, inView } = useInView()
 
-  const { data: usersData, isLoading } = useUsers({
-    inputQuery: {
+  const { data: employeesData, isLoading } = useEmployees({
+    input: {
       ...searchParams,
     },
     queryConfig: {
@@ -46,11 +45,11 @@ export function EmployeeTable() {
 
   const {
     status: statusInfinite,
-    data: usersInfiniteData,
+    data: employeesInfiniteData,
     isFetchingNextPage: isFetchingNextPageInfinite,
     fetchNextPage,
-  } = useUsersInfinite({
-    inputQuery: {
+  } = useEmployeesInfinite({
+    input: {
       username: searchParams.username,
       jobRole: searchParams.jobRole,
       employmentType: searchParams.employmentType,
@@ -64,9 +63,11 @@ export function EmployeeTable() {
     },
   })
 
-  const users =
-    viewMode === 'table' ? (usersData?.data ?? []) : (usersInfiniteData ?? [])
-  const total = usersData?.pagination?.totalRecords ?? 0
+  const employees =
+    viewMode === 'table'
+      ? (employeesData?.data ?? [])
+      : (employeesInfiniteData ?? [])
+  const total = employeesData?.pagination?.totalRecords ?? 0
 
   React.useEffect(() => {
     if (inView) {
@@ -74,7 +75,7 @@ export function EmployeeTable() {
     }
   }, [fetchNextPage, inView])
 
-  const filterFields: DataTableFilterField<User>[] = [
+  const filterFields: DataTableFilterField<Employee>[] = [
     {
       label: t('employeeName', { ns: 'glossary' }),
       value: 'fullName',
@@ -97,7 +98,7 @@ export function EmployeeTable() {
     },
     {
       label: t('status', { ns: 'glossary' }),
-      value: 'status',
+      value: 'employmentStatus',
       options: userStatusOptionsFn(t),
       multiple: false,
     },
@@ -106,7 +107,7 @@ export function EmployeeTable() {
   const { table } = useDataTable({
     isLoading,
     route,
-    data: users,
+    data: employees,
     columns,
     rowCount: total,
     filterFields,
@@ -116,7 +117,7 @@ export function EmployeeTable() {
     setViewMode(mode)
   }
 
-  const navigateToDetail = (row: Row<User>) => {
+  const navigateToDetail = (row: Row<Employee>) => {
     navigate({
       to: EmployeeDetailRoute.fullPath,
       params: { employeeId: row.original.id },

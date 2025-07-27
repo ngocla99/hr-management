@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { Table } from '@tanstack/react-table'
 import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { TrashIcon } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -22,7 +22,7 @@ const route = getRouteApi(UserRoute.id)
 export function UsersTableToolbar({
   table,
   filterFields,
-}: UsersTableToolbarProps<User>) {
+}: UsersTableToolbarProps<UserApi>) {
   const navigate = route.useNavigate()
 
   const { t } = useTranslation()

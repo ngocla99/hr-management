@@ -27,4 +27,17 @@ export enum ErrorCode {
   T004 = "team.error.not_found",
   T005 = "team.error.has_members",
   T006 = "team.error.has_active_members",
+
+  // Employee
+  E001 = "employee.error.employee_number_exists",
+  E002 = "employee.error.user_already_employee",
+  E003 = "employee.error.not_found",
+  E004 = "employee.error.employee_number_not_found",
+  E005 = "employee.error.hire_date_in_the_future",
+  E006 = "employee.error.termination_date_before_hire_date",
+  E007 = "employee.error.salary_less_than_zero",
+  E008 = "employee.error.work_schedule_invalid",
+  E009 = "employee.error.document_type_invalid",
+  E010 = "employee.error.document_expiry_date_in_the_past",
+  E011 = "employee.error.first_name_or_last_name_required",
 }

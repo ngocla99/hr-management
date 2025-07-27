@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { ColumnDef } from '@tanstack/react-table'
 import { IconDots, IconEye, IconMail, IconTrash } from '@tabler/icons-react'
-import { User, UserStatus } from '@/types/api'
+import { EmploymentStatus } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -25,6 +25,7 @@ import {
   employmentTypeOptionsFn,
 } from '@/features/employee/constants/employee-options'
 import { useEmployee } from '@/features/employee/context/employee-context'
+import { Employee } from '@/features/employee/type/employee'
 import { checkboxClass } from '@/features/user/components/table/user-columns'
 
 export const useEmployeeColumns = () => {
@@ -32,7 +33,7 @@ export const useEmployeeColumns = () => {
   const { setOpen, setCurrentRow } = useEmployee()
   const navigate = useNavigate()
 
-  const columns = useMemo<ColumnDef<User>[]>(
+  const columns = useMemo<ColumnDef<Employee>[]>(
     () => [
       {
         id: 'select',
@@ -84,10 +85,12 @@ export const useEmployeeColumns = () => {
                 </AvatarFallback>
               </Avatar>
               <div className='min-w-0 flex-1'>
-                <div className='font-medium text-gray-900'>
+                <div className='font-medium capitalize'>
                   {employee.fullName}
                 </div>
-                <div className='text-sm text-gray-500'>{jobRole?.label}</div>
+                <div className='text-muted-foreground text-sm'>
+                  {jobRole?.label}
+                </div>
               </div>
             </div>
           )
@@ -121,7 +124,7 @@ export const useEmployeeColumns = () => {
         enableSorting: false,
       },
       {
-        accessorKey: 'status',
+        accessorKey: 'employmentStatus',
         meta: { className: 'w-28', align: 'center' },
         header: ({ column }) => (
           <DataTableColumnHeader
@@ -130,7 +133,7 @@ export const useEmployeeColumns = () => {
           />
         ),
         cell: ({ cell }) => {
-          const status = cell.getValue() as UserStatus
+          const status = cell.getValue() as EmploymentStatus
           const badgeVariant = employeeStatusStyles.get(status)
           return (
             <Badge variant={badgeVariant} className={cn('capitalize')} hasDot>
@@ -208,7 +211,7 @@ export const useEmployeeColumns = () => {
         meta: { className: 'w-32' },
       },
       {
-        accessorKey: 'dateStarted',
+        accessorKey: 'hireDate',
         header: ({ column }) => (
           <DataTableColumnHeader
             column={column}

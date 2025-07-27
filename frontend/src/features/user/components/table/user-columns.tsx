@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -14,7 +14,7 @@ import { UsersTableRowActions } from './user-table-row-actions'
 export const checkboxClass =
   'sticky md:table-cell left-0 z-10 rounded-tl bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted w-12'
 
-export const useUserColumns = (): ColumnDef<User>[] => {
+export const useUserColumns = (): ColumnDef<UserApi>[] => {
   const { t } = useTranslation()
   return [
     {
@@ -64,7 +64,9 @@ export const useUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <LongText className='max-w-36'>{row.getValue('fullName')}</LongText>
+        <LongText className='max-w-36 capitalize'>
+          {row.getValue('fullName')}
+        </LongText>
       ),
       meta: { className: 'w-36' },
     },

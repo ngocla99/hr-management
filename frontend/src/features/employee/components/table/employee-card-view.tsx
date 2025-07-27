@@ -11,7 +11,6 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { Route as EmployeeDetailRoute } from '@/routes/_authenticated/organization/employee/$employeeId'
-import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -30,9 +29,10 @@ import { ScrollToTop } from '@/components/scroll-to-top'
 import { employeeStatusStyles } from '@/features/employee/constants/employee-helpers'
 import { employeeRoleOptionsFn } from '@/features/employee/constants/employee-options'
 import { useEmployee } from '@/features/employee/context/employee-context'
+import { Employee } from '@/features/employee/type/employee'
 
 interface EmployeeCardProps {
-  employee: User
+  employee: Employee
   index: number
 }
 
@@ -56,7 +56,7 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
       <CardContent className='px-6'>
         <div className='mb-4 flex items-start justify-between'>
           <Badge
-            variant={employeeStatusStyles.get(employee.status)}
+            variant={employeeStatusStyles.get(employee.employmentStatus)}
             className={cn('capitalize')}
             hasDot
             size='lg'
@@ -191,7 +191,7 @@ function EmployeeCard({ employee, index }: EmployeeCardProps) {
 }
 
 interface EmployeeCardViewProps {
-  table: TanstackTable<User>
+  table: TanstackTable<Employee>
 }
 
 export function EmployeeCardView({ table }: EmployeeCardViewProps) {

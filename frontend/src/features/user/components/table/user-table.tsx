@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { Route as UserRoute } from '@/routes/_authenticated/organization/user'
-import { User } from '@/types/api'
+import { UserApi } from '@/types/api'
 import { DataTableFilterField } from '@/types/common'
 import { useTranslation } from 'react-i18next'
 import { useDataTable } from '@/hooks/use-data-table'
@@ -28,7 +28,7 @@ export function UserTable() {
 
   const total = data?.pagination?.totalRecords ?? 0
 
-  const filterFields: DataTableFilterField<User>[] = [
+  const filterFields: DataTableFilterField<UserApi>[] = [
     {
       label: t('username', { ns: 'glossary' }),
       value: 'username',

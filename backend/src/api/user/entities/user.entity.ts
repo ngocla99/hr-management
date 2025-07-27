@@ -12,56 +12,6 @@ export enum Gender {
   OTHER = "other",
 }
 
-export enum MaritalStatus {
-  SINGLE = "single",
-  MARRIED = "married",
-}
-
-export enum BloodType {
-  A = "A",
-  B = "B",
-  AB = "AB",
-  O = "O",
-}
-
-export enum EmploymentType {
-  FULLTIME = "fulltime",
-  PARTTIME = "parttime",
-  CONTRACT = "contract",
-  INTERN = "intern",
-  FREELANCE = "freelance",
-}
-
-export enum JobLevel {
-  ENTRY = "entry",
-  JUNIOR = "junior",
-  MID = "mid",
-  SENIOR = "senior",
-  LEAD = "lead",
-  MANAGER = "manager",
-  DIRECTOR = "director",
-  EXECUTIVE = "executive",
-}
-
-export enum JobRole {
-  FE_DEVELOPER = "fe_developer",
-  BE_DEVELOPER = "be_developer",
-  FULLSTACK_DEVELOPER = "fullstack_developer",
-  MOBILE_DEVELOPER = "mobile_developer",
-  DESIGNER = "designer",
-  QA = "qa",
-  HR = "hr",
-  ACCOUNTANT = "accountant",
-}
-
-export enum Department {
-  QA = "qa",
-  IT = "it",
-  HR = "hr",
-  FINANCE = "finance",
-  MARKETING = "marketing",
-}
-
 export enum UserStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
@@ -82,17 +32,14 @@ export class User extends BaseEntity {
 
   @Prop({
     required: true,
+    unique: true,
     match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
   })
   email: string;
 
   @Prop({
-    match: /^([+]\d{2})?\d{10}$/,
-  })
-  phoneNumber: string;
-
-  @Prop({
     required: true,
+    unique: true,
   })
   username: string;
 
@@ -105,11 +52,16 @@ export class User extends BaseEntity {
   password: string;
 
   @Prop({
+    match: /^([+]\d{2})?\d{10}$/,
+  })
+  phoneNumber: string;
+
+  @Prop({
     default: "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png",
   })
   avatar: string;
 
-  // Personal Information
+  // Personal Information (Basic)
   @Prop()
   dateOfBirth: Date;
 
@@ -118,81 +70,8 @@ export class User extends BaseEntity {
   })
   gender: string;
 
-  @Prop({
-    enum: MaritalStatus,
-  })
-  maritalStatus: string;
-
   @Prop()
-  religion: string;
-
-  @Prop()
-  placeOfBirth: string;
-
-  @Prop({
-    enum: BloodType,
-  })
-  bloodType: string;
-
-  // Address Information
-  @Prop()
-  residentialAddress: string;
-
-  @Prop()
-  residentialAddressNotes: string;
-
-  @Prop()
-  citizenIdAddress: string;
-
-  @Prop()
-  citizenIdAddressNotes: string;
-
-  // Contact Information
-  @Prop({
-    match: /^([+]\d{2})?\d{10}$/,
-  })
-  emergencyContactPhone: string;
-
-  @Prop()
-  emergencyContactName: string;
-
-  @Prop()
-  emergencyContactRelationship: string;
-
-  // Employment Information
-  @Prop()
-  employeeId: string;
-
-  @Prop()
-  dateStarted: Date;
-
-  @Prop({
-    type: String,
-    enum: JobRole,
-  })
-  jobRole: string;
-
-  @Prop({
-    type: String,
-    enum: JobLevel,
-  })
-  jobLevel: string;
-
-  @Prop({
-    type: String,
-    enum: EmploymentType,
-    default: EmploymentType.FULLTIME,
-  })
-  employmentType: string;
-
-  @Prop({
-    type: String,
-    enum: Department,
-  })
-  department: string;
-
-  @Prop()
-  contractEndDate: Date;
+  bio?: string;
 
   // System Information
   @Prop({
@@ -210,13 +89,10 @@ export class User extends BaseEntity {
   status: string;
 
   @Prop()
-  lastClockedIn: Date;
+  lastLogin?: Date;
 
-  @Prop()
-  lastMessaged: Date;
-
-  @Prop()
-  tags: string[];
+  @Prop({ default: false })
+  emailVerified: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -225,12 +101,10 @@ export const UserSchemaFactory = () => {
   const userSchema = UserSchema;
 
   // Indexes
-  userSchema.index({ email: 1 });
-  userSchema.index({ username: 1 });
-  userSchema.index({ employeeId: 1 });
+  userSchema.index({ email: 1 }, { unique: true });
+  userSchema.index({ username: 1 }, { unique: true });
   userSchema.index({ status: 1 });
-  userSchema.index({ department: 1 });
-  userSchema.index({ jobRole: 1 });
+  userSchema.index({ role: 1 });
 
   // Password hashing middleware
   userSchema.pre("save", async function (next) {
@@ -267,21 +141,6 @@ export const UserSchemaFactory = () => {
     }
 
     return age;
-  });
-
-  // Virtual for years of service
-  userSchema.virtual("yearsOfService").get(function () {
-    if (!this.dateStarted) return null;
-    const today = new Date();
-    const startDate = new Date(this.dateStarted);
-    let years = today.getFullYear() - startDate.getFullYear();
-    const monthDiff = today.getMonth() - startDate.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < startDate.getDate())) {
-      years--;
-    }
-
-    return years;
   });
 
   // Ensure virtuals are included in JSON output
