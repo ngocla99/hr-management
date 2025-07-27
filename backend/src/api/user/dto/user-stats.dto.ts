@@ -5,25 +5,25 @@ export class UserStatsDto {
     description: "Total number of active users",
     example: 150,
   })
-  totalActive: number;
+  active: number;
 
   @NumberField({
     description: "Total number of inactive users",
     example: 25,
   })
-  totalInactive: number;
+  inactive: number;
 
   @NumberField({
     description: "Total number of suspended users",
     example: 5,
   })
-  totalSuspended: number;
+  suspended: number;
 
   @NumberField({
     description: "Total number of unverified users",
     example: 10,
   })
-  totalUnverified: number;
+  unverified: number;
 
   @NumberField({
     description: "Total number of all users",
@@ -31,16 +31,11 @@ export class UserStatsDto {
   })
   total: number;
 
-  constructor(
-    totalActive: number,
-    totalInactive: number,
-    totalSuspended: number,
-    totalUnverified: number,
-  ) {
-    this.totalActive = totalActive;
-    this.totalInactive = totalInactive;
-    this.totalSuspended = totalSuspended;
-    this.totalUnverified = totalUnverified;
-    this.total = totalActive + totalInactive + totalSuspended + totalUnverified;
+  constructor(active: number, inactive: number, suspended: number, unverified: number) {
+    this.active = active;
+    this.inactive = inactive;
+    this.suspended = suspended;
+    this.unverified = unverified;
+    this.total = active + inactive + suspended + unverified;
   }
 }

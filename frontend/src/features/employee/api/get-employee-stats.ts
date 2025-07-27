@@ -2,22 +2,20 @@ import { queryOptions, useQuery } from '@tanstack/react-query'
 import {
   Department,
   EmployeeStats,
+  EmploymentStatus,
   EmploymentType,
   JobRole,
-  UserRole,
-  UserStatus,
 } from '@/types/api'
 import qs from 'qs'
 import apiClient from '@/lib/api-client'
 import { QueryConfig } from '@/lib/react-query'
 
 export type EmployeeStatsInput = {
-  username?: string
+  employeeNumber?: string
   jobRole?: JobRole[]
   employmentType?: EmploymentType[]
   department?: Department[]
-  role?: UserRole[]
-  status?: UserStatus
+  employmentStatus?: EmploymentStatus[]
   createdAtFrom?: string
   createdAtTo?: string
 }

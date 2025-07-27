@@ -39,10 +39,11 @@ export enum UserStatus {
 }
 
 export type UserStats = {
-  totalActive: number
-  totalInactive: number
-  totalSuspended: number
-  totalUnverified: number
+  active: number
+  inactive: number
+  suspended: number
+  unverified: number
+  total: number
 }
 
 export type UserApi = Entity<{
@@ -122,10 +123,11 @@ export enum Department {
 }
 
 export type EmployeeStats = {
-  totalActive: number
-  totalInactive: number
-  totalSuspended: number
-  totalUnverified: number
+  active: number
+  inactive: number
+  suspended: number
+  terminated: number
+  probation: number
 }
 
 export type EmployeeApi = Entity<{

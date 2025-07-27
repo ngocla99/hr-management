@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { User } from '@/types/api'
-import { Hash } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import { Employee } from '@/features/employee/type/employee'
+import { Hash } from 'lucide-react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface TagsProps {
-  employee: User
+  employee: Employee
 }
 
 export function Tags({ employee }: TagsProps) {

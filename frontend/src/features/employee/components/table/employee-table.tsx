@@ -18,10 +18,10 @@ import { EmployeeCardView } from '@/features/employee/components/table/employee-
 import {
   employeeDepartmentOptionsFn,
   employeeRoleOptionsFn,
+  employmentStatusOptionsFn,
   employmentTypeOptionsFn,
 } from '@/features/employee/constants/employee-options'
 import { Employee } from '@/features/employee/type/employee'
-import { userStatusOptionsFn } from '@/features/user/constants/user-options'
 import { useEmployeeColumns } from './employee-columns'
 import { EmployeeTableToolbar } from './employee-table-toolbar'
 
@@ -50,11 +50,11 @@ export function EmployeeTable() {
     fetchNextPage,
   } = useEmployeesInfinite({
     input: {
-      username: searchParams.username,
+      employeeNumber: searchParams.employeeNumber,
       jobRole: searchParams.jobRole,
       employmentType: searchParams.employmentType,
       department: searchParams.department,
-      status: searchParams.status,
+      employmentStatus: searchParams.employmentStatus,
       sort: searchParams.sort,
       limit: 12,
     },
@@ -77,9 +77,9 @@ export function EmployeeTable() {
 
   const filterFields: DataTableFilterField<Employee>[] = [
     {
-      label: t('employeeName', { ns: 'glossary' }),
-      value: 'fullName',
-      placeholder: t('form.searchEmployees', { ns: 'employee' }),
+      label: t('employeeNumber', { ns: 'glossary' }),
+      value: 'employeeNumber',
+      placeholder: t('form.searchEmployeeNumber', { ns: 'employee' }),
     },
     {
       label: t('type', { ns: 'glossary' }),
@@ -99,7 +99,7 @@ export function EmployeeTable() {
     {
       label: t('status', { ns: 'glossary' }),
       value: 'employmentStatus',
-      options: userStatusOptionsFn(t),
+      options: employmentStatusOptionsFn(t),
       multiple: false,
     },
   ]

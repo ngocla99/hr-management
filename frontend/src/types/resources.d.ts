@@ -175,6 +175,12 @@ interface Resources {
       "addTag": "Add Tag",
       "sendEmail": "Send Email"
     },
+    "employmentStatus": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "probation": "Probation",
+      "on_leave": "On Leave"
+    },
     "employmentType": {
       "fulltime": "Full Time",
       "parttime": "Part Time",
@@ -207,9 +213,11 @@ interface Resources {
       "it": "IT",
       "hr": "HR",
       "finance": "Finance",
-      "marketing": "Marketing"
+      "marketing": "Marketing",
+      "sales": "Sales"
     },
     "form": {
+      "searchEmployeeNumber": "Search employee ID",
       "searchEmployees": "Search employees",
       "enterFirstName": "Enter First Name",
       "enterLastName": "Enter Last Name",
@@ -337,7 +345,9 @@ interface Resources {
     "phoneNumber": "Phone Number",
     "notProvided": "Not Provided",
     "jobLevel": "Job Level",
-    "employmentStatus": "Employment Status"
+    "employmentStatus": "Employment Status",
+    "employeeNumber": "Employee Number",
+    "id": "ID"
   },
   "users": {
     "page.title": "User List",

@@ -79,17 +79,12 @@ export class UserService {
   async getUserStats(reqDto: ListUserStatsReqDto): Promise<UserStatsDto> {
     const filter = getUserFilter(reqDto as ListUserReqDto);
     const stats = await this.userRepository.getUserStats(filter);
-    return new UserStatsDto(
-      stats.totalActive,
-      stats.totalInactive,
-      stats.totalSuspended,
-      stats.totalUnverified,
-    );
+    return new UserStatsDto(stats.active, stats.inactive, stats.suspended, stats.unverified);
   }
 
   async findAll(reqDto: ListUserReqDto): Promise<OffsetPaginatedDto<UserResDto>> {
     const filter = getUserFilter(reqDto);
-    const [users, metaDto] = await paginate<UserDocument>(this.userRepository.userModel, reqDto, {
+    const [users, metaDto] = await paginate<UserDocument>(this.userRepository.model, reqDto, {
       skipCount: false,
       takeAll: false,
       filter,
@@ -99,7 +94,7 @@ export class UserService {
   }
 
   async loadMoreUsers(reqDto: LoadMoreUsersReqDto): Promise<CursorPaginatedDto<UserResDto>> {
-    const paginator = buildPaginator<UserDocument>(this.userRepository.userModel, {
+    const paginator = buildPaginator<UserDocument>(this.userRepository.model, {
       query: reqDto,
     });
 

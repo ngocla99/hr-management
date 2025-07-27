@@ -1,5 +1,10 @@
 import { IconBriefcase, IconCalendar, IconUser } from '@tabler/icons-react'
-import { Department, EmploymentType, JobRole } from '@/types/api'
+import {
+  Department,
+  EmploymentStatus,
+  EmploymentType,
+  JobRole,
+} from '@/types/api'
 import { TFunction } from 'i18next'
 import {
   BLOOD_TYPES,
@@ -32,6 +37,11 @@ export const employeeDepartmentOptionsFn = (t: TFunction) => [
   {
     label: t('department.marketing', { ns: 'employee' }),
     value: Department.MARKETING,
+    icon: IconBriefcase,
+  },
+  {
+    label: t('department.sales', { ns: 'employee' }),
+    value: Department.SALES,
     icon: IconBriefcase,
   },
 ]
@@ -103,6 +113,29 @@ export const employeeRoleOptionsFn = (t: TFunction) => [
   {
     label: t('role.accountant', { ns: 'employee' }),
     value: JobRole.ACCOUNTANT,
+    icon: IconUser,
+  },
+]
+
+export const employmentStatusOptionsFn = (t: TFunction) => [
+  {
+    label: t('employmentStatus.active', { ns: 'employee' }),
+    value: EmploymentStatus.ACTIVE,
+    icon: IconUser,
+  },
+  {
+    label: t('employmentStatus.terminated', { ns: 'employee' }),
+    value: EmploymentStatus.TERMINATED,
+    icon: IconUser,
+  },
+  {
+    label: t('employmentStatus.probation', { ns: 'employee' }),
+    value: EmploymentStatus.PROBATION,
+    icon: IconUser,
+  },
+  {
+    label: t('employmentStatus.on_leave', { ns: 'employee' }),
+    value: EmploymentStatus.ON_LEAVE,
     icon: IconUser,
   },
 ]

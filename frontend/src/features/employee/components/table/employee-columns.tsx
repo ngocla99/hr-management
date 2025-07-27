@@ -150,6 +150,21 @@ export const useEmployeeColumns = () => {
         enableHiding: false,
       },
       {
+        accessorKey: 'employeeNumber',
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t('id', { ns: 'glossary' })}
+          />
+        ),
+        cell: ({ row }) => {
+          const employee = row.original
+          return <div className='text-sm'>{employee.employeeNumber}</div>
+        },
+        meta: { className: 'w-20' },
+        enableSorting: false,
+      },
+      {
         accessorKey: 'department',
         header: ({ column }) => (
           <DataTableColumnHeader

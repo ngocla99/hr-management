@@ -34,22 +34,28 @@
     "addTag": "Thêm tag",
     "sendEmail": "Gửi email"
   },
+  "employmentStatus": {
+    "active": "Hoạt động",
+    "terminated": "Thôi việc",
+    "probation": "Thử việc",
+    "on_leave": "Nghỉ"
+  },
   "employmentType": {
     "fulltime": "Toàn thời gian",
     "parttime": "Bán thời gian",
     "contract": "Hợp đồng",
     "intern": "Thực tập",
-    "freelance": "Freelance"
+    "freelance": "Tự do"
   },
   "role": {
-    "fe_developer": "Frontend Developer",
-    "be_developer": "Backend Developer",
-    "fullstack_developer": "Full Stack Developer",
-    "mobile_developer": "Mobile Developer",
+    "fe_developer": "Frontend",
+    "be_developer": "Backend",
+    "fullstack_developer": "Full Stack",
+    "mobile_developer": "Mobile",
     "qa": "QA",
-    "hr": "HR",
-    "designer": "Designer",
-    "accountant": "Accountant"
+    "hr": "Nhân sự",
+    "designer": "Thiết kế",
+    "accountant": "Kế toán"
   },
   "level": {
     "entry": "Entry",
@@ -66,9 +72,11 @@
     "it": "IT",
     "hr": "HR",
     "finance": "Finance",
-    "marketing": "Marketing"
+    "marketing": "Marketing",
+    "sales": "Sales"
   },
   "form": {
+    "searchEmployeeNumber": "Tìm kiếm mã nhân viên",
     "searchEmployees": "Tìm kiếm nhân viên",
     "enterFirstName": "Nhập tên",
     "enterLastName": "Nhập họ",

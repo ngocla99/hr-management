@@ -13,11 +13,11 @@ function EmployeeContent() {
   const searchParams = route.useSearch() as EmployeeStatsInput
   const { data: statsData } = useEmployeeStats({
     input: {
-      status: searchParams.status,
+      employmentStatus: searchParams.employmentStatus,
       jobRole: searchParams.jobRole,
       department: searchParams.department,
       employmentType: searchParams.employmentType,
-      username: searchParams.username,
+      employeeNumber: searchParams.employeeNumber,
     },
   })
 
@@ -38,14 +38,14 @@ function EmployeeContent() {
                   <div className='size-1.5 rounded-full bg-[#9dc082]' />
                   <span>
                     {t('status.active', { ns: 'users' })}{' '}
-                    {statsData?.totalActive ?? 0}
+                    {statsData?.active ?? 0}
                   </span>
                 </div>
                 <div className='flex items-center space-x-1.5 text-xs'>
                   <div className='size-1.5 rounded-full bg-[#1d212c]' />
                   <span>
                     {t('status.inactive', { ns: 'users' })}{' '}
-                    {statsData?.totalInactive ?? 0}
+                    {statsData?.inactive ?? 0}
                   </span>
                 </div>
               </div>

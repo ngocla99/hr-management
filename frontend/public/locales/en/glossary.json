@@ -88,5 +88,7 @@
   "phoneNumber": "Phone Number",
   "notProvided": "Not Provided",
   "jobLevel": "Job Level",
-  "employmentStatus": "Employment Status"
+  "employmentStatus": "Employment Status",
+  "employeeNumber": "Employee Number",
+  "id": "ID"
 }

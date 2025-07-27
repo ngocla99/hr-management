@@ -34,6 +34,12 @@
     "addTag": "Add Tag",
     "sendEmail": "Send Email"
   },
+  "employmentStatus": {
+    "active": "Active",
+    "terminated": "Terminated",
+    "probation": "Probation",
+    "on_leave": "On Leave"
+  },
   "employmentType": {
     "fulltime": "Full Time",
     "parttime": "Part Time",
@@ -66,9 +72,11 @@
     "it": "IT",
     "hr": "HR",
     "finance": "Finance",
-    "marketing": "Marketing"
+    "marketing": "Marketing",
+    "sales": "Sales"
   },
   "form": {
+    "searchEmployeeNumber": "Search employee ID",
     "searchEmployees": "Search employees",
     "enterFirstName": "Enter First Name",
     "enterLastName": "Enter Last Name",

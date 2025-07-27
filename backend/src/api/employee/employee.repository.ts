@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
+import { EmployeeStatsDto } from "./dto/employee-stats.res.dto";
 import { UpdateEmployeeReqDto } from "./dto/update-employee.req.dto";
 import { Employee, EmployeeDocument } from "./entities/employee.entity";
 
@@ -90,14 +91,7 @@ export class EmployeeRepository {
     return await this.model.countDocuments({ deletedAt: null, ...filter });
   }
 
-  async getEmployeeStats(): Promise<{
-    total: number;
-    active: number;
-    onLeave: number;
-    terminated: number;
-    probation: number;
-    onboarding: number;
-  }> {
+  async getEmployeeStats(): Promise<EmployeeStatsDto> {
     const stats = await this.model.aggregate([
       {
         $group: {
@@ -115,30 +109,18 @@ export class EmployeeRepository {
           probation: {
             $sum: { $cond: [{ $eq: ["$employmentStatus", "probation"] }, 1, 0] },
           },
-          onboarding: {
-            $sum: {
-              $cond: [
-                {
-                  $in: ["$onboardingStatus", ["pending", "in_progress"]],
-                },
-                1,
-                0,
-              ],
-            },
-          },
         },
       },
     ]);
 
-    return (
-      stats[0] || {
-        total: 0,
-        active: 0,
-        onLeave: 0,
-        terminated: 0,
-        probation: 0,
-        onboarding: 0,
-      }
-    );
+    const result = (stats[0] || {
+      total: 0,
+      active: 0,
+      onLeave: 0,
+      terminated: 0,
+      probation: 0,
+    }) as EmployeeStatsDto;
+
+    return result;
   }
 }

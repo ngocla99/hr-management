@@ -88,5 +88,7 @@
   "phoneNumber": "Số điện thoại",
   "notProvided": "Không cung cấp",
   "jobLevel": "Cấp bậc",
-  "employmentStatus": "Trạng thái việc làm"
+  "employmentStatus": "Trạng thái việc làm",
+  "employeeNumber": "Mã nhân viên",
+  "id": "ID"
 }

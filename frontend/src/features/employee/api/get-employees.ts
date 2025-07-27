@@ -1,10 +1,9 @@
 import { queryOptions, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import {
   Department,
-  JobRole,
+  EmploymentStatus,
   EmploymentType,
-  UserRole,
-  UserStatus,
+  JobRole,
 } from '@/types/api'
 import { Pagination, PaginationInput } from '@/types/common'
 import qs from 'qs'
@@ -15,12 +14,11 @@ import { Employee } from '@/features/employee/type/employee'
 import { transformEmployee } from '@/features/employee/utils/transform-employee'
 
 export type EmployeesInput = PaginationInput & {
-  username?: string
+  employeeNumber?: string
   jobRole?: JobRole[]
   employmentType?: EmploymentType[]
   department?: Department[]
-  role?: UserRole[]
-  status?: UserStatus
+  employmentStatus?: EmploymentStatus
   createdAtFrom?: string
   createdAtTo?: string
 }

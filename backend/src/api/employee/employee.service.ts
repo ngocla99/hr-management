@@ -9,6 +9,7 @@ import { forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nest
 import { plainToInstance } from "class-transformer";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
 import { EmployeeAdjacentResDto } from "./dto/employee-adjacent.res.dto";
+import { EmployeeStatsDto } from "./dto/employee-stats.res.dto";
 import { EmployeeResDto } from "./dto/employee.res.dto";
 import { ListEmployeeReqDto } from "./dto/list-employee.req.dto";
 import { UpdateEmployeeReqDto } from "./dto/update-employee.req.dto";
@@ -207,17 +208,8 @@ export class EmployeeService {
     };
   }
 
-  async getEmployeeStats(): Promise<{
-    total: number;
-    active: number;
-    onLeave: number;
-    terminated: number;
-    probation: number;
-    onboarding: number;
-  }> {
-    const stats = await this.employeeRepository.getEmployeeStats();
-
-    return stats;
+  async getEmployeeStats(): Promise<EmployeeStatsDto> {
+    return await this.employeeRepository.getEmployeeStats();
   }
 
   async terminateEmployee(id: string, terminationDate: Date): Promise<EmployeeResDto> {

@@ -1,7 +1,20 @@
-import { BloodType, Department, EmploymentType, Gender, JobLevel, JobRole, MaritalStatus } from '@/types/api'
+import {
+  BloodType,
+  Department,
+  EmploymentStatus,
+  EmploymentType,
+  Gender,
+  JobLevel,
+  JobRole,
+  MaritalStatus,
+} from '@/types/api'
 
 export const GENDERS = Object.values(Gender) as [string, ...string[]]
 export const MARITAL_STATUSES = Object.values(MaritalStatus) as [
+  string,
+  ...string[],
+]
+export const EMPLOYMENT_STATUSES = Object.values(EmploymentStatus) as [
   string,
   ...string[],
 ]
