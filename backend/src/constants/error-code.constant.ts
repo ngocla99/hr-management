@@ -40,4 +40,16 @@ export enum ErrorCode {
   E009 = "employee.error.document_type_invalid",
   E010 = "employee.error.document_expiry_date_in_the_past",
   E011 = "employee.error.first_name_or_last_name_required",
+
+  // Time Management
+  TM001 = "time_management.error.already_clocked_in",
+  TM002 = "time_management.error.already_clocked_out",
+  TM003 = "time_management.error.clock_in_time_invalid",
+  TM004 = "time_management.error.clock_out_time_invalid",
+  TM005 = "time_management.error.attendance_not_found",
+  TM006 = "time_management.error.attendance_already_exists",
+  TM007 = "time_management.error.time_off_date_invalid",
+  TM008 = "time_management.error.time_off_date_in_the_past",
+  TM009 = "time_management.error.time_off_not_found",
+  TM010 = "time_management.error.time_off_not_pending",
 }

@@ -61,6 +61,24 @@ export enum Permission {
   // Reports and analytics
   VIEW_REPORTS = "view_reports",
   EXPORT_DATA = "export_data",
+
+  // Time management
+  CREATE_ATTENDANCE = "create_attendance",
+  READ_ATTENDANCE = "read_attendance",
+  UPDATE_ATTENDANCE = "update_attendance",
+  DELETE_ATTENDANCE = "delete_attendance",
+
+  CREATE_TIME_OFF = "create_time_off",
+  READ_TIME_OFF = "read_time_off",
+  UPDATE_TIME_OFF = "update_time_off",
+  DELETE_TIME_OFF = "delete_time_off",
+  APPROVE_TIME_OFF = "approve_time_off",
+
+  CREATE_OVERTIME = "create_overtime",
+  READ_OVERTIME = "read_overtime",
+  UPDATE_OVERTIME = "update_overtime",
+  DELETE_OVERTIME = "delete_overtime",
+  APPROVE_OVERTIME = "approve_overtime",
 }
 
 // Role-Permission mapping
@@ -98,6 +116,22 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     // Reports
     Permission.VIEW_REPORTS,
     Permission.EXPORT_DATA,
+
+    // Time management
+    Permission.CREATE_ATTENDANCE,
+    Permission.READ_ATTENDANCE,
+    Permission.UPDATE_ATTENDANCE,
+    Permission.DELETE_ATTENDANCE,
+    Permission.CREATE_TIME_OFF,
+    Permission.READ_TIME_OFF,
+    Permission.UPDATE_TIME_OFF,
+    Permission.DELETE_TIME_OFF,
+    Permission.APPROVE_TIME_OFF,
+    Permission.CREATE_OVERTIME,
+    Permission.READ_OVERTIME,
+    Permission.UPDATE_OVERTIME,
+    Permission.DELETE_OVERTIME,
+    Permission.APPROVE_OVERTIME,
   ],
 
   [UserRole.HR_MANAGER]: [
@@ -140,6 +174,22 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     // Reports
     Permission.VIEW_REPORTS,
     Permission.EXPORT_DATA,
+
+    // Time management
+    Permission.CREATE_ATTENDANCE,
+    Permission.READ_ATTENDANCE,
+    Permission.UPDATE_ATTENDANCE,
+    Permission.DELETE_ATTENDANCE,
+    Permission.CREATE_TIME_OFF,
+    Permission.READ_TIME_OFF,
+    Permission.UPDATE_TIME_OFF,
+    Permission.DELETE_TIME_OFF,
+    Permission.APPROVE_TIME_OFF,
+    Permission.CREATE_OVERTIME,
+    Permission.READ_OVERTIME,
+    Permission.UPDATE_OVERTIME,
+    Permission.DELETE_OVERTIME,
+    Permission.APPROVE_OVERTIME,
   ],
 
   [UserRole.RECRUITER]: [
@@ -205,6 +255,14 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     // Basic employee info
     Permission.READ_EMPLOYEE,
     Permission.READ_DEPARTMENT,
+
+    // Time management (own records)
+    Permission.CREATE_ATTENDANCE,
+    Permission.READ_ATTENDANCE,
+    Permission.CREATE_TIME_OFF,
+    Permission.READ_TIME_OFF,
+    Permission.CREATE_OVERTIME,
+    Permission.READ_OVERTIME,
   ],
 };
 

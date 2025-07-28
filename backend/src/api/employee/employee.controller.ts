@@ -58,7 +58,7 @@ export class EmployeeController {
 
   @Get()
   @ApiAuth({
-    type: OffsetPaginatedDto<EmployeeResDto>,
+    type: EmployeeResDto,
     summary: "Get all employees with pagination and filters",
     isPaginated: true,
   })

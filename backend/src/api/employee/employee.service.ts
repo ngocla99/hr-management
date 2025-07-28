@@ -7,6 +7,7 @@ import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
 import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
+import { UpdateUserReqDto } from "../user/dto/update-user.req.dto";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
 import { EmployeeAdjacentResDto } from "./dto/employee-adjacent.res.dto";
 import { EmployeeStatsDto } from "./dto/employee-stats.res.dto";
@@ -140,48 +141,51 @@ export class EmployeeService {
   }
 
   async update(id: string, updateEmployeeDto: UpdateEmployeeReqDto): Promise<EmployeeResDto> {
-    // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
-      throw new ValidationException(ErrorCode.E003);
+      throw new ValidationException(ErrorCode.E002);
     }
 
-    // Validate employee number uniqueness if being updated
+    // If updating user information, also update the user
     if (
-      updateEmployeeDto.employeeNumber &&
-      updateEmployeeDto.employeeNumber !== existingEmployee.employeeNumber
+      updateEmployeeDto.firstName ||
+      updateEmployeeDto.lastName ||
+      updateEmployeeDto.phoneNumber ||
+      updateEmployeeDto.gender ||
+      updateEmployeeDto.dateOfBirth
     ) {
-      const employeeWithNumber = await this.employeeRepository.findByEmployeeNumber(
-        updateEmployeeDto.employeeNumber,
-      );
-      if (employeeWithNumber && employeeWithNumber.id !== id) {
-        throw new ValidationException(ErrorCode.E001);
-      }
-    }
-
-    const { firstName, lastName, email, phoneNumber, dateOfBirth, gender, ...employeeData } =
-      updateEmployeeDto;
-
-    // Update the associated user
-    if (firstName || lastName || email || phoneNumber || dateOfBirth || gender) {
-      const userUpdateData: Record<string, any> = {};
-      if (firstName !== undefined) userUpdateData.firstName = firstName;
-      if (lastName !== undefined) userUpdateData.lastName = lastName;
-      if (email !== undefined) userUpdateData.email = email;
-      if (phoneNumber !== undefined) userUpdateData.phoneNumber = phoneNumber;
-      if (dateOfBirth !== undefined) userUpdateData.dateOfBirth = dateOfBirth;
-      if (gender !== undefined) userUpdateData.gender = gender;
+      const userUpdateData: Partial<UpdateUserReqDto> = {};
+      if (updateEmployeeDto.firstName) userUpdateData.firstName = updateEmployeeDto.firstName;
+      if (updateEmployeeDto.lastName) userUpdateData.lastName = updateEmployeeDto.lastName;
+      if (updateEmployeeDto.phoneNumber) userUpdateData.phoneNumber = updateEmployeeDto.phoneNumber;
+      if (updateEmployeeDto.gender) userUpdateData.gender = updateEmployeeDto.gender;
+      if (updateEmployeeDto.dateOfBirth) userUpdateData.dateOfBirth = updateEmployeeDto.dateOfBirth;
 
       await this.userService.update(existingEmployee.userId.id.toString(), userUpdateData);
     }
 
-    // Update employee data
-    const updatedEmployee = await this.employeeRepository.updateById(id, employeeData);
-    if (!updatedEmployee) {
+    // If updating hire date, validate it's not in the future
+    if (updateEmployeeDto.hireDate && updateEmployeeDto.hireDate > new Date()) {
+      throw new ValidationException(ErrorCode.E005);
+    }
+
+    const employee = await this.employeeRepository.updateById(id, updateEmployeeDto);
+
+    return plainToInstance(EmployeeResDto, employee);
+  }
+
+  async updateByUserId(
+    userId: string,
+    updateData: Partial<UpdateEmployeeReqDto>,
+  ): Promise<EmployeeResDto> {
+    const existingEmployee = await this.employeeRepository.findByUserId(userId);
+    if (!existingEmployee) {
       throw new ValidationException(ErrorCode.E002);
     }
 
-    return plainToInstance(EmployeeResDto, updatedEmployee);
+    const employee = await this.employeeRepository.updateByUserId(userId, updateData);
+
+    return plainToInstance(EmployeeResDto, employee);
   }
 
   async remove(id: string): Promise<void> {

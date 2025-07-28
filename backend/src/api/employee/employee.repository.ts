@@ -52,6 +52,20 @@ export class EmployeeRepository {
     return employee;
   }
 
+  async updateByUserId(
+    userId: string,
+    updateData: Partial<UpdateEmployeeReqDto>,
+  ): Promise<EmployeeDocument | null> {
+    const updateObj = { ...updateData };
+
+    const employee = await this.model
+      .findOneAndUpdate({ userId: new Types.ObjectId(userId) }, updateObj, { new: true })
+      .populate("userId", "firstName lastName email avatar phoneNumber username role status")
+      .exec();
+
+    return employee;
+  }
+
   async deleteById(id: string): Promise<EmployeeDocument | null> {
     return await this.model.findByIdAndDelete(id).exec();
   }
