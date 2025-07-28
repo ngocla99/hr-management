@@ -10,6 +10,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -121,7 +122,7 @@ export class EmployeeController {
     return await this.employeeService.findByEmployeeNumber(employeeNumber);
   }
 
-  @Put(":id")
+  @Patch(":id")
   @ApiAuth({
     type: EmployeeResDto,
     summary: "Update employee",

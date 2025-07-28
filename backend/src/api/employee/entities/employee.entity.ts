@@ -156,7 +156,6 @@ export const EmployeeSchemaFactory = () => {
   employeeSchema.index({ jobLevel: 1 });
   employeeSchema.index({ employmentType: 1 });
 
-  // Virtual for full name (populated from User)
   employeeSchema.virtual("fullName", {
     ref: "User",
     localField: "userId",
@@ -167,7 +166,6 @@ export const EmployeeSchemaFactory = () => {
     },
   });
 
-  // Virtual for years of service
   employeeSchema.virtual("yearsOfService").get(function () {
     if (!this.hireDate) return null;
     const today = new Date();

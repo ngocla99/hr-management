@@ -5,7 +5,7 @@ import { UserRole } from "@/constants/roles.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { buildPaginator } from "@/utils/cursor-pagination";
 import { paginate } from "@/utils/offset-pagination";
-import { forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { EmployeeRepository } from "../employee/employee.repository";
 import { CreateUserReqDto } from "./dto/create-user.req.dto";
@@ -123,7 +123,7 @@ export class UserService {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new NotFoundException(ErrorCode.U002);
+      throw new ValidationException(ErrorCode.U002);
     }
 
     const updatedUser = await this.userRepository.updateUser(id, updateUserDto);
@@ -140,7 +140,7 @@ export class UserService {
     const result = await this.userRepository.hardDeleteUser(id);
 
     if (result.deletedCount === 0) {
-      throw new NotFoundException(ErrorCode.U002);
+      throw new ValidationException(ErrorCode.U002);
     }
 
     return {
@@ -152,7 +152,7 @@ export class UserService {
     const result = await this.userRepository.hardDeleteManyUsers(reqDto.ids);
 
     if (result.deletedCount === 0) {
-      throw new NotFoundException(ErrorCode.U002);
+      throw new ValidationException(ErrorCode.U002);
     }
 
     return {

@@ -27,6 +27,19 @@ export type I18nTranslations = {
             "root_department_exists": string;
         };
     };
+    "employee": {
+        "error": {
+            "not_found": string;
+            "employee_number_exists": string;
+            "user_already_employee": string;
+            "hire_date_in_the_future": string;
+            "termination_date_before_hire_date": string;
+            "salary_less_than_zero": string;
+            "work_schedule_invalid": string;
+            "document_type_invalid": string;
+            "document_expiry_date_in_the_past": string;
+        };
+    };
     "team": {
         "error": {
             "name_exists": string;

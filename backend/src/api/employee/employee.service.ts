@@ -5,7 +5,7 @@ import { ErrorCode } from "@/constants/error-code.constant";
 import { UserRole } from "@/constants/roles.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
-import { forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { CreateEmployeeReqDto } from "./dto/create-employee.req.dto";
 import { EmployeeAdjacentResDto } from "./dto/employee-adjacent.res.dto";
@@ -115,7 +115,7 @@ export class EmployeeService {
   async findById(id: string): Promise<EmployeeResDto> {
     const employee = await this.employeeRepository.findById(id);
     if (!employee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     return plainToInstance(EmployeeResDto, employee);
@@ -124,7 +124,7 @@ export class EmployeeService {
   async findByUserId(userId: string): Promise<EmployeeResDto> {
     const employee = await this.employeeRepository.findByUserId(userId);
     if (!employee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     return plainToInstance(EmployeeResDto, employee);
@@ -133,7 +133,7 @@ export class EmployeeService {
   async findByEmployeeNumber(employeeNumber: string): Promise<EmployeeResDto> {
     const employee = await this.employeeRepository.findByEmployeeNumber(employeeNumber);
     if (!employee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     return plainToInstance(EmployeeResDto, employee);
@@ -143,7 +143,7 @@ export class EmployeeService {
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E003);
     }
 
     // Validate employee number uniqueness if being updated
@@ -159,9 +159,26 @@ export class EmployeeService {
       }
     }
 
-    const updatedEmployee = await this.employeeRepository.updateById(id, updateEmployeeDto);
+    const { firstName, lastName, email, phoneNumber, dateOfBirth, gender, ...employeeData } =
+      updateEmployeeDto;
+
+    // Update the associated user
+    if (firstName || lastName || email || phoneNumber || dateOfBirth || gender) {
+      const userUpdateData: Record<string, any> = {};
+      if (firstName !== undefined) userUpdateData.firstName = firstName;
+      if (lastName !== undefined) userUpdateData.lastName = lastName;
+      if (email !== undefined) userUpdateData.email = email;
+      if (phoneNumber !== undefined) userUpdateData.phoneNumber = phoneNumber;
+      if (dateOfBirth !== undefined) userUpdateData.dateOfBirth = dateOfBirth;
+      if (gender !== undefined) userUpdateData.gender = gender;
+
+      await this.userService.update(existingEmployee.userId.id.toString(), userUpdateData);
+    }
+
+    // Update employee data
+    const updatedEmployee = await this.employeeRepository.updateById(id, employeeData);
     if (!updatedEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     return plainToInstance(EmployeeResDto, updatedEmployee);
@@ -171,18 +188,18 @@ export class EmployeeService {
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     const deleted = await this.employeeRepository.deleteById(id);
     if (!deleted) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
   }
 
   async getAdjacentUsers(id: string): Promise<EmployeeAdjacentResDto> {
     const current = await this.employeeRepository.findById(id);
-    if (!current) throw new NotFoundException(ErrorCode.U002);
+    if (!current) throw new ValidationException(ErrorCode.U002);
 
     const [total, position, previous, next] = await Promise.all([
       this.employeeRepository.countDocuments(),
@@ -216,7 +233,7 @@ export class EmployeeService {
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     // Check if employee is already terminated
@@ -235,7 +252,7 @@ export class EmployeeService {
     });
 
     if (!updatedEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     return plainToInstance(EmployeeResDto, updatedEmployee);
@@ -245,7 +262,7 @@ export class EmployeeService {
     // Check if employee exists
     const existingEmployee = await this.employeeRepository.findById(id);
     if (!existingEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     // Check if employee is terminated
@@ -259,7 +276,7 @@ export class EmployeeService {
     });
 
     if (!updatedEmployee) {
-      throw new NotFoundException(ErrorCode.E002);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     return plainToInstance(EmployeeResDto, updatedEmployee);

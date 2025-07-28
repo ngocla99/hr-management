@@ -4,7 +4,7 @@ import { Uuid } from "@/common/types/common.type";
 import { ErrorCode } from "@/constants/error-code.constant";
 import { ValidationException } from "@/exceptions/validation.exception";
 import { paginate } from "@/utils/offset-pagination";
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { UserDocument } from "../user/entities/user.entity";
 import { CreateDepartmentReqDto } from "./dto/create-department.req.dto";
@@ -44,7 +44,7 @@ export class OrganizationService {
     if (manager) {
       const managerUser = await this.userRepository.findById(manager);
       if (!managerUser) {
-        throw new NotFoundException(ErrorCode.D002);
+        throw new ValidationException(ErrorCode.D002);
       }
     }
 
@@ -63,7 +63,7 @@ export class OrganizationService {
       // Validate parent department exists if provided
       const parentDept = await this.organizationRepository.findDepartmentById(parentDepartment);
       if (!parentDept) {
-        throw new NotFoundException(ErrorCode.D003);
+        throw new ValidationException(ErrorCode.D003);
       }
     }
 
@@ -99,7 +99,7 @@ export class OrganizationService {
   async findDepartmentById(id: string): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
-      throw new NotFoundException(ErrorCode.D002);
+      throw new ValidationException(ErrorCode.D002);
     }
     return plainToInstance(DepartmentResDto, department);
   }
@@ -107,14 +107,14 @@ export class OrganizationService {
   async updateDepartment(id: string, updateDto: UpdateDepartmentReqDto): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
-      throw new NotFoundException(ErrorCode.D002);
+      throw new ValidationException(ErrorCode.D002);
     }
 
     // Validate manager exists if provided
     if (updateDto.manager) {
       const managerUser = await this.userRepository.findById(updateDto.manager);
       if (!managerUser) {
-        throw new NotFoundException(ErrorCode.D002);
+        throw new ValidationException(ErrorCode.D002);
       }
     }
 
@@ -139,7 +139,7 @@ export class OrganizationService {
   async removeDepartment(id: Uuid): Promise<DepartmentResDto> {
     const department = await this.organizationRepository.findDepartmentById(id);
     if (!department) {
-      throw new NotFoundException(ErrorCode.D002);
+      throw new ValidationException(ErrorCode.D002);
     }
 
     // Check for child departments
@@ -156,7 +156,7 @@ export class OrganizationService {
 
     const deletedDepartment = await this.organizationRepository.softDeleteDepartment(id);
     if (!deletedDepartment) {
-      throw new NotFoundException(ErrorCode.D002);
+      throw new ValidationException(ErrorCode.D002);
     }
 
     return plainToInstance(DepartmentResDto, deletedDepartment);
@@ -239,7 +239,7 @@ export class OrganizationService {
     // Validate department exists
     const departmentDoc = await this.organizationRepository.findDepartmentById(department);
     if (!departmentDoc) {
-      throw new NotFoundException(ErrorCode.D002);
+      throw new ValidationException(ErrorCode.D002);
     }
 
     // Check if team name is unique within the department
@@ -252,7 +252,7 @@ export class OrganizationService {
     if (teamLead) {
       const teamLeadUser = await this.userRepository.findById(teamLead);
       if (!teamLeadUser) {
-        throw new NotFoundException(ErrorCode.D002);
+        throw new ValidationException(ErrorCode.D002);
       }
     }
 
@@ -268,7 +268,7 @@ export class OrganizationService {
   async findTeamById(id: string): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
-      throw new NotFoundException(ErrorCode.T004);
+      throw new ValidationException(ErrorCode.T004);
     }
     return plainToInstance(TeamResDto, team);
   }
@@ -281,7 +281,7 @@ export class OrganizationService {
   async updateTeam(id: string, updateDto: UpdateTeamReqDto): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
-      throw new NotFoundException(ErrorCode.T004);
+      throw new ValidationException(ErrorCode.T004);
     }
 
     // Validate department exists if provided
@@ -290,7 +290,7 @@ export class OrganizationService {
         updateDto.department,
       );
       if (!departmentDoc) {
-        throw new NotFoundException(ErrorCode.D002);
+        throw new ValidationException(ErrorCode.D002);
       }
     }
 
@@ -298,7 +298,7 @@ export class OrganizationService {
     if (updateDto.teamLead) {
       const teamLeadUser = await this.userRepository.findById(updateDto.teamLead);
       if (!teamLeadUser) {
-        throw new NotFoundException(ErrorCode.T002);
+        throw new ValidationException(ErrorCode.T002);
       }
     }
 
@@ -309,12 +309,12 @@ export class OrganizationService {
   async removeTeam(id: Uuid): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(id);
     if (!team) {
-      throw new NotFoundException(ErrorCode.T004);
+      throw new ValidationException(ErrorCode.T004);
     }
 
     const deletedTeam = await this.organizationRepository.softDeleteTeam(id);
     if (!deletedTeam) {
-      throw new NotFoundException(ErrorCode.T004);
+      throw new ValidationException(ErrorCode.T004);
     }
 
     return plainToInstance(TeamResDto, deletedTeam);
@@ -323,12 +323,12 @@ export class OrganizationService {
   async addTeamMember(teamId: string, userId: string): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(teamId);
     if (!team) {
-      throw new NotFoundException(ErrorCode.T004);
+      throw new ValidationException(ErrorCode.T004);
     }
 
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new NotFoundException(ErrorCode.U002);
+      throw new ValidationException(ErrorCode.U002);
     }
 
     // Check if user is already a member
@@ -343,7 +343,7 @@ export class OrganizationService {
   async removeTeamMember(teamId: Uuid, userId: Uuid): Promise<TeamResDto> {
     const team = await this.organizationRepository.findTeamById(teamId);
     if (!team) {
-      throw new NotFoundException(ErrorCode.T004);
+      throw new ValidationException(ErrorCode.T004);
     }
 
     const updatedTeam = await this.organizationRepository.removeMemberFromTeam(teamId, userId);

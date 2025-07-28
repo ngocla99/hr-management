@@ -20,7 +20,6 @@ import {
   jobLevelOptionsFn,
 } from '@/features/employee/constants/employee-options'
 import { Employee } from '@/features/employee/type/employee'
-import { useUpdateUser } from '@/features/user/api/update-user'
 
 interface EmploymentOverviewProps {
   employee: Employee
@@ -73,7 +72,7 @@ export function EmploymentOverview({ employee }: EmploymentOverviewProps) {
   const handleSave = async (data: EmploymentOverviewFormData) => {
     if (updateEmployeeMutation.isPending) return
     updateEmployeeMutation.mutate({
-      id: employee.userId,
+      id: employee.id,
       ...data,
     })
   }

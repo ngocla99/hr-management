@@ -1,6 +1,8 @@
 import { UserRepository } from "@/api/user/user.repository";
+import { ErrorCode } from "@/constants/error-code.constant";
 import { getRolePermissions, hasHigherOrEqualRole, UserRole } from "@/constants/roles.constant";
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { ValidationException } from "@/exceptions/validation.exception";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { AssignRoleResDto } from "./dto/assign-role.res.dto";
 import { UserRoleResDto } from "./dto/user-role.res.dto";
@@ -37,13 +39,13 @@ export class RolesService {
     // Get the user who is assigning the role
     const assignedByUser = await this.userRepository.findById(assignedByUserId);
     if (!assignedByUser) {
-      throw new NotFoundException("Assigning user not found");
+      throw new ValidationException(ErrorCode.U002);
     }
 
     // Get the target user
     const targetUser = await this.userRepository.findById(userId);
     if (!targetUser) {
-      throw new NotFoundException("Target user not found");
+      throw new ValidationException(ErrorCode.U002);
     }
 
     // Check if the assigning user has permission to assign this role
@@ -77,7 +79,7 @@ export class RolesService {
   async getUserRole(userId: string): Promise<UserRoleResDto> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new NotFoundException("User not found");
+      throw new ValidationException(ErrorCode.U002);
     }
 
     return plainToInstance(UserRoleResDto, {

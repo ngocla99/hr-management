@@ -1,0 +1,13 @@
+{
+  "error": {
+    "not_found": "Nhân viên không tồn tại",
+    "employee_number_exists": "Mã nhân viên đã tồn tại",
+    "user_already_employee": "Người dùng đã là nhân viên",
+    "hire_date_in_the_future": "Ngày thuê không thể trong tương lai",
+    "termination_date_before_hire_date": "Ngày kết thúc không thể trước ngày thuê",
+    "salary_less_than_zero": "Lương không thể nhỏ hơn 0",
+    "work_schedule_invalid": "Lịch làm việc không hợp lệ",
+    "document_type_invalid": "Loại tài liệu không hợp lệ",
+    "document_expiry_date_in_the_past": "Ngày hết hạn tài liệu không thể trong quá khứ"
+  }
+}

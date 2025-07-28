@@ -4,16 +4,16 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@tanstack/react-router'
 import { IconMapPinFilled, IconPencilMinus } from '@tabler/icons-react'
-import { User } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { FormTextarea } from '@/components/form-field/form-textarea'
-import { useUpdateUser } from '@/features/user/api/update-user'
+import { useUpdateEmployee } from '@/features/employee/api/update-employee'
+import { Employee } from '@/features/employee/type/employee'
 
 interface AddressInformationProps {
-  employee: User
+  employee: Employee
 }
 
 const addressInformationSchema = z.object({
@@ -40,7 +40,7 @@ export function AddressInformation({ employee }: AddressInformationProps) {
     },
   })
 
-  const updateUserMutation = useUpdateUser({
+  const updateEmployeeMutation = useUpdateEmployee({
     mutationConfig: {
       onSuccess: () => {
         router.invalidate()
@@ -59,8 +59,8 @@ export function AddressInformation({ employee }: AddressInformationProps) {
   }
 
   const handleSave = async (data: AddressInformationFormData) => {
-    if (updateUserMutation.isPending) return
-    updateUserMutation.mutate({
+    if (updateEmployeeMutation.isPending) return
+    updateEmployeeMutation.mutate({
       id: employee.id,
       ...data,
     })

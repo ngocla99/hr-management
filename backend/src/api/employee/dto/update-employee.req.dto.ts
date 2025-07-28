@@ -1,3 +1,4 @@
+import { Gender } from "@/api/user/entities/user.entity";
 import {
   DateFieldOptional,
   EnumFieldOptional,
@@ -14,6 +15,42 @@ import {
 } from "../entities/employee.entity";
 
 export class UpdateEmployeeReqDto {
+  @StringFieldOptional({
+    description: "First name",
+    example: "John",
+  })
+  firstName?: string;
+
+  @StringFieldOptional({
+    description: "Last name",
+    example: "Doe",
+  })
+  lastName?: string;
+
+  @StringFieldOptional({
+    description: "Email",
+    example: "john.doe@example.com",
+  })
+  email?: string;
+
+  @StringFieldOptional({
+    description: "Phone number",
+    example: "+1234567890",
+  })
+  phoneNumber?: string;
+
+  @DateFieldOptional({
+    description: "Date of birth",
+    example: "2024-01-15T00:00:00.000Z",
+  })
+  dateOfBirth?: Date;
+
+  @EnumFieldOptional(() => Gender, {
+    description: "Gender",
+    example: Gender.MALE,
+  })
+  gender?: Gender;
+
   @StringFieldOptional({
     description: "Employee number",
     example: "EMP001",

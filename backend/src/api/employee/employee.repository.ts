@@ -45,12 +45,9 @@ export class EmployeeRepository {
   }
 
   async updateById(id: string, updateData: UpdateEmployeeReqDto): Promise<EmployeeDocument | null> {
-    const updateObj: any = { ...updateData };
+    const updateObj = { ...updateData };
 
-    const employee = await this.model
-      .findByIdAndUpdate(id, updateObj, { new: true })
-      .populate("userId", "firstName lastName email avatar phoneNumber username role status")
-      .exec();
+    const employee = await this.model.findByIdAndUpdate(id, updateObj, { new: true }).exec();
 
     return employee;
   }
