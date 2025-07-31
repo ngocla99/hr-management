@@ -1,0 +1,81 @@
+{
+  "title": "Quản lý thời gian",
+  "description": "Theo dõi chấm công, nghỉ phép và làm thêm giờ cho nhân viên",
+  "tabs": {
+    "attendance": "Chấm công",
+    "timeOff": "Nghỉ phép",
+    "overtime": "Làm thêm giờ"
+  },
+  "actions": {
+    "addAttendance": "Thêm chấm công"
+  },
+  "summary": {
+    "title": "Tóm tắt chấm công",
+    "dayOff": "Ngày nghỉ",
+    "lateClockIn": "Đi muộn",
+    "lateClockOut": "Về sớm",
+    "noClockOut": "Không chấm ra",
+    "offTimeQuota": "Hạn mức nghỉ",
+    "absent": "Vắng mặt"
+  },
+  "log": {
+    "title": "Nhật ký chấm công hàng ngày",
+    "clockIn": "Giờ vào",
+    "clockOut": "Giờ ra",
+    "duration": "Thời gian",
+    "noData": "Không tìm thấy dữ liệu chấm công"
+  },
+  "timeline": {
+    "workingTime": "Thời gian làm việc",
+    "break": "Nghỉ trưa",
+    "overtime": "Làm thêm giờ"
+  },
+  "date": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua"
+  },
+  "status": {
+    "late": "Muộn",
+    "earlyLeave": "Về sớm",
+    "noClockOut": "Chưa chấm ra",
+    "complete": "Hoàn thành"
+  },
+  "timeOff": {
+    "title": "Yêu cầu nghỉ phép",
+    "request": "Yêu cầu nghỉ phép",
+    "noData": "Không tìm thấy yêu cầu nghỉ phép",
+    "status": {
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "type": {
+      "annual_leave": "Nghỉ phép năm",
+      "sick_leave": "Nghỉ ốm",
+      "personal_leave": "Nghỉ cá nhân",
+      "maternity_leave": "Nghỉ thai sản",
+      "paternity_leave": "Nghỉ thai sản (nam)",
+      "bereavement_leave": "Nghỉ tang",
+      "other": "Khác"
+    }
+  },
+  "overtime": {
+    "title": "Yêu cầu làm thêm giờ",
+    "request": "Yêu cầu làm thêm giờ",
+    "paid": "Đã thanh toán",
+    "noData": "Không tìm thấy yêu cầu làm thêm giờ",
+    "status": {
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "type": {
+      "regular": "Làm thêm giờ thường",
+      "holiday": "Làm thêm giờ ngày lễ",
+      "weekend": "Làm thêm giờ cuối tuần",
+      "night": "Làm thêm giờ đêm"
+    }
+  }
+} 

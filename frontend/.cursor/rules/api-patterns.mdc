@@ -1,0 +1,176 @@
+# Frontend API Patterns
+
+This project follows a consistent API pattern across all features. All API files should follow this structure.
+
+## API File Structure
+
+### 1. Import Order
+```typescript
+// 1. React Query imports
+import { queryOptions, useQuery } from '@tanstack/react-query'
+
+// 2. TypeScript types
+import { SomeType } from '@/types/api'
+
+// 3. API client and utilities
+import apiClient from '@/lib/api-client'
+import { QueryConfig } from '@/lib/react-query'
+```
+
+### 2. Parameter Interface
+```typescript
+export interface GetXxxParams {
+  userId: string
+  startDate?: string
+  endDate?: string
+  limit?: number
+  afterCursor?: string
+  // ... other optional parameters
+}
+```
+
+### 3. Response Interface
+```typescript
+export interface GetXxxResponse {
+  data: SomeType[]
+  cursor?: {
+    afterCursor?: string
+    beforeCursor?: string
+  }
+}
+```
+
+### 4. API Function Pattern
+```typescript
+export const getXxxApi = (params: GetXxxParams): Promise<GetXxxResponse> => {
+  const { userId, ...queryParams } = params
+  return apiClient.get(`/endpoint/${userId}`, {
+    params: queryParams,
+  })
+}
+```
+
+**Key Points:**
+- Use `params: queryParams` instead of manual URL building
+- Destructure `userId` from params for URL path
+- Pass remaining parameters as query params
+- Let Axios handle parameter serialization
+
+### 5. Query Options Pattern
+```typescript
+export const getXxxQueryOptions = (params: GetXxxParams) => {
+  return queryOptions({
+    queryKey: ['xxx', params],
+    queryFn: () => getXxxApi(params),
+  })
+}
+```
+
+### 6. Hook Pattern
+```typescript
+type UseXxxOptions = {
+  input: GetXxxParams
+  queryConfig?: QueryConfig<typeof getXxxQueryOptions>
+}
+
+export const useXxx = ({ input, queryConfig }: UseXxxOptions) => {
+  return useQuery({
+    ...getXxxQueryOptions(input),
+    ...queryConfig,
+  })
+}
+```
+
+## Usage in Components
+
+### Component Hook Usage
+```typescript
+const { data, isLoading } = useXxx({
+  input: {
+    userId: employeeId,
+    startDate: startOfMonth.toISOString(),
+    endDate: endOfMonth.toISOString(),
+  },
+})
+```
+
+## Examples
+
+### Employee API Pattern
+Reference: [get-employee.ts](mdc:src/features/employee/api/get-employee.ts)
+
+```typescript
+export const getEmployeeApi = (id: string): Promise<Employee> => {
+  return apiClient.get(`/employees/${id}`)
+}
+
+export const getEmployeeQueryOptions = (id: string) => {
+  return queryOptions({
+    queryKey: ['employees', id],
+    queryFn: () => getEmployeeApi(id),
+  })
+}
+
+export const useEmployee = ({ input, queryConfig }: UseEmployeeOptions) => {
+  return useQuery({
+    ...getEmployeeQueryOptions(input),
+    ...queryConfig,
+    select: (data) => transformEmployee(data),
+  })
+}
+```
+
+### Time Management API Pattern
+Reference: [get-attendance.ts](mdc:src/features/time-management/api/get-attendance.ts)
+
+```typescript
+export const getAttendanceApi = (params: GetAttendanceParams): Promise<GetAttendanceResponse> => {
+  const { userId, ...queryParams } = params
+  return apiClient.get(`/time-management/attendance/${userId}`, {
+    params: queryParams,
+  })
+}
+```
+
+## Best Practices
+
+1. **Always use `params` option** in `apiClient.get()` instead of manual URL building
+2. **Consistent naming**: `getXxxApi`, `getXxxQueryOptions`, `useXxx`
+3. **Type safety**: Use proper TypeScript interfaces for all parameters and responses
+4. **Query key structure**: Use descriptive keys like `['attendance', params]`
+5. **Error handling**: Let React Query handle errors and loading states
+6. **Data transformation**: Use `select` option in hooks for data transformation
+
+## Anti-Patterns to Avoid
+
+❌ **Don't manually build URLs:**
+```typescript
+// WRONG
+const searchParams = new URLSearchParams()
+if (params.startDate) searchParams.append('startDate', params.startDate)
+return apiClient.get(`/endpoint?${searchParams.toString()}`)
+```
+
+✅ **Use params option:**
+```typescript
+// CORRECT
+return apiClient.get('/endpoint', { params: queryParams })
+```
+
+❌ **Don't use inconsistent naming:**
+```typescript
+// WRONG
+export const fetchData = () => { }
+export const useFetchData = () => { }
+```
+
+✅ **Use consistent naming:**
+```typescript
+// CORRECT
+export const getDataApi = () => { }
+export const useData = () => { }
+```
+description:
+globs:
+alwaysApply: false
+---

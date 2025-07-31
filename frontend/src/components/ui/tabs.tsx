@@ -45,7 +45,7 @@ const tabsListVariants = cva('inline-flex items-center justify-center', {
   variants: {
     variant: {
       default: 'bg-muted text-muted-foreground h-9 w-fit rounded-lg p-[3px]',
-      pills: 'bg-muted text-muted-foreground h-9 w-fit rounded-lg p-[3px]',
+      pills: 'text-muted-foreground h-9 w-fit rounded-lg p-1 space-x-1',
       underline: 'h-10 w-full border-b border-border bg-transparent p-0',
     },
   },
@@ -77,7 +77,7 @@ const tabsTriggerVariants = cva(
         default:
           'data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground h-[calc(100%-1px)] flex-1 gap-1.5 rounded-md border border-transparent px-2 py-1 focus-visible:ring-[3px] focus-visible:outline-1 data-[state=active]:shadow-sm',
         pills:
-          'data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground h-[calc(100%-1px)] flex-1 gap-1.5 rounded-md border border-transparent px-2 py-1 focus-visible:ring-[3px] focus-visible:outline-1 data-[state=active]:shadow-sm',
+          'px-3 py-1.5 rounded-full transition-all data-[state=active]:bg-foreground data-[state=active]:text-background text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
         underline:
           'border-b-3 border-transparent px-3 py-1.5 data-[state=active]:border-[#1d212c] data-[state=active]:text-foreground text-muted-foreground hover:text-foreground',
       },

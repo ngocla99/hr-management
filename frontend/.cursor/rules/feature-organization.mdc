@@ -1,189 +1,278 @@
-# Feature Organization & Development
+# Feature Organization Patterns
 
-This project organizes code by business domains/features for better maintainability and team collaboration. The [user module](mdc:src/features/user) serves as the reference implementation.
+This project follows a consistent feature-based architecture. All features should follow this organization pattern.
 
-## Feature Structure ([src/features/](mdc:src/features))
+## Feature Directory Structure
 
-Each feature follows the established pattern from the user module:
-
-### User Management Feature ([src/features/user/](mdc:src/features/user))
-Complete user management system serving as the template:
-
-**Entry Point**: [index.tsx](mdc:src/features/user/index.tsx)
-- Provider wrapper pattern for feature-level state
-- Separation of concerns with UserContent component
-- Main layout integration with consistent styling
-
-**Feature Structure**:
 ```
-src/features/user/
-├── api/                    # TanStack Query hooks for all CRUD operations
-│   ├── get-users.ts        # Paginated user listing with filters
-│   ├── create-user.ts      # User creation mutation
-│   ├── update-user.ts      # User update mutation
-│   ├── delete-user.ts      # Single user deletion
-│   ├── delete-users.ts     # Bulk user deletion
-│   ├── activate-user.ts    # User activation
-│   ├── suspend-user.ts     # User suspension
-│   └── get-me.ts          # Current user profile
-├── components/             # Feature-specific UI components
-│   ├── user-table.tsx      # Main data table with filtering/pagination
-│   ├── user-columns.tsx    # Table column definitions
-│   ├── user-table-toolbar.tsx     # Table filtering and bulk actions
-│   ├── user-table-row-actions.tsx # Context menu per row
-│   ├── user-dialogs.tsx    # Dialog orchestrator component
-│   ├── user-mutate-dialog.tsx     # Add/Edit dialog
-│   ├── user-delete-dialog.tsx     # Delete confirmation dialog
-│   ├── user-invite-dialog.tsx     # User invitation dialog
-│   └── user-primary-buttons.tsx   # Action buttons
-├── constants/              # Feature constants and configurations
-│   ├── user-constants.ts   # Type definitions and mappings
-│   └── user-options.ts     # Dropdown options with icons
-├── context/               # Feature-level state management
-│   └── user-context.tsx   # Dialog state and current row management
-└── index.tsx             # Main feature entry point
+src/features/{feature-name}/
+├── api/                    # API functions and hooks
+│   ├── get-xxx.ts         # GET requests
+│   ├── create-xxx.ts      # POST requests
+│   ├── update-xxx.ts      # PUT/PATCH requests
+│   └── delete-xxx.ts      # DELETE requests
+├── components/             # Feature-specific components
+│   ├── xxx-list.tsx       # List components
+│   ├── xxx-form.tsx       # Form components
+│   └── xxx-detail.tsx     # Detail components
+├── pages/                  # Page components
+│   └── xxx-page.tsx       # Main page components
+├── type/                   # TypeScript types
+│   └── xxx.type.ts        # Feature-specific types
+├── constants/              # Constants and enums
+│   └── xxx.constants.ts   # Feature constants
+├── utils/                  # Utility functions
+│   └── xxx.utils.ts       # Feature utilities
+├── context/                # React Context (if needed)
+│   └── xxx-context.tsx    # Feature context
+├── index.tsx               # Main feature component
+├── index.ts                # Feature exports
+└── README.md               # Feature documentation
 ```
 
-### Other Implemented Features
+## API Layer Organization
 
-**Authentication** ([src/features/auth/](mdc:src/features/auth))
-- Multi-step authentication flows
-- Sign-in, sign-up, forgot password, OTP verification
-- Shared auth layout component
+### File Naming Convention
+- **GET requests**: `get-xxx.ts`
+- **POST requests**: `create-xxx.ts`
+- **PUT/PATCH requests**: `update-xxx.ts`
+- **DELETE requests**: `delete-xxx.ts`
 
-**Dashboard** ([src/features/dashboard/](mdc:src/features/dashboard))
-- Main dashboard with analytics widgets
-- Data visualization components
+### API Function Pattern
+Each API file should export:
+1. **Parameter interface**: `GetXxxParams`
+2. **Response interface**: `GetXxxResponse`
+3. **API function**: `getXxxApi`
+4. **Query options**: `getXxxQueryOptions`
+5. **React Query hook**: `useXxx`
 
-**Organization** ([src/features/organization/](mdc:src/features/organization))  
-- Department and team management
-- Organizational hierarchy
+## Component Organization
 
-**Settings** ([src/features/settings/](mdc:src/features/settings))
-- Application configuration
-- User preferences and account settings
+### Component File Naming
+- **List components**: `xxx-list.tsx`
+- **Form components**: `xxx-form.tsx`
+- **Detail components**: `xxx-detail.tsx`
+- **Modal components**: `xxx-modal.tsx`
+- **Card components**: `xxx-card.tsx`
 
-## Standard Feature Development Pattern
-
-### 1. Feature Entry Point Pattern
+### Component Structure
 ```typescript
-// Provider wrapper for feature-level state
-export default function FeatureName() {
-  return (
-    <FeatureProvider>
-      <FeatureContent />
-    </FeatureProvider>
-  )
+import { useTranslation } from 'react-i18next'
+import { useXxx } from '../api/get-xxx'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+interface XxxComponentProps {
+  // Props interface
 }
 
-function FeatureContent() {
-  const { t } = useTranslation()
+export function XxxComponent({ ...props }: XxxComponentProps) {
+  const { t } = useTranslation('feature-name')
+  const { data, isLoading } = useXxx({ input: { ... } })
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('title')}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {/* Component content */}
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Type Organization
+
+### Type File Structure
+```typescript
+// Feature-specific types
+export interface XxxType {
+  id: string
+  name: string
+  // ... other properties
+}
+
+// API parameter types
+export interface GetXxxParams {
+  userId: string
+  // ... other parameters
+}
+
+// API response types
+export interface GetXxxResponse {
+  data: XxxType[]
+  cursor?: {
+    afterCursor?: string
+    beforeCursor?: string
+  }
+}
+```
+
+## Constants Organization
+
+### Constants File Structure
+```typescript
+export enum XxxStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+}
+
+export enum XxxType {
+  TYPE_1 = 'type_1',
+  TYPE_2 = 'type_2',
+}
+
+export const XXX_CONSTANTS = {
+  DEFAULT_LIMIT: 10,
+  MAX_LIMIT: 100,
+} as const
+```
+
+## Feature Integration
+
+### Main Feature Component
+```typescript
+// index.tsx
+import { useTranslation } from 'react-i18next'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Main } from '@/components/layout/main'
+import { XxxList } from './components/xxx-list'
+import { XxxForm } from './components/xxx-form'
+
+interface XxxFeatureProps {
+  employeeId: string
+}
+
+export function XxxFeature({ employeeId }: XxxFeatureProps) {
+  const { t } = useTranslation('feature-name')
+
   return (
     <Main>
-      <div className='mb-2 flex items-center justify-between'>
-        <div>
-          <h2 className='text-2xl font-bold tracking-tight'>
-            {t('page.title', { ns: 'feature-namespace' })}
-          </h2>
+      <div className='space-y-6'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className='text-2xl font-bold tracking-tight'>{t('title')}</h1>
+            <p className='text-muted-foreground'>{t('description')}</p>
+          </div>
         </div>
-        <FeaturePrimaryButtons />
+
+        <Tabs defaultValue='list' className='space-y-6'>
+          <TabsList className='grid w-full grid-cols-2'>
+            <TabsTrigger value='list'>{t('tabs.list')}</TabsTrigger>
+            <TabsTrigger value='form'>{t('tabs.form')}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value='list'>
+            <XxxList employeeId={employeeId} />
+          </TabsContent>
+
+          <TabsContent value='form'>
+            <XxxForm employeeId={employeeId} />
+          </TabsContent>
+        </Tabs>
       </div>
-      <FeatureTable />
-      <FeatureDialogs />
     </Main>
   )
 }
 ```
 
-### 2. API Layer Pattern
-**Query Hooks**: Custom hooks wrapping TanStack Query
+### Feature Exports
 ```typescript
-export const useFeatureData = (props: Props) => {
-  return useQuery({
-    ...getFeatureQueryOptions(props.input),
-    ...props.queryConfig,
-  })
+// index.ts
+export { XxxFeature } from './index.tsx'
+```
+
+## Internationalization
+
+### Translation Files
+Create translation files in `public/locales/{lang}/feature-name.json`:
+
+```json
+{
+  "title": "Feature Title",
+  "description": "Feature description",
+  "tabs": {
+    "list": "List",
+    "form": "Form"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  }
 }
 ```
 
-**Mutation Hooks**: CRUD operations with cache invalidation
+## Examples
+
+### Employee Feature
+Reference: [employee feature](mdc:src/features/employee/)
+
+### Time Management Feature
+Reference: [time-management feature](mdc:src/features/time-management/)
+
+## Best Practices
+
+1. **Consistent naming**: Use kebab-case for files, PascalCase for components
+2. **Feature isolation**: Keep feature-specific code within the feature directory
+3. **Reusable components**: Place shared components in `src/components/`
+4. **Type safety**: Define proper TypeScript interfaces for all data structures
+5. **Internationalization**: Use translation keys for all user-facing text
+6. **API patterns**: Follow the established API patterns for all requests
+7. **Component composition**: Build complex components from simple primitives
+8. **Error handling**: Implement proper error boundaries and loading states
+
+## Anti-Patterns to Avoid
+
+❌ **Don't mix feature concerns:**
 ```typescript
-export const useCreateFeature = (config: MutationConfig) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: createFeatureApi,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['features'] })
-      toast.success(t('message.success.created'))
-    },
-    ...config,
-  })
+// WRONG - Mixing employee and time management logic
+export function EmployeeTimeManagement() {
+  // Mixed concerns
 }
 ```
 
-### 3. Component Organization Pattern
-**Table System**:
-- Main table component with data integration
-- Separate column definitions file
-- Toolbar component for filtering/actions  
-- Row actions component for context menus
-
-**Dialog System**:
-- Dialog orchestrator managing all dialogs
-- Individual dialog components (CRUD, delete, etc.)
-- Context-based state coordination
-
-**Action Components**:
-- Primary action buttons
-- Bulk operation handlers
-- Integration with feature context
-
-### 4. State Management Pattern
-**Feature Context**:
+✅ **Separate feature concerns:**
 ```typescript
-type FeatureDialogType = 'add' | 'edit' | 'delete' | 'custom'
-
-export default function FeatureProvider({ children }: Props) {
-  const [open, setOpen] = useDialogState<FeatureDialogType>(null)
-  const [currentRow, setCurrentRow] = useState<EntityType | null>(null)
-  
+// CORRECT - Separate features
+export function EmployeeDetail() {
   return (
-    <FeatureContext value={{ open, setOpen, currentRow, setCurrentRow }}>
-      {children}
-    </FeatureContext>
+    <Tabs>
+      <TabsContent value='time'>
+        <TimeManagement employeeId={employee.id} />
+      </TabsContent>
+    </Tabs>
   )
 }
 ```
 
-**State Layers**:
-1. **Server State**: TanStack Query for all API data and caching
-2. **Feature State**: React Context for dialog state and current selections
-3. **Component State**: useState for local component interactions
-4. **URL State**: TanStack Router search params for filters and pagination
+❌ **Don't create deep component nesting:**
+```typescript
+// WRONG - Too many nested components
+export function Feature() {
+  return (
+    <div>
+      <div>
+        <div>
+          <Component />
+        </div>
+      </div>
+    </div>
+  )
+}
+```
 
-### 5. Constants & Configuration Pattern
-**Options Files**: Dropdown configurations with icons and i18n keys
-**Constants Files**: Type definitions, validation schemas, and style mappings
-**i18n Integration**: Feature-specific translation namespaces
-
-## Development Guidelines
-
-### Adding New Features
-1. **Copy Structure**: Use user module as template
-2. **Replace Names**: Find/replace "user" with new feature name
-3. **API Layer**: Implement feature-specific query/mutation hooks
-4. **Context Setup**: Create feature context for state management
-5. **Components**: Build table, dialogs, and action components following patterns
-6. **Constants**: Define feature-specific constants and options
-7. **Routes**: Add routes in appropriate route groups
-8. **Navigation**: Update sidebar and navigation
-9. **i18n**: Create feature translation namespace
-
-### Code Quality Standards
-- **TypeScript**: Full type safety for all components and APIs
-- **Error Handling**: Comprehensive loading and error states
-- **Accessibility**: ARIA labels and semantic HTML
-- **Internationalization**: Proper i18n namespace usage
-- **Performance**: Memoization and query optimization
-- **Consistency**: Follow established component and naming patterns
+✅ **Use proper component structure:**
+```typescript
+// CORRECT - Clean component structure
+export function Feature() {
+  return (
+    <Main>
+      <div className='space-y-6'>
+        <Component />
+      </div>
+    </Main>
+  )
+}
+```
 

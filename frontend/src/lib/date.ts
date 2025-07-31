@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 
 interface FormatDateOptions {
-  period: 'date' | 'month' | 'year' | 'datetime' | 'dateWeek'
+  period: 'date' | 'month' | 'year' | 'datetime' | 'dateWeek' | 'time'
 }
 
 export const formatDate = (
@@ -20,6 +20,8 @@ export const formatDate = (
       return format(date, 'MM/yyyy')
     case 'year':
       return format(date, 'yyyy')
+    case 'time':
+      return format(date, 'HH:mm a')
     default:
       return format(date, 'dd/MM/yyyy')
   }

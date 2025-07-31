@@ -155,3 +155,108 @@ export type EmployeeApi = Entity<{
   lastMessaged?: Date
   tags?: string[]
 }>
+
+// Time Management Types
+export enum AttendanceStatus {
+  PRESENT = 'present',
+  ABSENT = 'absent',
+  LATE = 'late',
+  EARLY_LEAVE = 'early_leave',
+  HALF_DAY = 'half_day',
+}
+
+export enum TimeOffStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  CANCELLED = 'cancelled',
+}
+
+export enum TimeOffType {
+  ANNUAL_LEAVE = 'annual_leave',
+  SICK_LEAVE = 'sick_leave',
+  PERSONAL_LEAVE = 'personal_leave',
+  MATERNITY_LEAVE = 'maternity_leave',
+  PATERNITY_LEAVE = 'paternity_leave',
+  BEREAVEMENT_LEAVE = 'bereavement_leave',
+  OTHER = 'other',
+}
+
+export enum OvertimeStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  CANCELLED = 'cancelled',
+}
+
+export enum OvertimeType {
+  REGULAR = 'regular',
+  HOLIDAY = 'holiday',
+  WEEKEND = 'weekend',
+  NIGHT = 'night',
+}
+
+export type AttendanceResDto = Entity<{
+  userId: string
+  date: Date
+  clockInTime: Date
+  clockOutTime?: Date
+  breakStartTime?: Date
+  breakEndTime?: Date
+  overtimeStartTime?: Date
+  overtimeEndTime?: Date
+  status: AttendanceStatus
+  totalWorkHours?: number
+  netWorkHours?: number
+  totalBreakHours: number
+  totalOvertimeHours?: number
+  notes?: string
+  isLate: boolean
+  isEarlyLeave: boolean
+}>
+
+export type TimeOffResDto = Entity<{
+  userId: string
+  startDate: Date
+  endDate: Date
+  type: TimeOffType
+  status: TimeOffStatus
+  reason: string
+  totalDays: number
+  totalHours: number
+  approvedBy?: string
+  approvedAt?: Date
+  rejectionReason?: string
+  attachment?: string
+  notes?: string
+  isHalfDay: boolean
+  halfDayType?: string
+}>
+
+export type OvertimeResDto = Entity<{
+  userId: string
+  requestDate: Date
+  overtimeDate: Date
+  startTime: Date
+  endTime: Date
+  status: OvertimeStatus
+  type: OvertimeType
+  reason: string
+  totalHours: number
+  hourlyRate?: number
+  totalAmount?: number
+  approvedBy?: string
+  approvedAt?: Date
+  rejectionReason?: string
+  notes?: string
+  isPaid: boolean
+  paidAt?: Date
+}>
+
+export type AttendanceStatsDto = {
+  totalDays: number
+  lateDays: number
+  earlyLeaveDays: number
+  noClockOutDays: number
+  totalWorkHours: number
+}

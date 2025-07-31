@@ -1,0 +1,81 @@
+{
+  "title": "Time Management",
+  "description": "Track attendance, time off, and overtime for employees",
+  "tabs": {
+    "attendance": "Attendance",
+    "timeOff": "Time Off",
+    "overtime": "Overtime"
+  },
+  "actions": {
+    "addAttendance": "Add Attendance"
+  },
+  "summary": {
+    "title": "Attendance Summary",
+    "dayOff": "Day off",
+    "lateClockIn": "Late clock-in",
+    "lateClockOut": "Late clock-out",
+    "noClockOut": "No clock-out",
+    "offTimeQuota": "Off time quota",
+    "absent": "Absent"
+  },
+  "log": {
+    "title": "Daily Attendance Log",
+    "clockIn": "Clock-in",
+    "clockOut": "Clock-out",
+    "duration": "Duration",
+    "noData": "No attendance records found"
+  },
+  "timeline": {
+    "workingTime": "Working time",
+    "break": "Break",
+    "overtime": "Over time"
+  },
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday"
+  },
+  "status": {
+    "late": "Late",
+    "earlyLeave": "Early leave",
+    "noClockOut": "No clock-out",
+    "complete": "Complete"
+  },
+  "timeOff": {
+    "title": "Time Off Requests",
+    "request": "Request Time Off",
+    "noData": "No time off requests found",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "type": {
+      "annual_leave": "Annual Leave",
+      "sick_leave": "Sick Leave",
+      "personal_leave": "Personal Leave",
+      "maternity_leave": "Maternity Leave",
+      "paternity_leave": "Paternity Leave",
+      "bereavement_leave": "Bereavement Leave",
+      "other": "Other"
+    }
+  },
+  "overtime": {
+    "title": "Overtime Requests",
+    "request": "Request Overtime",
+    "paid": "Paid",
+    "noData": "No overtime requests found",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "type": {
+      "regular": "Regular Overtime",
+      "holiday": "Holiday Overtime",
+      "weekend": "Weekend Overtime",
+      "night": "Night Overtime"
+    }
+  }
+}

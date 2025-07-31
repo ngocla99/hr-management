@@ -12,6 +12,7 @@ import { EmploymentOverview } from '@/features/employee/components/details/infor
 import { PersonalInformation } from '@/features/employee/components/details/information/personal-information'
 import { Tags } from '@/features/employee/components/details/information/tags'
 import { employeeTabsFn } from '@/features/employee/constants/employee-config'
+import { TimeManagement } from '@/features/time-management'
 
 const route = getRouteApi(EmployeeRouteId.id)
 export function EmployeeDetailPage() {
@@ -104,16 +105,7 @@ export function EmployeeDetailPage() {
           </TabsContent>
 
           <TabsContent value='time'>
-            <Card>
-              <CardHeader>
-                <CardTitle>Time Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className='text-muted-foreground'>
-                  Time tracking details will be displayed here.
-                </p>
-              </CardContent>
-            </Card>
+            <TimeManagement employeeId={employee.id} />
           </TabsContent>
 
           <TabsContent value='assets'>
