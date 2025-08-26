@@ -22,12 +22,10 @@
 - [Project Structure](#project-structure)
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
-- [API Documentation](#api-documentation)
 - [Development](#development)
-- [Deployment](#deployment)
 - [Contributing](#contributing)
 
-## 🎯 Overview
+## Overview
 
 The HR Management System is a comprehensive solution designed to streamline human resources operations, from recruitment and candidate management to employee lifecycle management. Built with modern technologies, it provides a robust, scalable, and user-friendly platform for HR professionals.
 
@@ -40,7 +38,7 @@ The HR Management System is a comprehensive solution designed to streamline huma
 - **Scalable Architecture**: Microservices-based backend with MongoDB
 - **Multi-language Support**: Internationalization (i18n) support for global teams
 
-## ✨ Features
+## Features
 
 ### 🔐 Authentication & Security
 - JWT-based authentication with refresh tokens
@@ -94,7 +92,7 @@ The HR Management System is a comprehensive solution designed to streamline huma
 - Localized content and interfaces
 - Cultural adaptation features
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - **Framework**: [NestJS](https://nestjs.com/) 11.0.1
@@ -173,7 +171,7 @@ hr-management/
 └── README.md               # This File
 ```
 
-## 🖼️ Screenshots
+## Screenshots
 
 ### Dashboard Overview
 ![Dashboard](https://via.placeholder.com/1200x600/1f2937/ffffff?text=Dashboard+Overview+%7C+HR+Analytics+%26+KPIs)
@@ -242,7 +240,7 @@ hr-management/
    pnpm run dev
    ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please follow these steps:
 
