@@ -22,7 +22,6 @@
 - [Project Structure](#project-structure)
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
-- [Development](#development)
 - [Contributing](#contributing)
 
 ## Overview
